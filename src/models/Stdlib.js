@@ -1,6 +1,7 @@
 import truffleContract from 'truffle-contract';
 import fs from 'fs';
 import path from 'path';
+import npm from 'npm-programmatic';
 
 const ContractDirectory = artifacts.require('ContractDirectory');
 
