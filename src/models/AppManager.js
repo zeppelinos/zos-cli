@@ -1,6 +1,7 @@
 import decodeLogs from '../utils/decodeLogs';
 import encodeCall from '../utils/encodeCall';
 import Stdlib from './Stdlib';
+import _ from 'lodash';
 
 const AppManager = artifacts.require('PackagedAppManager');
 const AppDirectory = artifacts.require('AppDirectory');
@@ -35,9 +36,9 @@ class AppManagerWrapper {
   }
 
   _getStdlibAddress(stdlib) {
-    if (!stdlib) {
+    if (!stdlib || _.isEmpty(stdlib)) {
       return 0;
-    } else if (stdlib.name) {
+    } else if (stdlib.getDeployed) {
       return stdlib.getDeployed(this.network);
     } else {
       return (new Stdlib(stdlib)).getDeployed(this.network);

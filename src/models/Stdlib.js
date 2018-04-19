@@ -6,7 +6,13 @@ const ContractDirectory = artifacts.require('ContractDirectory');
 
 export default class Stdlib {
   constructor(nameWithVersion, owner) {
-    const [name, version] = nameWithVersion.split('@');
+    let name, version;
+    if (typeof(nameWithVersion) === 'string') {
+      [name, version] = nameWithVersion.split('@');
+    } else {
+      ({ name, version } = nameWithVersion);
+    }
+    
     this.name = name;
     this.version = version;
     this.owner = owner;

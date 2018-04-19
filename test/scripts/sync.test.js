@@ -58,7 +58,7 @@ contract('sync', function([_, owner]) {
 
     after(cleanupfn(networkFileName));
 
-    it.skip('should set stdlib in deployed app', async function () {
+    it('should set stdlib in deployed app', async function () {
       const address = JSON.parse(fs.readFileSync(networkFileName)).app.address;
       const appManager = await AppManager.at(address);
       const appPackage = await Package.at(await appManager.package());
@@ -67,7 +67,10 @@ contract('sync', function([_, owner]) {
 
       stdlib.should.eq(stdlibAddress);
     });
-    
+
+    it('should set address in network file', async function () {
+      JSON.parse(fs.readFileSync(networkFileName)).stdlib.address.should.eq(stdlibAddress);
+    });  
   });
   
 });
