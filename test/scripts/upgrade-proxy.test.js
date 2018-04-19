@@ -33,7 +33,7 @@ contract('upgrade-proxy command', function([_, owner]) {
     await addImplementation(contractName, contractAlias, {packageFileName});
     await sync({ packageFileName, network, from });
     await createProxy(contractAlias, {packageFileName, network, from});
-    await newVersion(version, {packageFileName, from});
+    await newVersion(version, null, {packageFileName, from});
     await addImplementation(contractName, contractAlias, {packageFileName});
     await sync({ packageFileName, network, from });
   });
