@@ -1,5 +1,6 @@
 import decodeLogs from '../utils/decodeLogs';
 import encodeCall from '../utils/encodeCall';
+import Stdlib from './Stdlib';
 
 const AppManager = artifacts.require('PackagedAppManager');
 const AppDirectory = artifacts.require('AppDirectory');
@@ -8,8 +9,9 @@ const UpgradeabilityProxyFactory = artifacts.require('UpgradeabilityProxyFactory
 
 class AppManagerWrapper {
 
-  constructor(owner) {
+  constructor(owner, network) {
     this.owner = owner;
+    this.network = network;
     this.directories = {};
   }
 
@@ -21,14 +23,25 @@ class AppManagerWrapper {
     return this.appManager.address;
   }
 
-  async deploy(initialVersion) {
+  async deploy(initialVersion, stdlib) {
     this.factory = await UpgradeabilityProxyFactory.new({ from: this.owner });
     this.package = await Package.new({ from: this.owner });
-    const directory = await AppDirectory.new(0, { from: this.owner });
+    const stdlibAddress = this._getStdlibAddress(stdlib);
+    const directory = await AppDirectory.new(stdlibAddress, { from: this.owner });
     await this.package.addVersion(initialVersion, directory.address, { from: this.owner });
     this.directories[initialVersion] = directory;
     this.version = initialVersion;
     this.appManager = await AppManager.new(this.package.address, initialVersion, this.factory.address, { from: this.owner });
+  }
+
+  _getStdlibAddress(stdlib) {
+    if (!stdlib) {
+      return 0;
+    } else if (stdlib.name) {
+      return stdlib.getDeployed(this.network);
+    } else {
+      return (new Stdlib(stdlib)).getDeployed(this.network);
+    }
   }
 
   async connect(address) {
