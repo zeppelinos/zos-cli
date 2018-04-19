@@ -53,8 +53,19 @@ export default class Stdlib {
     const stdlibString = this.version
       ? `${this.name}@${this.version}`
       : this.name
-    await npm.install([stdlibString], {
-      save: true, cwd: process.cwd()
-    })
+    // await npm.install([stdlibString], {
+    //   save: true, cwd: process.cwd()
+    // })
+  }
+
+  getName() {
+    return this.name;
+  }
+
+  getVersion() {
+    if (!this.version) {
+      this.version = this.getPackage().version;
+    }
+    return this.version;
   }
 }
