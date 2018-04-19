@@ -46,7 +46,7 @@ export default class Stdlib {
   getDeployed(network) {
     if (!network) throw "Must specify network to read stdlib deployment address";
     const networkInfo = JSON.parse(fs.readFileSync(`node_modules/${this.name}/package.zos.${network}.json`));
-    return networkInfo.app.address;
+    return networkInfo.provider.address;
   }
 
   async installDependency() {
