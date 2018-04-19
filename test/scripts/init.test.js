@@ -49,6 +49,11 @@ contract('init command', function(accounts) {
       data.contracts.should.eql({});
     });
 
-    // TODO: add tests for stdlib
+    it('should set stdlib', async function () {
+      await init(appName, defaultVersion, 'mock-stdlib@1.1.0', {packageFileName});
+      const data = files.read();
+      data.stdlib.name.should.eq('mock-stdlib');
+      data.stdlib.version.should.eq('1.1.0');
+    });
   });
 });
