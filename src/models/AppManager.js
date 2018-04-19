@@ -52,8 +52,9 @@ class AppManagerWrapper {
     this.directories[this.version] = AppDirectory.at(await this.package.getVersion(this.version));
   }
 
-  async newVersion(versionName) {
-    const directory = await AppDirectory.new(0, { from: this.owner });
+  async newVersion(versionName, stdlib) {
+    const stdlibAddress = this._getStdlibAddress(stdlib);
+    const directory = await AppDirectory.new(stdlibAddress, { from: this.owner });
     await this.package.addVersion(versionName, directory.address, { from: this.owner });
     await this.appManager.setVersion(versionName, { from: this.owner });
     this.directories[versionName] = directory;
@@ -70,7 +71,13 @@ class AppManagerWrapper {
     const directory = this.getCurrentDirectory();
     await directory.setImplementation(contractName, implementation.address, { from: this.owner });
     return implementation;
-  }  
+  }
+
+  async setStdlib(stdlib) {
+    const stdlibAddress = this._getStdlibAddress(stdlib);
+    await this.getCurrentDirectory().setStdlib(stdlibAddress, { from: this.owner });
+    return stdlibAddress;
+  }
 
   async createProxy(contractClass, contractName, initArgs) {
     const initMethodName = 'initialize';

@@ -36,7 +36,8 @@ export default class Stdlib {
   }
 
   getDeployed(network) {
-    const networkInfo = JSON.parse(fs.readFileSync(`node_modules/${this.name}/package.zos.${network}.json`))
+    if (!network) throw "Must specify network to read stdlib deployment address";
+    const networkInfo = JSON.parse(fs.readFileSync(`node_modules/${this.name}/package.zos.${network}.json`));
     return networkInfo.app.address;
   }
 }

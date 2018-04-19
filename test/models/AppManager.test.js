@@ -12,7 +12,7 @@ contract('AppManager', function ([_, owner]) {
   
   const initialVersion = "1.0";
   const contractName = 'Impl';
-  const networkName = 'testnet';
+  const networkName = 'test';
   const stdlibAddress = "0x0000000000000000000000000000000000000010";
   const stdlibName = 'mock-stdlib';
 
@@ -40,6 +40,14 @@ contract('AppManager', function ([_, owner]) {
       this.app.getCurrentDirectory().address.should.be.not.null;
     });
   };
+
+  const shouldConnectToStdlib = function () {
+    it('should connect current directory to stdlib', async function () {
+      const directory = await this.app.getCurrentDirectory();
+      (await directory.stdlib()).should.eq(stdlibAddress);
+    });
+  };
+
 
   describe('without stdlib', function () {
 
@@ -177,9 +185,28 @@ contract('AppManager', function ([_, owner]) {
           (await this.proxy.value()).toNumber().should.eq(20);
         });
       });
+    });
 
+    describe('setStdlib', function () {
+      describe('from name', function () {
+        beforeEach("setting stdlib from name", async function () {
+          await this.app.setStdlib(stdlibName);
+        });
+
+        shouldConnectToStdlib();
+      });
+
+      describe('from object', function () {
+        beforeEach("setting stdlib from object", async function () {
+          this.stdlib = new Stdlib(stdlibName);
+          await this.app.setStdlib(this.stdlib);
+        });
+
+        shouldConnectToStdlib();
+      });
     });
   });
+
 
   describe('with stdlib', function () {
     beforeEach("deploying", async function () {
@@ -187,13 +214,6 @@ contract('AppManager', function ([_, owner]) {
       this.app = new AppManager(owner, networkName);
       await this.app.deploy(initialVersion, this.stdlib);
     });
-
-    const shouldConnectToStdlib = function () {
-      it('should connect to stdlib', async function () {
-        const directory = await this.app.getCurrentDirectory();
-        (await directory.stdlib()).should.eq(stdlibAddress);
-      });
-    };
 
     describe('deploy', function () {
       shouldInitialize();
@@ -219,17 +239,10 @@ contract('AppManager', function ([_, owner]) {
       await this.app.deploy(initialVersion, stdlibName);
     });
 
-    const shouldConnectToStdlib = function () {
-      it('should connect to stdlib', async function () {
-        const directory = await this.app.getCurrentDirectory();
-        (await directory.stdlib()).should.eq(stdlibAddress);
-      });
-    };
-
     describe('deploy', function () {
       shouldInitialize();
       shouldConnectToStdlib();
     });
   });
-  
+
  });
