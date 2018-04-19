@@ -29,7 +29,7 @@ contract('upgrade-proxy command', function([_, owner]) {
     cleanup(packageFileName)
     cleanup(networkPackageFileName)
 
-    await init(appName, defaultVersion, {packageFileName});
+    await init(appName, defaultVersion, null, {packageFileName});
     await addImplementation(contractName, contractAlias, {packageFileName});
     await sync({ packageFileName, network, from });
     await createProxy(contractAlias, {packageFileName, network, from});
