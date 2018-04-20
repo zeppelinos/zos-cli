@@ -36,16 +36,6 @@ class AppManagerWrapper {
     this.appManager = await AppManager.new(this.package.address, initialVersion, this.factory.address, { from: this.owner });
   }
 
-  _getStdlibAddress(stdlib) {
-    if (!stdlib || _.isEmpty(stdlib)) {
-      return 0;
-    } else if (stdlib.getDeployed) {
-      return stdlib.getDeployed(this.network);
-    } else {
-      return (new Stdlib(stdlib)).getDeployed(this.network);
-    }
-  }
-
   async connect(address) {
     this.appManager = await AppManager.at(address);
     this.package = Package.at(await this.appManager.package());
@@ -92,6 +82,16 @@ class AppManagerWrapper {
     return contractClass.at(address);
   }
 
+  // TODO: Instead of accepting argTypes, could accept contractClass and lookup the types in its ABI. Decide which option is most usable.
+  async upgradeProxy(proxyAddress, contractName, methodName, argTypes, args) {
+    if (typeof(methodName) === 'undefined') {
+      return this.appManager.upgradeTo(proxyAddress, contractName, { from: this.owner });
+    } else {
+      const callData = encodeCall(methodName, argTypes, args);
+      return this.appManager.upgradeToAndCall(proxyAddress, contractName, callData, { from: this.owner });  
+    }
+  }
+
   async _createProxyAndCall(contractClass, contractName, initMethodName, initArgs) {
     // TODO: Support more than one initialize function with different arg types
     const initMethod = contractClass.abi.find(fn => fn.name === initMethodName && fn.inputs.length === initArgs.length);
@@ -106,13 +106,13 @@ class AppManagerWrapper {
     return this.appManager.create(contractName, { from: this.owner });
   }
 
-  // TODO: Instead of accepting argTypes, could accept contractClass and lookup the types in its ABI. Decide which option is most usable.
-  async upgradeProxy(proxyAddress, contractName, methodName, argTypes, args) {
-    if (typeof(methodName) === 'undefined') {
-      return this.appManager.upgradeTo(proxyAddress, contractName, { from: this.owner });
+  _getStdlibAddress(stdlib) {
+    if (!stdlib || _.isEmpty(stdlib)) {
+      return 0;
+    } else if (stdlib.getDeployed) {
+      return stdlib.getDeployed(this.network);
     } else {
-      const callData = encodeCall(methodName, argTypes, args);
-      return this.appManager.upgradeToAndCall(proxyAddress, contractName, callData, { from: this.owner });  
+      return (new Stdlib(stdlib)).getDeployed(this.network);
     }
   }
 }
