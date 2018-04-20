@@ -1,13 +1,11 @@
-~~~ ALL THIS IS PSEUDO CODE ~~~
-
 // -------------------------------------------------------------
 // 1. Initializes the project
-$ zos init Basil 0.0.1
+$ zos init Herbs 0.0.1
 // -------------------------------------------------------------
 
 // -> package.zos.json // <--------------------------
 {
-  "name": "Basil",
+  "name": "Herbs",
   "version": "0.0.1",
   "contracts": {},
   "stdlib": {}
@@ -111,7 +109,7 @@ $ zos version 0.0.2
 // same
 
 // -------------------------------------------------------------
-// 7. Adds a new implementation of basil
+// 7. Adds a new implementation of Basil
 $ zos add Basil Basil_v1
 // -------------------------------------------------------------
 
