@@ -28,3 +28,11 @@ async function init(name, version, { from, packageFileName }) {
 
 
 module.exports = init
+
+
+init.register = function(program, cb) {
+  program
+    .command('init [name] [version]')
+    .description("Initializes a new zos application")
+    .script(init)
+}
