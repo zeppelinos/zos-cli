@@ -19,7 +19,7 @@ npm i -g zos
 Next, learn how to:
 
 - [Develop an upgradeable smart contract application using `zos`](#develop).
-- [Automated testing on a `zos` application](#testing)
+- [Testing a `zos` upgradeable application](#testing)
 - [Develop a new zOS Kernel standard library release using `zos`](#kernel).
 - [Use `zos` to fund development and auditing of zOS Kernel releases with your ZEP tokens](#vouching).
 - [Extend provided zOS Kernel standard library code in your own contracts](https://github.com/zeppelinos/labs/tree/master/extensibility-study#extensibility-study) (experimental).
@@ -134,7 +134,7 @@ The next `sync` operation will connect your application with the chosen standard
 zos create-proxy MintableToken --network [NETWORK]
 ```
 
-However, in ganache on development, the standard library is not already deployed, since you are running from an empty blockchain. To work around this, you can run the following command:
+However, if you're using development nodes (such as testrpc or ganache), the standard library is not already deployed, since you are running from an empty blockchain. To work around this, you can run the following command:
 
 ```bash
 zos deploy-all --network [NETWORK]
@@ -193,7 +193,7 @@ zos upgrade-proxy MyContract --network ropsten
 ```
 Voila! Your contract has now been upgraded. The address is the same as before, but the code has been changed to the latest version. Repeat the same steps for every code update you want to perform.
 
-## <a name="testing"></a> Automated testing on a `zos` application
+## <a name="testing"></a> Testing a `zos` upgradeable application
 
 To simplify the testing process, you can use the `AppManager` class to set up your entire application (including a standard library) in the test network. This class also acts as wrapper to your deployed application, and can be used to programatically create new proxies of the contracts to test:
 
