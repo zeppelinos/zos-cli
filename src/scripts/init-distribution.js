@@ -7,7 +7,7 @@ const BASE_DISTRIBUTION = {
   }
 }
 
-async function initDistribution(name, kernelAddress, { from, packageFileName }) {
+async function initDistribution(name, kernelAddress, { packageFileName }) {
   if (name === undefined) throw 'Must provide a distribution name'
   if (kernelAddress === undefined) throw 'Must provide a kernel address'
 

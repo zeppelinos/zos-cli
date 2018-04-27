@@ -6,6 +6,7 @@ import Logger from '../utils/Logger'
 
 const log = new Logger('deploy')
 
+// TODO: remove version param
 async function deploy(version, { network, from, packageFileName }) {
   const files = new PackageFilesInterface(packageFileName)
   const distribution = new Distribution(from, network)
@@ -21,7 +22,7 @@ async function deploy(version, { network, from, packageFileName }) {
     await distribution.connect(zosNetworkFile.distribution.address)
   } else {
     log.info('Network file not found, deploying new distribution...')
-    await distribution.deploy(version)
+    await distribution.deploy()
     createNetworkFile(network, distribution.address(), packageFileName)
     zosNetworkFile = files.readNetworkFile(network)
   }
