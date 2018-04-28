@@ -2,15 +2,11 @@ import fs from 'fs';
 import _ from 'lodash';
 import Stdlib from './Stdlib';
 import Logger from '../utils/Logger'
-import makeContract from '../utils/contract';
+import ContractsProvider from "./ContractsProvider";
 
 const log = new Logger('AppManager');
 const decodeLogs = require('zos-lib').decodeLogs;
 const encodeCall = require('zos-lib').encodeCall;
-const Package = makeContract('Package');
-const AppManager = makeContract('PackagedAppManager');
-const AppDirectory = makeContract('AppDirectory');
-const UpgradeabilityProxyFactory = makeContract('UpgradeabilityProxyFactory');
 
 class AppManagerWrapper {
 
@@ -19,6 +15,12 @@ class AppManagerWrapper {
     this.network = network;
     this.directories = {};
     this.txParams = { from: this.owner }
+
+    // TODO: This class is handling a lot of things, splitting it may make unnecessary to provide contracts at this level
+    this.Package = ContractsProvider.getByName('Package')
+    this.AppManager = ContractsProvider.getByName('PackagedAppManager')
+    this.AppDirectory = ContractsProvider.getByName('AppDirectory')
+    this.UpgradeabilityProxyFactory = ContractsProvider.getByName('UpgradeabilityProxyFactory')
   }
 
   getCurrentDirectory() {
@@ -31,33 +33,33 @@ class AppManagerWrapper {
 
   async deploy(initialVersion, stdlib) {
     log.info('Deploying a new app manager...')
-    this.factory = await UpgradeabilityProxyFactory.new(this.txParams);
+    this.factory = await this.UpgradeabilityProxyFactory.new(this.txParams);
     log.info(` UpgradeabilityProxyFactory: ${this.factory.address}`)
-    this.package = await Package.new(this.txParams);
+    this.package = await this.Package.new(this.txParams);
     log.info(` Package: ${this.package.address}`)
     const stdlibAddress = this._getStdlibAddress(stdlib);
-    const directory = await AppDirectory.new(stdlibAddress, this.txParams);
+    const directory = await this.AppDirectory.new(stdlibAddress, this.txParams);
     log.info(` App directory: ${directory.address}`)
     await this.package.addVersion(initialVersion, directory.address, this.txParams);
     log.info(` Added version: ${initialVersion}`)
     this.directories[initialVersion] = directory;
     this.version = initialVersion;
-    this.appManager = await AppManager.new(this.package.address, initialVersion, this.factory.address, this.txParams);
+    this.appManager = await this.AppManager.new(this.package.address, initialVersion, this.factory.address, this.txParams);
     log.info(` App Manager ${this.appManager.address}`)
   }
 
   async connect(address) {
-    this.appManager = new AppManager(address);
-    this.package = new Package(await this.appManager.package());
-    this.factory = new UpgradeabilityProxyFactory(await this.appManager.factory());
+    this.appManager = new this.AppManager(address);
+    this.package = new this.Package(await this.appManager.package());
+    this.factory = new this.UpgradeabilityProxyFactory(await this.appManager.factory());
     this.version = await this.appManager.version();
-    this.directories[this.version] = new AppDirectory(await this.package.getVersion(this.version));
+    this.directories[this.version] = new this.AppDirectory(await this.package.getVersion(this.version));
   }
 
   async newVersion(versionName, stdlib) {
     log.info(`Adding version ${versionName}...`)
     const stdlibAddress = this._getStdlibAddress(stdlib);
-    const directory = await AppDirectory.new(stdlibAddress, this.txParams);
+    const directory = await this.AppDirectory.new(stdlibAddress, this.txParams);
     log.info(` App directory: ${directory.address}`)
     await this.package.addVersion(versionName, directory.address, this.txParams);
     log.info(` Added version: ${versionName}`)
@@ -95,7 +97,7 @@ class AppManagerWrapper {
       : await this._createProxyAndCall(contractClass, contractName, initMethodName, initArgs);
 
     log.info(` TX receipt received: ${receipt.transactionHash}`)
-    const logs = decodeLogs(receipt.logs, UpgradeabilityProxyFactory);
+    const logs = decodeLogs(receipt.logs, this.UpgradeabilityProxyFactory);
     const address = logs.find(l => l.event === 'ProxyCreated').args.proxy;
     log.info(` ${contractName} proxy: ${address}`)
     return new contractClass(address);
@@ -161,8 +163,8 @@ class AppManagerWrapper {
 
     // Deploy all contracts
     const directory = this.getCurrentDirectory()
-    await Promise.all(_.map(packageData.contracts, async (contractImpl, contractAlias) => {
-      const contractClass = await makeContract.local(contractImpl);
+    await Promise.all(_.map(packageData.contracts, async (contractName, contractAlias) => {
+      const contractClass = await ContractsProvider.getFromArtifacts(contractName);
       const deployed = await contractClass.new({ from: this.owner });
       await directory.setImplementation(contractAlias, deployed.address, { from: this.owner });
     }));

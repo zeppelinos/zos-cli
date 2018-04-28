@@ -1,7 +1,7 @@
 import fs from 'fs'
 import Logger from './Logger'
 import Stdlib from '../models/Stdlib'
-import makeContract from '../utils/contract'
+import ContractsProvider from '../models/ContractsProvider'
 
 const log = new Logger('PackageFilesInterface')
 
@@ -49,7 +49,7 @@ export default class PackageFilesInterface {
   async getContractClass(zosPackage, contractAlias) {
     const contractName = zosPackage.contracts[contractAlias]
     if (contractName) {
-      return makeContract.local(contractName)
+      return ContractsProvider.getFromArtifacts(contractName)
     } else if (zosPackage.stdlib && !_.isEmpty(zosPackage.stdlib)) {
       const stdlib = new Stdlib(zosPackage.stdlib)
       return await stdlib.getContract(contractAlias);

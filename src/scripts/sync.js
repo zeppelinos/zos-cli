@@ -1,5 +1,5 @@
 import AppManager from '../models/AppManager'
-import makeContract from '../utils/contract'
+import ContractsProvider from '../models/ContractsProvider'
 import PackageFilesInterface from '../utils/PackageFilesInterface'
 
 async function sync({ network, from, packageFileName, handleStdlib }) {
@@ -28,11 +28,12 @@ async function sync({ network, from, packageFileName, handleStdlib }) {
   const currentProvider = await appManager.getCurrentDirectory()
   zosNetworkFile.provider = { address: currentProvider.address }
 
-  for (let contractName in zosPackage.contracts) {
+  for (let contractAlias in zosPackage.contracts) {
     // TODO: store the implementation's hash to avoid unnecessary deployments
-    const contractClass = makeContract.local(zosPackage.contracts[contractName])
-    const contractInstance = await appManager.setImplementation(contractClass, contractName)
-    zosNetworkFile.contracts[contractName] = contractInstance.address
+    const contractName = zosPackage.contracts[contractAlias];
+    const contractClass = ContractsProvider.getFromArtifacts(contractName)
+    const contractInstance = await appManager.setImplementation(contractClass, contractAlias)
+    zosNetworkFile.contracts[contractAlias] = contractInstance.address
   }
 
   if (zosPackage.stdlib) {

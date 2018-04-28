@@ -1,9 +1,7 @@
 import Logger from '../utils/Logger'
-import makeContract from '../utils/contract'
+import ContractsProvider from "./ContractsProvider";
 
 const log = new Logger('Distribution');
-const Package = makeContract('Package')
-const Release = makeContract(require('zos-kernel/build/contracts/Release.json'))
 
 class Distribution {
 
@@ -17,17 +15,20 @@ class Distribution {
   }
 
   async connect(address) {
+    const Package = ContractsProvider.getByName('Package')
     this.package = new Package(address)
     return this.package
   }
 
   async deploy() {
+    const Package = ContractsProvider.getByName('Package')
     this.package = await Package.new(this.txParams)
     return this.package
   }
 
   async getRelease(version) {
     const releaseAddress = await this.package.getVersion(version)
+    const Release = ContractsProvider.release()
     return new Release(releaseAddress)
   }
 
@@ -37,6 +38,7 @@ class Distribution {
 
   async newVersion(version) {
     log.info('Adding new version...')
+    const Release = ContractsProvider.release()
     const release = await Release.new(this.txParams)
     await this.package.addVersion(version, release.address, this.txParams)
     log.info(' Added version:', version)

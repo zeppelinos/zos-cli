@@ -1,10 +1,9 @@
 import fs from 'fs';
 import npm from 'npm-programmatic';
 import Logger from '../utils/Logger'
-import makeContract from '../utils/contract'
+import ContractsProvider from './ContractsProvider'
 
 const log = new Logger('Stdlib');
-const ContractDirectory = makeContract('ContractDirectory');
 
 export default class Stdlib {
   constructor(nameWithVersion, owner) {
@@ -30,8 +29,8 @@ export default class Stdlib {
   async getContract(contractName) {
     const implName = this.getPackage().contracts[contractName];
     if (!implName) throw `Contract ${contractName} not found in package`;
-    const schema = JSON.parse(fs.readFileSync(`node_modules/${this.name}/build/contracts/${implName}.json`));
-    return makeContract(schema);
+    const data = JSON.parse(fs.readFileSync(`node_modules/${this.name}/build/contracts/${implName}.json`));
+    return ContractsProvider.getByJSONData(data);
   }
 
   listContracts() {
@@ -40,6 +39,7 @@ export default class Stdlib {
 
   async deploy() {
     log.info(`Deploying contract directory...`)
+    const ContractDirectory = ContractsProvider.getByName('ContractDirectory')
     const directory = await ContractDirectory.new({ from: this.owner });
     log.info(' Contract directory:', directory.address)
     await Promise.all(this.listContracts().map(async (contractName) => {
