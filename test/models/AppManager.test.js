@@ -1,6 +1,7 @@
-import AppManager from '../../src/models/AppManager';
-import Stdlib from '../../src/models/Stdlib';
 import fs from 'fs';
+import ProjectDeployer from "../../src/zos-lib/ProjectDeployer";
+import AppManagerProvider from "../../src/zos-lib/app_manager/AppManagerProvider";
+import AppManagerDeployer from "../../src/zos-lib/app_manager/AppManagerDeployer";
 
 const ImplV1 = artifacts.require('ImplV1');
 const ImplV2 = artifacts.require('ImplV2');
@@ -12,9 +13,7 @@ const should = require('chai')
 contract('AppManager', function ([_, owner]) {
   const initialVersion = "1.0";
   const contractName = 'Impl';
-  const networkName = 'test';
   const stdlibAddress = "0x0000000000000000000000000000000000000010";
-  const stdlibName = 'mock-stdlib';
 
   const shouldInitialize = function () {
     it('deploys all contracts', async function() {
@@ -37,22 +36,21 @@ contract('AppManager', function ([_, owner]) {
     });
 
     it('returns the current directory', async function () {
-      this.app.getCurrentDirectory().address.should.be.not.null;
+      this.app.currentDirectory().address.should.be.not.null;
     });
   };
 
   const shouldConnectToStdlib = function () {
     it('should connect current directory to stdlib', async function () {
-      const directory = await this.app.getCurrentDirectory();
+      const directory = this.app.currentDirectory();
       (await directory.stdlib()).should.eq(stdlibAddress);
     });
   };
 
   describe('without stdlib', function () {
-
     beforeEach("deploying", async function () {
-      this.app = new AppManager(owner, networkName);
-      await this.app.deploy(initialVersion);
+      const appManagerDeployer = new AppManagerDeployer(owner)
+      this.app = await appManagerDeployer.call(initialVersion)
     });
 
     describe('deploy', function () {
@@ -61,8 +59,8 @@ contract('AppManager', function ([_, owner]) {
 
     describe('connect', function () {
       beforeEach("connecting to existing instance", async function () {
-        const connectedApp = new AppManager(owner);
-        await connectedApp.connect(this.app.appManager.address);
+        const appManagerProvider = new AppManagerProvider()
+        const connectedApp = await appManagerProvider.from(owner, this.app.appManager.address);
         this.app = connectedApp;
       });
 
@@ -92,7 +90,7 @@ contract('AppManager', function ([_, owner]) {
 
       it('returns the current directory', async function () {
         const currentDirectory = await this.app.package.getVersion(newVersion);
-        this.app.getCurrentDirectory().address.should.eq(currentDirectory);
+        this.app.currentDirectory().address.should.eq(currentDirectory);
       });
     });
 
@@ -108,7 +106,7 @@ contract('AppManager', function ([_, owner]) {
       });
 
       it('should register implementation on directory', async function () {
-        const implementation = await this.app.getCurrentDirectory().getImplementation(contractName);
+        const implementation = await this.app.currentDirectory().getImplementation(contractName);
         implementation.should.eq(this.implementation.address);
       });
     });
@@ -181,30 +179,18 @@ contract('AppManager', function ([_, owner]) {
     });
 
     describe('setStdlib', function () {
-      describe('from name', function () {
-        beforeEach("setting stdlib from name", async function () {
-          await this.app.setStdlib(stdlibName);
-        });
-
-        shouldConnectToStdlib();
+      beforeEach("setting stdlib from name", async function () {
+        await this.app.setStdlib(stdlibAddress);
       });
 
-      describe('from object', function () {
-        beforeEach("setting stdlib from object", async function () {
-          this.stdlib = new Stdlib(stdlibName);
-          await this.app.setStdlib(this.stdlib);
-        });
-
-        shouldConnectToStdlib();
-      });
+      shouldConnectToStdlib();
     });
   });
 
   describe('with stdlib', function () {
     beforeEach("deploying", async function () {
-      this.stdlib = new Stdlib(stdlibName, owner);
-      this.app = new AppManager(owner, networkName);
-      await this.app.deploy(initialVersion, this.stdlib);
+      const appManagerDeployer = new AppManagerDeployer(owner)
+      this.app = await appManagerDeployer.call(initialVersion, stdlibAddress);
     });
 
     describe('deploy', function () {
@@ -214,8 +200,8 @@ contract('AppManager', function ([_, owner]) {
 
     describe('connect', function () {
       beforeEach("connecting to existing instance", async function () {
-        const connectedApp = new AppManager(owner);
-        await connectedApp.connect(this.app.appManager.address);
+        const appManagerProvider = new AppManagerProvider()
+        const connectedApp = await appManagerProvider.from(owner, this.app.appManager.address);
         this.app = connectedApp;
       });
 
@@ -224,10 +210,10 @@ contract('AppManager', function ([_, owner]) {
     });
   });
 
-  describe('with stdlib via name', function () {
+  describe('with stdlib', function () {
     beforeEach("deploying", async function () {
-      this.app = new AppManager(owner, networkName);
-      await this.app.deploy(initialVersion, stdlibName);
+      const appManagerDeployer = new AppManagerDeployer(owner)
+      this.app = await appManagerDeployer.call(initialVersion, stdlibAddress);
     });
 
     describe('deploy', function () {
@@ -237,13 +223,11 @@ contract('AppManager', function ([_, owner]) {
   });
 
   describe('from package data', async function () {
-    const greeterName = 'Greeter';
-
     beforeEach("deploying all contracts", async function () {
-      this.app = new AppManager(owner, networkName);
       const packageData = JSON.parse(fs.readFileSync('test/mocks/packages/package-with-contracts-and-stdlib.zos.json'));
-      await this.app.deployAll(packageData);
-      this.directory = await this.app.getCurrentDirectory();
+      const projectDeployer = new ProjectDeployer(owner)
+      this.app = await projectDeployer.call(packageData)
+      this.directory = this.app.currentDirectory();
     });
 
     describe('deployAll', function () {
@@ -257,7 +241,6 @@ contract('AppManager', function ([_, owner]) {
         const proxy = await this.app.createProxy(ImplV1, "Impl");
         (await proxy.say()).should.eq('V1');
       });
-    });    
-    
+    });
   });
  });

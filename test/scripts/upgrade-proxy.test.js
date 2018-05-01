@@ -4,7 +4,6 @@ import sync from "../../src/scripts/sync.js";
 import newVersion from "../../src/scripts/new-version.js";
 import createProxy from "../../src/scripts/create-proxy.js";
 import upgradeProxy from "../../src/scripts/upgrade-proxy.js";
-import fs from 'fs';
 import PackageFilesInterface from '../../src/utils/PackageFilesInterface';
 import { cleanup, cleanupfn } from "../helpers/cleanup.js";
 

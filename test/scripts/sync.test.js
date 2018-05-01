@@ -1,7 +1,6 @@
 import sync from "../../src/scripts/sync.js";
 import fs from 'fs';
 import { cleanup, cleanupfn } from '../helpers/cleanup';
-import PackageFilesInterface from "../../src/utils/PackageFilesInterface.js";
 
 const AppManager = artifacts.require('PackagedAppManager');
 const Package = artifacts.require('Package');
@@ -15,7 +14,6 @@ contract('sync', function([_, owner]) {
 
   const network = "test";
   const from = owner;
-  const appName = "MyApp";
   const defaultVersion = "1.1.0";
 
   describe('an empty package', function() {
