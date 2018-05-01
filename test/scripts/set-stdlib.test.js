@@ -8,8 +8,6 @@ const should = require('chai')
       .should();
 
 contract('set-stdlib command', function([_, owner]) {
-
-  const from = owner;
   const appName = "MyApp";
   const defaultVersion = "0.1.0";
   const packageFileName = "package.test.zos.json";

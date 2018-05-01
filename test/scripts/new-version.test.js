@@ -1,6 +1,5 @@
 import init from "../../src/scripts/init.js";
 import newVersion from "../../src/scripts/new-version.js";
-import fs from 'fs';
 import PackageFilesInterface from '../../src/utils/PackageFilesInterface';
 import { cleanup, cleanupfn } from "../helpers/cleanup.js";
 
@@ -9,8 +8,6 @@ const should = require('chai')
       .should();
 
 contract('new-version command', function([_, owner]) {
-
-  const from = owner;
   const appName = "MyApp";
   const defaultVersion = "0.1.0";
   const packageFileName = "package.test.zos.json";
@@ -32,7 +29,7 @@ contract('new-version command', function([_, owner]) {
 
   it('should set stdlib', async function () {
     const version = '0.2.0';
-    await newVersion(version, { packageFileName, stdlib: 'mock-stdlib@1.1.0' });
+    await newVersion(version, { packageFileName, stdlibNameVersion: 'mock-stdlib@1.1.0' });
     const data = files.read();
     data.stdlib.name.should.eq('mock-stdlib');
     data.stdlib.version.should.eq('1.1.0');

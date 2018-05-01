@@ -1,7 +1,6 @@
-import deployAll from "../../src/scripts/deploy-all";
 import fs from 'fs';
+import deployAll from "../../src/scripts/deploy-all";
 import { cleanup, cleanupfn } from '../helpers/cleanup';
-import PackageFilesInterface from "../../src/utils/PackageFilesInterface.js";
 
 const AppManager = artifacts.require('PackagedAppManager');
 const Package = artifacts.require('Package');

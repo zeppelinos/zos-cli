@@ -1,6 +1,5 @@
 import init from "../../src/scripts/init.js";
 import addImplementation from "../../src/scripts/add-implementation.js";
-import fs from 'fs';
 import PackageFilesInterface from '../../src/utils/PackageFilesInterface';
 import { cleanup, cleanupfn } from "../helpers/cleanup.js";
 
