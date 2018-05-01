@@ -9,7 +9,7 @@ module.exports = function(program) {
     .option('-s, --stdlib <stdlib>', 'Standard library to use')
     .option('--no-install', 'Skip installing stdlib npm dependencies')
     .action(function (project, version, options) {
-      const { stdlib, install: installDeps } = options
-      init(project, version, { stdlib, installDeps })
+      const { stdlib: stdlibNameVersion, install: installDeps } = options
+      init(project, version, { stdlibNameVersion, installDeps })
     })
 }

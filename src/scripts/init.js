@@ -1,3 +1,5 @@
+import Stdlib from "../models/Stdlib";
+import StdlibInstaller from "../zos-lib/stdlib/StdlibInstaller"
 import PackageFilesInterface from '../utils/PackageFilesInterface'
 
 const DEFAULT_VERSION = '0.1.0'
@@ -7,14 +9,20 @@ const BASE_PACKAGE = {
   stdlib: {}
 }
 
-async function init(name, version, { packageFileName, stdlib, installDeps }) {
+async function init(name, version, { packageFileName, stdlibNameVersion, installDeps }) {
   if (name === undefined) throw 'Must provide a project name'
   const files = new PackageFilesInterface(packageFileName)
   const zosPackage = BASE_PACKAGE
 
   zosPackage.name = name
   zosPackage.version = version || DEFAULT_VERSION
-  await files.setStdlib(zosPackage, stdlib, installDeps)
+  zosPackage.stdlib = {}
+
+  if(stdlibNameVersion) {
+    const stdlib = installDeps ? new StdlibInstaller(stdlibNameVersion).call() : new Stdlib(stdlibNameVersion)
+    await files.setStdlib(zosPackage, stdlib)
+  }
+
   files.write(zosPackage)
 }
 
