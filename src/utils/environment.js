@@ -4,6 +4,10 @@ const Environment = {
     else ifFalse()
   },
 
+  isNotTest() {
+    return !this.isTest()
+  },
+
   isTest() {
     return process.env.NODE_ENV === 'test'
   },

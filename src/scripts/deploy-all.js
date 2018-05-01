@@ -1,14 +1,11 @@
 import sync from './sync'
-import Stdlib from '../models/Stdlib';
+import StdlibDeployer from "../zos-lib/stdlib/StdlibDeployer";
 
 // TODO: This file should a middle layer instead of invoking another command
 // See https://github.com/zeppelinos/zos-cli/issues/1
 async function deployAll({ network, from, packageFileName }) {
-  await sync({ network, from, packageFileName, handleStdlib: async function(appManager, stdlibInfo) {
-    const stdlib = new Stdlib(stdlibInfo, from);
-    const deployed = await stdlib.deploy();
-    await appManager.setStdlib(deployed.address);
-    return deployed.address;
+  await sync({ network, from, packageFileName, deployStdlib: async function(appManager, stdlibName) {
+    return new StdlibDeployer(from).call(stdlibName);
   }});
 }
 

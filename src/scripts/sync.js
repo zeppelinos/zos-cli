@@ -1,21 +1,26 @@
-import AppManager from '../models/AppManager'
+import _ from 'lodash'
+import StdlibProvider from "../zos-lib/stdlib/StdlibProvider";
 import ContractsProvider from '../models/ContractsProvider'
+import AppManagerProvider from "../zos-lib/app_manager/AppManagerProvider";
+import AppManagerDeployer from "../zos-lib/app_manager/AppManagerDeployer";
 import PackageFilesInterface from '../utils/PackageFilesInterface'
 
-async function sync({ network, from, packageFileName, handleStdlib }) {
+async function sync({ network, from, packageFileName, deployStdlib }) {
   const files = new PackageFilesInterface(packageFileName)
-  const appManager = new AppManager(from, network)
   if (! files.exists()) throw `Could not find package file ${packageFileName}`
 
   const zosPackage = files.read()
   let zosNetworkFile
+  let appManager
 
   // Get AppManager instance
   if (files.existsNetworkFile(network)) {
     zosNetworkFile = files.readNetworkFile(network)
-    await appManager.connect(zosNetworkFile.app.address)
+    const appManagerProvider = new AppManagerProvider()
+    appManager = await appManagerProvider.from(from, zosNetworkFile.app.address)
   } else {
-    await appManager.deploy(zosPackage.version)
+    const appManagerDeployer = new AppManagerDeployer(from)
+    appManager = await appManagerDeployer.call(zosPackage.version)
     createNetworkFile(network, appManager.address(), packageFileName)
     zosNetworkFile = files.readNetworkFile(network)
   }
@@ -25,7 +30,7 @@ async function sync({ network, from, packageFileName, handleStdlib }) {
     zosNetworkFile.app.version = zosPackage.version
   }
 
-  const currentProvider = await appManager.getCurrentDirectory()
+  const currentProvider = appManager.currentDirectory()
   zosNetworkFile.provider = { address: currentProvider.address }
 
   for (let contractAlias in zosPackage.contracts) {
@@ -36,14 +41,16 @@ async function sync({ network, from, packageFileName, handleStdlib }) {
     zosNetworkFile.contracts[contractAlias] = contractInstance.address
   }
 
-  if (zosPackage.stdlib) {
-    const stdlibAddress = handleStdlib
-      ? await handleStdlib(appManager, zosPackage.stdlib)
-      : await appManager.setStdlib(zosPackage.stdlib);
+  if (!_.isEmpty(zosPackage.stdlib)) {
+    const stdlibName = zosPackage.stdlib.name
+    const stdlibAddress = deployStdlib
+      ? await deployStdlib(appManager, stdlibName)
+      : StdlibProvider.from(stdlibName, network)
+    await appManager.setStdlib(stdlibAddress)
     zosNetworkFile.stdlib = { address: stdlibAddress }
   } else {
     delete zosNetworkFile['stdlib']
-    await appManager.setStdlib(null)
+    await appManager.setStdlib()
   }
 
   files.writeNetworkFile(network, zosNetworkFile)

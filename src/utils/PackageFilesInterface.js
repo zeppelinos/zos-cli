@@ -31,18 +31,10 @@ export default class PackageFilesInterface {
    * TODO: Move to a different class
    */
 
-  async setStdlib(zosPackage, stdlibName, installDeps) {
-    if (stdlibName) {
-      const stdlib = new Stdlib(stdlibName)
-      if (installDeps) {
-        await stdlib.installDependency();
-      }
-      zosPackage.stdlib = {
-        name: stdlib.getName(),
-        version: stdlib.getVersion()
-      }
-    } else {
-      zosPackage.stdlib = {};
+  async setStdlib(zosPackage, stdlib) {
+    zosPackage.stdlib = {
+      name: stdlib.getName(),
+      version: stdlib.getVersion()
     }
   }
 
@@ -50,8 +42,8 @@ export default class PackageFilesInterface {
     const contractName = zosPackage.contracts[contractAlias]
     if (contractName) {
       return ContractsProvider.getFromArtifacts(contractName)
-    } else if (zosPackage.stdlib && !_.isEmpty(zosPackage.stdlib)) {
-      const stdlib = new Stdlib(zosPackage.stdlib)
+    } else if (!_.isEmpty(zosPackage.stdlib)) {
+      const stdlib = new Stdlib(zosPackage.stdlib.name)
       return await stdlib.getContract(contractAlias);
     } else {
       throw `Could not find ${contractAlias} contract in zOS package file`

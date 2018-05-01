@@ -1,5 +1,5 @@
-import AppManager from '../models/AppManager'
 import PackageFilesInterface from '../utils/PackageFilesInterface'
+import AppManagerProvider from "../zos-lib/app_manager/AppManagerProvider";
 
 async function createProxy(contractAlias, { initMethod, initArgs, network, from, packageFileName }) {
   if (contractAlias === undefined) throw 'Must provide a contract alias'
@@ -10,8 +10,8 @@ async function createProxy(contractAlias, { initMethod, initArgs, network, from,
   const zosNetworkFile = files.readNetworkFile(network)
   const { proxies } = zosNetworkFile
 
-  const appManager = new AppManager(from)
-  await appManager.connect(zosNetworkFile.app.address)
+  const appManagerProvider = new AppManagerProvider()
+  const appManager = await appManagerProvider.from(from, zosNetworkFile.app.address)
 
   const contractClass = await files.getContractClass(zosPackage, contractAlias)
   const proxyInstance = await appManager.createProxy(contractClass, contractAlias, initMethod, initArgs)
