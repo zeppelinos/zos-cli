@@ -7,7 +7,7 @@ const BASE_PACKAGE = {
   stdlib: {}
 }
 
-async function init(name, version, { from, packageFileName, stdlib, installDeps }) {
+async function init(name, version, { packageFileName, stdlib, installDeps }) {
   if (name === undefined) throw 'Must provide a project name'
   const files = new PackageFilesInterface(packageFileName)
   const zosPackage = BASE_PACKAGE

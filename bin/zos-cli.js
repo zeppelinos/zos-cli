@@ -1,15 +1,15 @@
 #! /usr/bin/env node
 
-const Path = require('path')
-const shelljs = require('shelljs')
+const program = require('commander')
+const registerUserCommands = require('./users')
+const registerVouchingCommands = require('./vouching')
+const registerDeveloperCommands = require('./developers')
 
-function run() {
-  const bin = 'npx truffle exec'
-  const script = Path.resolve(__dirname, '../src/entrypoint.js')
-  const args = process.argv.slice(2).join(' ')
-  const command = `${bin} ${script} ${args}`
+program
+  .usage('<command> [options]')
+  .version(require('../package.json').version, '-v, --version')
 
-  shelljs.exec(command)
-}
-
-run()
+registerUserCommands(program)
+registerVouchingCommands(program)
+registerDeveloperCommands(program)
+program.parse(process.argv);
