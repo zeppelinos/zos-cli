@@ -1,7 +1,7 @@
-const createProxy = require('../../scripts/create-proxy')
-const runWithTruffle = require('../../utils/runWithTruffle')
+import createProxy from '../../scripts/create-proxy'
+import runWithTruffle from '../../utils/runWithTruffle'
 
-module.exports = function(program) {
+export default function(program) {
   program
     .command('create-proxy <alias>')
     .description("Deploy a new proxy to make your contract upgradeable.\n  Provide the <alias> name you used to register your contract.")
@@ -10,7 +10,7 @@ module.exports = function(program) {
     .option('-a, --args <arg1, arg2, ...>', 'Provide initialization arguments for your contract if required')
     .option('-f, --from <from>', 'Set the transactions sender')
     .option('-n, --network <network>', 'Provide a network to be used')
-    .action(function (alias, options) {
+    .action(function (contractAlias, options) {
       let initMethod = program.init
       if(typeof initMethod === 'boolean') initMethod = 'initialize'
 
@@ -19,6 +19,6 @@ module.exports = function(program) {
       else if(typeof initArgs === 'boolean' || initMethod) initArgs = []
 
       const { from, network } = options
-      runWithTruffle(() => createProxy(alias, { network, from, initMethod, initArgs }), network)
+      runWithTruffle(() => createProxy({ contractAlias, network, from, initMethod, initArgs }), network)
     })
 }

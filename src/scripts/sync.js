@@ -5,7 +5,7 @@ import AppManagerProvider from "../zos-lib/app_manager/AppManagerProvider";
 import AppManagerDeployer from "../zos-lib/app_manager/AppManagerDeployer";
 import PackageFilesInterface from '../utils/PackageFilesInterface'
 
-async function sync({ network, from, packageFileName, deployStdlib }) {
+export default async function sync({ network, from, packageFileName, deployStdlib }) {
   const files = new PackageFilesInterface(packageFileName)
   if (! files.exists()) throw `Could not find package file ${packageFileName}`
 
@@ -70,5 +70,3 @@ function createNetworkFile(network, address, packageFileName) {
 
   files.writeNetworkFile(network, zosNetworkFile)
 }
-
-module.exports = sync

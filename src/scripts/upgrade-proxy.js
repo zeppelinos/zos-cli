@@ -1,7 +1,7 @@
 import PackageFilesInterface from '../utils/PackageFilesInterface'
 import AppManagerProvider from "../zos-lib/app_manager/AppManagerProvider";
 
-async function upgradeProxy(contractAlias, proxyAddress, { initMethod, initArgs, network, from, packageFileName }) {
+export default async function upgradeProxy({ contractAlias, proxyAddress, initMethod, initArgs, network, from, packageFileName = null }) {
   if (contractAlias === undefined) throw `Must provide a contract name`
 
   // TODO: if network file does not exists, create it
@@ -29,5 +29,3 @@ async function upgradeProxy(contractAlias, proxyAddress, { initMethod, initArgs,
   zosNetworkFile.proxies = proxies
   files.writeNetworkFile(network, zosNetworkFile)
 }
-
-module.exports = upgradeProxy

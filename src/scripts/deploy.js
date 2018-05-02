@@ -8,7 +8,7 @@ import DistributionDeployer from "../zos-lib/distribution/DistributionDeployer";
 const log = new Logger('deploy')
 
 // TODO: remove version param
-async function deploy(version, { network, from, packageFileName }) {
+export default async function deploy({ version, network, from, packageFileName = null}) {
   const files = new PackageFilesInterface(packageFileName)
   if (! files.exists()) throw `Could not find package file ${packageFileName}`
 
@@ -72,5 +72,3 @@ function createNetworkFile(network, address, packageFileName) {
 
   files.writeNetworkFile(network, zosNetworkFile)
 }
-
-module.exports = deploy

@@ -28,12 +28,12 @@ contract('upgrade-proxy command', function([_, owner]) {
     cleanup(packageFileName)
     cleanup(networkPackageFileName)
 
-    await init(appName, defaultVersion, {packageFileName});
-    await addImplementation(contractName, contractAlias, {packageFileName});
+    await init({ name: appName, version: defaultVersion, packageFileName });
+    await addImplementation({ contractName, contractAlias, packageFileName });
     await sync({ packageFileName, network, from });
-    await createProxy(contractAlias, {packageFileName, network, from});
-    await newVersion(version, {packageFileName, from});
-    await addImplementation(contractName, contractAlias, {packageFileName});
+    await createProxy({ contractAlias, packageFileName, network, from });
+    await newVersion({ version, packageFileName, from });
+    await addImplementation({ contractName, contractAlias, packageFileName });
     await sync({ packageFileName, network, from });
   });
 
@@ -41,7 +41,7 @@ contract('upgrade-proxy command', function([_, owner]) {
   after(cleanupfn(networkPackageFileName));
 
   it('should upgrade the version of a proxy', async function() {
-    await upgradeProxy(contractAlias, null, {network, packageFileName, from});
+    await upgradeProxy({ contractAlias, proxyAddress: null, network, packageFileName, from });
     const data = files.readNetworkFile(network);
     const proxy = data.proxies[contractAlias][0];
     proxy.version.should.eq(version);

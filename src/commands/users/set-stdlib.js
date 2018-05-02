@@ -1,5 +1,5 @@
-const setStdlib = require('../../scripts/set-stdlib')
-const runWithTruffle = require('../../utils/runWithTruffle')
+import setStdlib from '../../scripts/set-stdlib'
+import runWithTruffle from '../../utils/runWithTruffle'
 
 module.exports = function(program) {
   program
@@ -8,8 +8,8 @@ module.exports = function(program) {
     .usage('<stdlib> [options]')
     .option('-f, --from <from>', 'Set the transactions sender')
     .option('--no-install', 'Skip installing stdlib npm dependencies')
-    .action(function (stdlib, options) {
+    .action(function (stdlibNameVersion, options) {
       const installDeps = options.install
-      runWithTruffle(() => setStdlib(stdlib, { installDeps }))
+      runWithTruffle(() => setStdlib({ stdlibNameVersion, installDeps }))
     })
 }

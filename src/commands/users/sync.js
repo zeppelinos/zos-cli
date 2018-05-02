@@ -1,7 +1,7 @@
-const sync = require('../../scripts/sync')
-const runWithTruffle = require('../../utils/runWithTruffle')
+import sync from '../../scripts/sync'
+import runWithTruffle from '../../utils/runWithTruffle'
 
-module.exports = function(program) {
+export default function(program) {
   program
     .command('sync')
     .description("Sync your project with the blockchain")
