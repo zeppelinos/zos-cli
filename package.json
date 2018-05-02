@@ -4,11 +4,11 @@
   "description": "zeppelin_os command line interface",
   "main": "lib/index.js",
   "scripts": {
-    "prepack": "truffle compile && sed -i.bak 's/\\/src/\\/lib/g' bin/zos-cli.js && rm bin/zos-cli.js.bak && babel src --out-dir lib",
+    "prepack": "truffle compile && babel src --out-dir lib",
     "test": "NODE_ENV=test ./node_modules/.bin/truffle test"
   },
   "bin": {
-    "zos": "./bin/zos-cli.js"
+    "zos": "./lib/bin/zos-cli.js"
   },
   "repository": {
     "type": "git",
