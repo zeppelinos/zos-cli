@@ -6,7 +6,7 @@ const upgradeProxy = require('../src/commands/users/upgrade-proxy')
 const setStdlib = require('../src/commands/users/set-stdlib')
 const deployAll = require('../src/commands/users/deploy-all')
 
-module.exports = function processUserCommands(program) {
+module.exports = function registerUserCommands(program) {
   init(program)
   addImplementation(program)
   sync(program)

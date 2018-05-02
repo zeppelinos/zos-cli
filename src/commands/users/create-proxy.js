@@ -4,7 +4,8 @@ const runWithTruffle = require('../../utils/runWithTruffle')
 module.exports = function(program) {
   program
     .command('create-proxy <alias>')
-    .description("Deploy a new proxy to make your contract upgradeable.\n  Provide the <alias> name you used to register your contract.")
+    .description(`Deploy a new proxy to make your contract upgradeable.
+      Provide the <alias> name you used to register your contract.`)
     .usage('<alias> --network <network> [options]')
     .option('-i, --init [function]', "Tell whether your contract has to be initialized or not. You can provide name of the initialization function. If none is given, 'initialize' will be considered by default")
     .option('-a, --args <arg1, arg2, ...>', 'Provide initialization arguments for your contract if required')
