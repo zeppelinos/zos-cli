@@ -1,20 +1,16 @@
 import env from "../../utils/environment";
 import Stdlib from "../../models/Stdlib";
 
-export default class StdlibInstaller {
-  constructor(stdlibNameAndVersion) {
-    this.stdlibNameAndVersion = stdlibNameAndVersion
-  }
+export default {
+  async call(stdlibNameAndVersion) {
+    await this._installDepIfNotTestEnv(stdlibNameAndVersion)
+    return new Stdlib(stdlibNameAndVersion)
+  },
 
-  async call() {
-    await this.installDepIfTestEnv()
-    return new Stdlib(this.stdlibNameAndVersion)
-  }
-
-  async installDepIfTestEnv() {
+  async _installDepIfNotTestEnv(stdlibNameAndVersion) {
     if(env.isNotTest()) {
       const params = { save: true, cwd: process.cwd() }
-      await npm.install([this.stdlibNameAndVersion], params)
+      await npm.install([stdlibNameAndVersion], params)
     }
   }
 }

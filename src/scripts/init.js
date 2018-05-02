@@ -19,7 +19,7 @@ async function init(name, version, { packageFileName, stdlibNameVersion, install
   zosPackage.stdlib = {}
 
   if(stdlibNameVersion) {
-    const stdlib = installDeps ? new StdlibInstaller(stdlibNameVersion).call() : new Stdlib(stdlibNameVersion)
+    const stdlib = installDeps ? StdlibInstaller.call(stdlibNameVersion) : new Stdlib(stdlibNameVersion)
     await files.setStdlib(zosPackage, stdlib)
   }
 
