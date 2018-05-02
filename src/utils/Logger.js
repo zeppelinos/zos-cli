@@ -1,4 +1,5 @@
 import colors from 'colors'
+import env from './environment'
 
 class Logger {
   constructor(prefix) {
@@ -20,4 +21,4 @@ class SilentLogger {
 }
 
 
-module.exports = process.env.NODE_ENV === 'test' ? SilentLogger : Logger
+module.exports = env.isTest() ? SilentLogger : Logger

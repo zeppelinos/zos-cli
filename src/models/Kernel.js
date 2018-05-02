@@ -1,16 +1,13 @@
 import Logger from '../utils/Logger'
+import ContractsProvider from './ContractsProvider'
 
 const log = new Logger('Kernel')
-const makeContract = require('../utils/contract')
-const Kernel = makeContract(require('zos-kernel/build/contracts/Kernel.json'))
-const Release = makeContract(require('zos-kernel/build/contracts/Release.json'))
-const ZepToken = makeContract(require('zos-kernel/build/contracts/ZepToken.json'))
-const Vouching = makeContract(require('zos-kernel/build/contracts/Vouching.json'))
 
 export default class KernelWrapper {
   constructor(address, txParams) {
-    this.txParams = txParams
+    const Kernel = ContractsProvider.kernel()
     this.kernel = new Kernel(address)
+    this.txParams = txParams
   }
 
   async register(release) {
@@ -66,6 +63,7 @@ export default class KernelWrapper {
   }
 
   async _ifFrozenThrow(releaseAddress, error) {
+    const Release = ContractsProvider.release()
     const release = new Release(releaseAddress)
     const isFrozen = await release.frozen(this.txParams)
     if(!isFrozen) throw error
@@ -101,11 +99,13 @@ export default class KernelWrapper {
 
   async zepToken() {
     if(!this.zepTokenAddress) this.zepTokenAddress = await this.kernel.token()
+    const ZepToken = ContractsProvider.zepToken()
     return new ZepToken(this.zepTokenAddress)
   }
 
   async vouching() {
     if(!this.vouchingAddress) this.vouchingAddress = await this.kernel.vouches()
+    const Vouching = ContractsProvider.vouching()
     return new Vouching(this.vouchingAddress)
   }
 

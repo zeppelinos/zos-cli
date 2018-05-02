@@ -7,7 +7,7 @@ function initTruffle(network) {
   const config = TruffleConfig.detect(options)
   config.network = network
   return new Promise((resolve, reject) => {
-    TruffleEnvironment.detect(config, function(error) {
+    TruffleEnvironment.detect(config, function (error) {
       if (error) throw error
       global.web3 = new Web3(config.provider)
       global.artifacts = config.resolver

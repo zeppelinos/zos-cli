@@ -1,8 +1,8 @@
-import Distribution from '../models/Distribution'
-import Kernel from '../models/Kernel'
-import makeContract from '../utils/contract'
-import PackageFilesInterface from '../utils/PackageFilesInterface'
 import Logger from '../utils/Logger'
+import Kernel from '../models/Kernel'
+import Distribution from '../models/Distribution'
+import ContractsProvider from '../models/ContractsProvider'
+import PackageFilesInterface from '../utils/PackageFilesInterface'
 
 const log = new Logger('deploy')
 
@@ -32,12 +32,13 @@ async function deploy(version, { network, from, packageFileName }) {
   const release = await distribution.newVersion(version)
 
   // 3. For each implementation, deploy it and register it into the release
-  for (let contractName in zosPackage.contracts) {
-    log.info(`Deploying ${contractName} contract...`)
+  for (let contractAlias in zosPackage.contracts) {
     // TODO: store the implementation's hash to avoid unnecessary deployments
-    const contractClass = makeContract.local(zosPackage.contracts[contractName])
-    const contractInstance = await distribution.setImplementation(version, contractClass, contractName)
-    zosNetworkFile.contracts[contractName] = contractInstance.address
+    log.info(`Deploying ${contractAlias} contract...`)
+    const contractName = zosPackage.contracts[contractAlias];
+    const contractClass = ContractsProvider.getFromArtifacts(contractName)
+    const contractInstance = await distribution.setImplementation(version, contractClass, contractAlias)
+    zosNetworkFile.contracts[contractAlias] = contractInstance.address
   }
 
   // 4. Freeze release
