@@ -5,14 +5,18 @@ import ContractsProvider from "../../models/ContractsProvider"
 const log = new Logger('AppManagerDeployer')
 
 export default {
-  async call(owner, version, stdlibAddress = 0x0) {
-    this.txParams = { from: owner }
+  async call(version, txParams = {}) {
+    return this.withStdlib(version, 0x0, txParams)
+  },
+
+  async withStdlib(version, stdlibAddress, txParams = {}) {
+    this.txParams = txParams
     await this.createFactory()
     await this.createPackage()
     await this.createAppDirectory(stdlibAddress)
     await this.addVersion(version)
     await this.createAppManager(version)
-    return new AppManagerWrapper(owner, this.packagedAppManager, this.factory, this.appDirectory, this.package, this.version)
+    return new AppManagerWrapper(this.packagedAppManager, this.factory, this.appDirectory, this.package, this.version, this.txParams)
   },
 
   async createAppManager(version) {

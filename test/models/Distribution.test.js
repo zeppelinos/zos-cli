@@ -10,7 +10,7 @@ const should = require('chai')
   .should()
 
 contract('Distribution', function ([_, owner]) {
-  
+  const txParams = { from: owner }
   const contractName = 'Impl'
   const initialVersion = "1.0"
   const newVersion = "2.0"
@@ -27,7 +27,7 @@ contract('Distribution', function ([_, owner]) {
 
 
   beforeEach("deploying", async function () {
-    this.distribution = await DistributionDeployer.call(owner)
+    this.distribution = await DistributionDeployer.call(txParams)
   })
 
 
@@ -38,7 +38,7 @@ contract('Distribution', function ([_, owner]) {
 
   describe('connect', function () {
     beforeEach("connecting to existing instance", async function () {
-      const connectedDistribution = await DistributionProvider.from(owner, this.distribution.address())
+      const connectedDistribution = await DistributionProvider.from(this.distribution.address(), txParams)
       this.distribution = connectedDistribution
     })
 

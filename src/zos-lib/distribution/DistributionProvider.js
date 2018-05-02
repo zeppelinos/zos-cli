@@ -5,9 +5,9 @@ import ContractsProvider from "../../models/ContractsProvider";
 const log = new Logger('DistributionProvider')
 
 export default {
-  from(owner, address) {
+  from(address, txParams = {}) {
     this._fetchPackage(address);
-    return new DistributionWrapper(owner, this.package)
+    return new DistributionWrapper(this.package, txParams)
   },
 
   _fetchPackage(address) {

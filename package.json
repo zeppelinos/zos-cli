@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "scripts": {
     "prepack": "truffle compile && sed -i.bak 's/\\/src/\\/lib/g' bin/zos-cli.js && rm bin/zos-cli.js.bak && babel src --out-dir lib",
-    "test": "NODE_ENV=test npx truffle test"
+    "test": "NODE_ENV=test ./node_modules/.bin/truffle test"
   },
   "bin": {
     "zos": "./bin/zos-cli.js"

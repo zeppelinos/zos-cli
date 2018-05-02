@@ -2,11 +2,11 @@ import KernelWrapper from "./KernelWrapper";
 import ContractsProvider from '../../models/ContractsProvider'
 
 export default {
-  async from(owner, address) {
+  async from(address, txParams = {}) {
     this._fetchKernel(address)
     await this._fetchZepToken()
     await this._fetchVouching()
-    return new KernelWrapper(owner, this.kernel, this.zepToken, this.vouching)
+    return new KernelWrapper(this.kernel, this.zepToken, this.vouching, txParams)
   },
 
   _fetchKernel(address) {

@@ -4,11 +4,11 @@ import ContractsProvider from '../../models/ContractsProvider'
 const log = new Logger('Kernel')
 
 export default class KernelWrapper {
-  constructor(owner, kernel, zepToken, vouching) {
+  constructor(kernel, zepToken, vouching, txParams = {}) {
     this.kernel = kernel
     this.zepToken = zepToken
     this.vouching = vouching
-    this.txParams = { from: owner }
+    this.txParams = txParams
   }
 
   async register(release) {

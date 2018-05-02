@@ -5,9 +5,9 @@ const log = new Logger('Distribution');
 
 export default class DistributionWrapper {
 
-  constructor(owner, _package) {
+  constructor(_package, txParams = {}) {
     this.package = _package
-    this.txParams = { from: owner }
+    this.txParams = txParams
   }
 
   address() {

@@ -5,7 +5,7 @@ import AppManagerProvider from "../zos-lib/app_manager/AppManagerProvider";
 import AppManagerDeployer from "../zos-lib/app_manager/AppManagerDeployer";
 import PackageFilesInterface from '../utils/PackageFilesInterface'
 
-export default async function sync({ network, from, packageFileName, deployStdlib }) {
+export default async function sync({ network, deployStdlib, txParams = {}, packageFileName = null }) {
   const files = new PackageFilesInterface(packageFileName)
   if (! files.exists()) throw `Could not find package file ${packageFileName}`
 
@@ -16,9 +16,9 @@ export default async function sync({ network, from, packageFileName, deployStdli
   // Get AppManager instance
   if (files.existsNetworkFile(network)) {
     zosNetworkFile = files.readNetworkFile(network)
-    appManager = await AppManagerProvider.from(from, zosNetworkFile.app.address)
+    appManager = await AppManagerProvider.from(zosNetworkFile.app.address, txParams)
   } else {
-    appManager = await AppManagerDeployer.call(from, zosPackage.version)
+    appManager = await AppManagerDeployer.call(zosPackage.version, txParams)
     createNetworkFile(network, appManager.address(), packageFileName)
     zosNetworkFile = files.readNetworkFile(network)
   }

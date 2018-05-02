@@ -8,7 +8,7 @@ import DistributionDeployer from "../zos-lib/distribution/DistributionDeployer";
 const log = new Logger('deploy')
 
 // TODO: remove version param
-export default async function deploy({ version, network, from, packageFileName = null}) {
+export default async function deploy({ version, network, txParams = {}, packageFileName = null}) {
   const files = new PackageFilesInterface(packageFileName)
   if (! files.exists()) throw `Could not find package file ${packageFileName}`
 
@@ -20,10 +20,10 @@ export default async function deploy({ version, network, from, packageFileName =
   if (files.existsNetworkFile(network)) {
     log.info('Reading network file...')
     zosNetworkFile = files.readNetworkFile(network)
-    distribution = await DistributionProvider.from(from, zosNetworkFile.distribution.address)
+    distribution = await DistributionProvider.from(zosNetworkFile.distribution.address, txParams)
   } else {
     log.info('Network file not found, deploying new distribution...')
-    distribution = await DistributionDeployer.call(from)
+    distribution = await DistributionDeployer.call(txParams)
     createNetworkFile(network, distribution.address(), packageFileName)
     zosNetworkFile = files.readNetworkFile(network)
   }
@@ -49,7 +49,7 @@ export default async function deploy({ version, network, from, packageFileName =
   // 5. Register release into kernel
   const kernelAddress = zosPackage.kernel.address
   log.info(`Registering release into kernel address ${kernelAddress}`)
-  const kernel = await KernelProvider.from(from, kernelAddress)
+  const kernel = await KernelProvider.from(kernelAddress, txParams)
   await kernel.register(release.address)
 
   zosNetworkFile.provider = { address: release.address }

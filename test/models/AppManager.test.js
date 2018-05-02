@@ -11,6 +11,7 @@ const should = require('chai')
   .should();
 
 contract('AppManager', function ([_, owner]) {
+  const txParams = { from: owner }
   const initialVersion = "1.0";
   const contractName = 'Impl';
   const stdlibAddress = "0x0000000000000000000000000000000000000010";
@@ -49,7 +50,7 @@ contract('AppManager', function ([_, owner]) {
 
   describe('without stdlib', function () {
     beforeEach("deploying", async function () {
-      this.app = await AppManagerDeployer.call(owner, initialVersion)
+      this.app = await AppManagerDeployer.call(initialVersion, txParams)
     });
 
     describe('deploy', function () {
@@ -58,7 +59,7 @@ contract('AppManager', function ([_, owner]) {
 
     describe('connect', function () {
       beforeEach("connecting to existing instance", async function () {
-        const connectedApp = await AppManagerProvider.from(owner, this.app.appManager.address);
+        const connectedApp = await AppManagerProvider.from(this.app.appManager.address, txParams);
         this.app = connectedApp;
       });
 
@@ -187,7 +188,7 @@ contract('AppManager', function ([_, owner]) {
 
   describe('with stdlib', function () {
     beforeEach("deploying", async function () {
-      this.app = await AppManagerDeployer.call(owner, initialVersion, stdlibAddress);
+      this.app = await AppManagerDeployer.withStdlib(initialVersion, stdlibAddress, txParams);
     });
 
     describe('deploy', function () {
@@ -197,7 +198,7 @@ contract('AppManager', function ([_, owner]) {
 
     describe('connect', function () {
       beforeEach("connecting to existing instance", async function () {
-        const connectedApp = await AppManagerProvider.from(owner, this.app.appManager.address);
+        const connectedApp = await AppManagerProvider.from(this.app.appManager.address, txParams);
         this.app = connectedApp;
       });
 
@@ -208,7 +209,7 @@ contract('AppManager', function ([_, owner]) {
 
   describe('with stdlib', function () {
     beforeEach("deploying", async function () {
-      this.app = await AppManagerDeployer.call(owner, initialVersion, stdlibAddress);
+      this.app = await AppManagerDeployer.withStdlib(initialVersion, stdlibAddress, txParams);
     });
 
     describe('deploy', function () {
@@ -220,7 +221,7 @@ contract('AppManager', function ([_, owner]) {
   describe('from package data', async function () {
     beforeEach("deploying all contracts", async function () {
       const packageData = JSON.parse(fs.readFileSync('test/mocks/packages/package-with-contracts-and-stdlib.zos.json'));
-      this.app = await ProjectDeployer.call(owner, packageData)
+      this.app = await ProjectDeployer.call(packageData, txParams)
       this.directory = this.app.currentDirectory();
     });
 

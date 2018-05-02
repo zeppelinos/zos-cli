@@ -2,12 +2,12 @@ import AppManagerWrapper from "./AppManagerWrapper"
 import ContractsProvider from "../../models/ContractsProvider"
 
 export default {
-  async from(owner, address) {
+  async from(address, txParams = {}) {
     this._fetchPackagedAppManager(address)
     await this._fetchFactory()
     await this._fetchPackage()
     await this._fetchAppDirectory()
-    return new AppManagerWrapper(owner, this.packagedAppManager, this.factory, this.appDirectory, this.package, this.version);
+    return new AppManagerWrapper(this.packagedAppManager, this.factory, this.appDirectory, this.package, this.version, txParams);
   },
 
   _fetchPackagedAppManager(address) {

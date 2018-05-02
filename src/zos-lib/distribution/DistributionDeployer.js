@@ -2,10 +2,10 @@ import DistributionWrapper from "./DistributionWrapper"
 import ContractsProvider from "../../models/ContractsProvider"
 
 export default {
-  async call(owner) {
-    this.txParams = { from: owner }
+  async call(txParams = {}) {
+    this.txParams = txParams
     await this._createPackage();
-    return new DistributionWrapper(owner, this.package)
+    return new DistributionWrapper(this.package, txParams)
   },
 
   async _createPackage() {
