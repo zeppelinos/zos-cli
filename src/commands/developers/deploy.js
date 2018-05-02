@@ -4,7 +4,8 @@ const runWithTruffle = require('../../utils/runWithTruffle')
 module.exports = function(program) {
   program
     .command('deploy <version>')
-    .description("Deploys the new stdlib release to the chosen network.  \nProvide the <version> of the release to be deployed.")
+    .description(`Deploys the new stdlib release to the chosen network.
+       Provide the <version> of the release to be deployed.`)
     .usage('<version> --network <network> [options]')
     .option('-f, --from <from>', 'Set the transactions sender')
     .option('-n, --network <network>', 'Provide a network to be used')
