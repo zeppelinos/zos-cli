@@ -1,15 +1,15 @@
 #! /usr/bin/env node
 
 const program = require('commander')
-const processUserCommands = require('./users')
-const processVouchingCommands = require('./vouching')
-const processDeveloperCommands = require('./developers')
+const registerUserCommands = require('./users')
+const registerVouchingCommands = require('./vouching')
+const registerDeveloperCommands = require('./developers')
 
 program
   .usage('<command> [options]')
   .version(require('../package.json').version, '-v, --version')
 
-processUserCommands(program)
-processVouchingCommands(program)
-processDeveloperCommands(program)
+registerUserCommands(program)
+registerVouchingCommands(program)
+registerDeveloperCommands(program)
 program.parse(process.argv);
