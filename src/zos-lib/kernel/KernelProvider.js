@@ -2,7 +2,12 @@ import KernelWrapper from "./KernelWrapper";
 import ContractsProvider from '../../models/ContractsProvider'
 
 export default {
-  async from(address, txParams = {}) {
+  async fromKernelNetworkFile(network, txParams = {}) {
+    const kernelAddress = this._readKernelAddressFromNetworkFile(network)
+    return this.fromAddress(kernelAddress, txParams)
+  },
+
+  async fromAddress(address, txParams = {}) {
     this._fetchKernel(address)
     await this._fetchZepToken()
     await this._fetchVouching()
@@ -24,5 +29,15 @@ export default {
     const Vouching = ContractsProvider.vouching()
     const vouchingAddress = await this.kernel.vouches()
     this.vouching = new Vouching(vouchingAddress)
+  },
+
+  _readKernelAddressFromNetworkFile(network) {
+    const file = `node_modules/kernel/package.zos.${network}.json`;
+    const json = fs.readFileSync(file);
+    const data = JSON.parse(json)
+    const proxies = data.proxies.Kernel
+    if(proxies.length === 0) return 0
+    const lastProxy = proxies[proxies.length - 1]
+    return lastProxy.address
   }
 }

@@ -49,7 +49,7 @@ export default async function deploy({ version, network, txParams = {}, packageF
   // 5. Register release into kernel
   const kernelAddress = zosPackage.kernel.address
   log.info(`Registering release into kernel address ${kernelAddress}`)
-  const kernel = await KernelProvider.from(kernelAddress, txParams)
+  const kernel = await KernelProvider.fromAddress(kernelAddress, txParams)
   await kernel.register(release.address)
 
   zosNetworkFile.provider = { address: release.address }

@@ -1,14 +1,12 @@
-import kernelAddress from '../utils/kernelAddress'
 import KernelProvider from "../zos-lib/kernel/KernelProvider";
 
 export default async function vouch({ releaseAddress, rawAmount, network, txParams = {} }) {
   if(!releaseAddress) throw 'You must provide a release address to vouch for'
   if(!rawAmount) throw 'You must provide a vouching amount of ZEP tokens'
-  const address = kernelAddress(network)
 
   const data = ''
   const amount = new web3.BigNumber(rawAmount)
-  const kernel = await KernelProvider.from(address, txParams)
+  const kernel = await KernelProvider.fromKernelNetworkFile(network, txParams)
   await kernel.validateCanVouch(releaseAddress, amount)
 
   try {
