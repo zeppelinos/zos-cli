@@ -1,39 +1,27 @@
-import Logger from '../utils/Logger'
-import ContractsProvider from "./ContractsProvider";
+import Logger from '../../utils/Logger'
+import ContractsProvider from "../../models/ContractsProvider";
 
 const log = new Logger('Distribution');
 
-class Distribution {
+export default class DistributionWrapper {
 
-  constructor(owner) {
-    this.owner = owner
-    this.txParams = { from: this.owner }
+  constructor(owner, _package) {
+    this.package = _package
+    this.txParams = { from: owner }
   }
 
   address() {
     return this.package.address
   }
 
-  async connect(address) {
-    const Package = ContractsProvider.getByName('Package')
-    this.package = new Package(address)
-    return this.package
-  }
-
-  async deploy() {
-    const Package = ContractsProvider.getByName('Package')
-    this.package = await Package.new(this.txParams)
-    return this.package
+  async hasVersion(version) {
+    return await this.package.hasVersion(version, this.txParams)
   }
 
   async getRelease(version) {
     const releaseAddress = await this.package.getVersion(version)
     const Release = ContractsProvider.release()
     return new Release(releaseAddress)
-  }
-
-  async hasVersion(version) {
-    return await this.package.hasVersion(version, this.txParams)
   }
 
   async newVersion(version) {
@@ -43,6 +31,18 @@ class Distribution {
     await this.package.addVersion(version, release.address, this.txParams)
     log.info(' Added version:', version)
     return release
+  }
+
+  async isFrozen(version) {
+    const release = await this.getRelease(version)
+    return await release.frozen()
+  }
+
+  async freeze(version) {
+    log.info('Freezing new version...')
+    const release = await this.getRelease(version)
+    await release.freeze(this.txParams)
+    log.info(' Release frozen')
   }
 
   async getImplementation(version, contractName) {
@@ -58,18 +58,4 @@ class Distribution {
     log.info(' Implementation set:', implementation.address)
     return implementation
   }
-
-  async frozen(version) {
-    const release = await this.getRelease(version)
-    return await release.frozen()
-  }
-
-  async freeze(version) {
-    log.info('Freezing new version...')
-    const release = await this.getRelease(version)
-    await release.freeze(this.txParams)
-    log.info(' Release frozen')
-  }
 }
-
-export default Distribution

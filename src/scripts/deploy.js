@@ -1,28 +1,29 @@
 import Logger from '../utils/Logger'
-import Distribution from '../models/Distribution'
 import KernelProvider from "../zos-lib/kernel/KernelProvider"
 import ContractsProvider from '../models/ContractsProvider'
 import PackageFilesInterface from '../utils/PackageFilesInterface'
+import DistributionProvider from "../zos-lib/distribution/DistributionProvider";
+import DistributionDeployer from "../zos-lib/distribution/DistributionDeployer";
 
 const log = new Logger('deploy')
 
 // TODO: remove version param
 async function deploy(version, { network, from, packageFileName }) {
   const files = new PackageFilesInterface(packageFileName)
-  const distribution = new Distribution(from, network)
   if (! files.exists()) throw `Could not find package file ${packageFileName}`
 
   const zosPackage = files.read()
   let zosNetworkFile
 
   // 1. Get or create distribution
+  let distribution
   if (files.existsNetworkFile(network)) {
     log.info('Reading network file...')
     zosNetworkFile = files.readNetworkFile(network)
-    await distribution.connect(zosNetworkFile.distribution.address)
+    distribution = await DistributionProvider.from(from, zosNetworkFile.distribution.address)
   } else {
     log.info('Network file not found, deploying new distribution...')
-    await distribution.deploy()
+    distribution = await DistributionDeployer.call(from)
     createNetworkFile(network, distribution.address(), packageFileName)
     zosNetworkFile = files.readNetworkFile(network)
   }
