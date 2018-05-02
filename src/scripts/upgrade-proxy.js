@@ -21,9 +21,7 @@ async function upgradeProxy(contractAlias, proxyAddress, { initMethod, initArgs,
     proxyAddress = proxies[contractAlias][0].address;
   }
 
-  const appManagerProvider = new AppManagerProvider()
-  const appManager = await appManagerProvider.from(from, zosNetworkFile.app.address)
-
+  const appManager = await AppManagerProvider.from(from, zosNetworkFile.app.address)
   const contractClass = await files.getContractClass(zosPackage, contractAlias)
   await appManager.upgradeProxy(proxyAddress, contractClass, contractAlias, initMethod, initArgs)
 

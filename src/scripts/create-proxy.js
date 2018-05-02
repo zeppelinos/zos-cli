@@ -10,9 +10,7 @@ async function createProxy(contractAlias, { initMethod, initArgs, network, from,
   const zosNetworkFile = files.readNetworkFile(network)
   const { proxies } = zosNetworkFile
 
-  const appManagerProvider = new AppManagerProvider()
-  const appManager = await appManagerProvider.from(from, zosNetworkFile.app.address)
-
+  const appManager = await AppManagerProvider.from(from, zosNetworkFile.app.address)
   const contractClass = await files.getContractClass(zosPackage, contractAlias)
   const proxyInstance = await appManager.createProxy(contractClass, contractAlias, initMethod, initArgs)
   

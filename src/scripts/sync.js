@@ -16,11 +16,9 @@ async function sync({ network, from, packageFileName, deployStdlib }) {
   // Get AppManager instance
   if (files.existsNetworkFile(network)) {
     zosNetworkFile = files.readNetworkFile(network)
-    const appManagerProvider = new AppManagerProvider()
-    appManager = await appManagerProvider.from(from, zosNetworkFile.app.address)
+    appManager = await AppManagerProvider.from(from, zosNetworkFile.app.address)
   } else {
-    const appManagerDeployer = new AppManagerDeployer(from)
-    appManager = await appManagerDeployer.call(zosPackage.version)
+    appManager = await AppManagerDeployer.call(from, zosPackage.version)
     createNetworkFile(network, appManager.address(), packageFileName)
     zosNetworkFile = files.readNetworkFile(network)
   }
