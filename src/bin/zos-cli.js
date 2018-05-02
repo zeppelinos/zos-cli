@@ -7,7 +7,7 @@ const registerDeveloperCommands = require('./developers')
 
 program
   .usage('<command> [options]')
-  .version(require('../package.json').version, '-v, --version')
+  .version(require('../../package.json').version, '-v, --version')
 
 registerUserCommands(program)
 registerVouchingCommands(program)
