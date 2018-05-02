@@ -1,6 +1,6 @@
 import Logger from '../utils/Logger'
-import Kernel from '../models/Kernel'
 import Distribution from '../models/Distribution'
+import KernelProvider from "../zos-lib/kernel/KernelProvider"
 import ContractsProvider from '../models/ContractsProvider'
 import PackageFilesInterface from '../utils/PackageFilesInterface'
 
@@ -48,7 +48,7 @@ async function deploy(version, { network, from, packageFileName }) {
   // 5. Register release into kernel
   const kernelAddress = zosPackage.kernel.address
   log.info(`Registering release into kernel address ${kernelAddress}`)
-  const kernel = new Kernel(kernelAddress)
+  const kernel = await KernelProvider.from(from, kernelAddress)
   await kernel.register(release.address)
 
   zosNetworkFile.provider = { address: release.address }
