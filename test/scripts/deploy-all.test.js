@@ -1,4 +1,4 @@
-import fs from 'fs';
+import fs from '../../src/models/FileSystem';
 import deployAll from "../../src/scripts/deploy-all";
 import { cleanup, cleanupfn } from '../helpers/cleanup';
 
@@ -12,9 +12,8 @@ const should = require('chai')
 
 contract('deployAll', function([_, owner]) {
 
-  const network = "test";
   const from = owner;
-  const appName = "MyApp";
+  const network = "test";
   const defaultVersion = "1.0";
 
   describe('a package with stdlib', function () {
@@ -30,21 +29,21 @@ contract('deployAll', function([_, owner]) {
     after(cleanupfn(networkFileName));
 
     it('should create a network file', async function() {
-      fs.existsSync(networkFileName).should.be.true;
+      fs.exists(networkFileName).should.be.true;
     });
 
     it('should include deployment address', async function () {
-      JSON.parse(fs.readFileSync(networkFileName)).app.address.should.be.not.null;
+      fs.parseJson(networkFileName).app.address.should.be.not.null;
     });
 
     it('should include stdlib address', async function () {
-      JSON.parse(fs.readFileSync(networkFileName)).stdlib.address.should.not.eq(ZERO_ADDRESS);
+      fs.parseJson(networkFileName).stdlib.address.should.not.eq(ZERO_ADDRESS);
     });
 
     describe('AppManager', function () {
 
       beforeEach('loading appManager', async function () {
-        const address = JSON.parse(fs.readFileSync(networkFileName)).app.address;
+        const address = fs.parseJson(networkFileName).app.address;
         this.appManager = await AppManager.at(address);
       });
 
@@ -61,7 +60,7 @@ contract('deployAll', function([_, owner]) {
       });
 
       it('should set stdlib address in network file', async function () {
-        JSON.parse(fs.readFileSync(networkFileName)).stdlib.address.should.be.not.null;
+        fs.parseJson(networkFileName).stdlib.address.should.be.not.null;
       });
 
       it('should retrieve a mock from app directory', async function () {

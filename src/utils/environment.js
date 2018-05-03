@@ -1,4 +1,4 @@
-const Environment = {
+export default {
   ifTest(ifTrue, ifFalse = () => {}) {
     if(this.isTest()) ifTrue()
     else ifFalse()
@@ -12,5 +12,3 @@ const Environment = {
     return process.env.NODE_ENV === 'test'
   },
 }
-
-export default Environment
