@@ -1,7 +1,6 @@
 import colors from 'colors'
-import env from './environment'
 
-class Logger {
+export default class Logger {
   constructor(prefix) {
     this.prefix = prefix
   }
@@ -14,11 +13,3 @@ class Logger {
     console.error(`[${this.prefix}] ${msg}`.red)
   }
 }
-
-class SilentLogger {
-  info(msg) { }
-  error(msg) { }
-}
-
-
-module.exports = env.isTest() ? SilentLogger : Logger
