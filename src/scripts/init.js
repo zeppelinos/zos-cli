@@ -1,5 +1,5 @@
-import Stdlib from "../models/Stdlib";
-import StdlibInstaller from "../zos-lib/stdlib/StdlibInstaller"
+import Stdlib from "../models/stdlib/Stdlib";
+import StdlibInstaller from "../models/stdlib/StdlibInstaller"
 import PackageFilesInterface from '../utils/PackageFilesInterface'
 
 const DEFAULT_VERSION = '0.1.0'

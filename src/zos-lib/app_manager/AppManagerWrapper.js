@@ -1,9 +1,8 @@
 import Logger from '../../utils/Logger'
-import ContractsProvider from "../../models/ContractsProvider"
+import ContractsProvider from "../utils/ContractsProvider"
+import { encodeCall, decodeLogs } from 'zos-lib'
 
 const log = new Logger('AppManager')
-const decodeLogs = require('zos-lib').decodeLogs
-const encodeCall = require('zos-lib').encodeCall
 
 export default class AppManagerWrapper {
   

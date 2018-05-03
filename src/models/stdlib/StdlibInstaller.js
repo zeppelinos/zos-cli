@@ -1,4 +1,4 @@
-import Stdlib from "../../models/Stdlib";
+import Stdlib from "./Stdlib";
 
 export default {
   async call(stdlibNameAndVersion) {

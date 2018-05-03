@@ -1,5 +1,5 @@
 import test from '../helpers/setup'
-import fs from '../../src/models/FileSystem';
+import fs from '../../src/zos-lib/utils/FileSystem';
 import sync from "../../src/scripts/sync.js";
 import { cleanup, cleanupfn } from '../helpers/cleanup';
 

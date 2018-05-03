@@ -1,5 +1,5 @@
 import test from '../helpers/setup'
-import Stdlib from '../../src/models/Stdlib';
+import Stdlib from '../../src/models/stdlib/Stdlib';
 
 const should = require('chai')
   .use(require('chai-as-promised'))

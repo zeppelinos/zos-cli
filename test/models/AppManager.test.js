@@ -1,6 +1,6 @@
 import test from '../helpers/setup'
-import fs from '../../src/models/FileSystem';
-import ProjectDeployer from "../../src/zos-lib/ProjectDeployer";
+import fs from '../../src/zos-lib/utils/FileSystem';
+import ProjectDeployer from "../../src/models/ProjectDeployer";
 import AppManagerProvider from "../../src/zos-lib/app_manager/AppManagerProvider";
 import AppManagerDeployer from "../../src/zos-lib/app_manager/AppManagerDeployer";
 

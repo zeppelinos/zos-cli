@@ -1,8 +1,8 @@
 import _ from 'lodash'
-import fs from '../models/FileSystem'
+import fs from '../zos-lib/utils/FileSystem'
 import StdlibDeployer from "./stdlib/StdlibDeployer"
-import ContractsProvider from "../models/ContractsProvider"
-import AppManagerDeployer from "./app_manager/AppManagerDeployer"
+import ContractsProvider from "../zos-lib/utils/ContractsProvider"
+import AppManagerDeployer from "../zos-lib/app_manager/AppManagerDeployer"
 
 export default {
   async call(packageData = null, txParams = {}) {

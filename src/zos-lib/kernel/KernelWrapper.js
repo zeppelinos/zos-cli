@@ -1,5 +1,5 @@
 import Logger from '../../utils/Logger'
-import ContractsProvider from '../../models/ContractsProvider'
+import ContractsProvider from '../utils/ContractsProvider'
 
 const log = new Logger('Kernel')
 
@@ -12,7 +12,7 @@ export default class KernelWrapper {
   }
 
   async register(release) {
-    const newVersionCost = await this.newVersionCost()
+    const newVersionCost = await this.kernel.newVersionCost()
     log.info(`Approving ${newVersionCost} ZEP tokens to zOS kernel contract...`)
     await this.zepToken.approve(this.kernel.address, newVersionCost, this.txParams)
     log.info(`Registering release ${release}...`)
@@ -69,7 +69,7 @@ export default class KernelWrapper {
   }
 
   async _ifNotEnoughBalanceToRegisterThrow(error) {
-    const newVersionCost = await this.newVersionCost()
+    const newVersionCost = await this.kernel.newVersionCost()
     const developerBalance = await this.zepToken.balanceOf(this.txParams.from)
     const doesNotHaveEnoughTokens = developerBalance.lt(newVersionCost)
     if(doesNotHaveEnoughTokens) throw error

@@ -1,5 +1,5 @@
 import DistributionWrapper from "./DistributionWrapper"
-import ContractsProvider from "../../models/ContractsProvider"
+import ContractsProvider from "../utils/ContractsProvider"
 
 export default {
   async call(txParams = {}) {

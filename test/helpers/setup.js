@@ -1,8 +1,8 @@
 import Logger from '../../src/utils/Logger'
-import Stdlib from '../../src/models/Stdlib'
+import Stdlib from '../../src/models/stdlib/Stdlib'
 import truffleContract from 'truffle-contract'
-import StdlibInstaller from '../../src/zos-lib/stdlib/StdlibInstaller'
-import ContractsProvider from '../../src/models/ContractsProvider'
+import StdlibInstaller from '../../src/models/stdlib/StdlibInstaller'
+import ContractsProvider from '../../src/zos-lib/utils/ContractsProvider'
 
 const DEFAULT_TX_PARAMS = {
   gas: 6721975,

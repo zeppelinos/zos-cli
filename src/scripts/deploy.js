@@ -1,6 +1,6 @@
 import Logger from '../utils/Logger'
 import KernelProvider from "../zos-lib/kernel/KernelProvider"
-import ContractsProvider from '../models/ContractsProvider'
+import ContractsProvider from '../zos-lib/utils/ContractsProvider'
 import PackageFilesInterface from '../utils/PackageFilesInterface'
 import DistributionProvider from "../zos-lib/distribution/DistributionProvider";
 import DistributionDeployer from "../zos-lib/distribution/DistributionDeployer";

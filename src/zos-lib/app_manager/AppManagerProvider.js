@@ -1,5 +1,5 @@
 import AppManagerWrapper from "./AppManagerWrapper"
-import ContractsProvider from "../../models/ContractsProvider"
+import ContractsProvider from "../utils/ContractsProvider"
 
 export default {
   async from(address, txParams = {}) {
