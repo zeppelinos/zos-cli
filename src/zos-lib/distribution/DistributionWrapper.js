@@ -1,5 +1,5 @@
 import Logger from '../../utils/Logger'
-import ContractsProvider from "../../models/ContractsProvider";
+import ContractsProvider from "../utils/ContractsProvider";
 
 const log = new Logger('Distribution');
 

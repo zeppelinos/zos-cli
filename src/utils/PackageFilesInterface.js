@@ -1,7 +1,7 @@
-import fs from '../models/FileSystem'
+import fs from '../zos-lib/utils/FileSystem'
 import Logger from './Logger'
-import Stdlib from '../models/Stdlib'
-import ContractsProvider from '../models/ContractsProvider'
+import Stdlib from '../models/stdlib/Stdlib'
+import ContractsProvider from '../zos-lib/utils/ContractsProvider'
 
 const log = new Logger('PackageFilesInterface')
 

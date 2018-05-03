@@ -1,8 +1,8 @@
-import fs from '../../models/FileSystem'
+import fs from '../../zos-lib/utils/FileSystem'
 import Logger from '../../utils/Logger'
-import ContractsProvider from "../../models/ContractsProvider"
+import ContractsProvider from "../../zos-lib/utils/ContractsProvider"
 
-const log = new Logger('StdlibFactory')
+const log = new Logger('StdlibDeployer')
 
 export default {
   async call(name, txParams = {}) {

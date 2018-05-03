@@ -1,4 +1,4 @@
-import fs from './FileSystem'
+import fs from '../../zos-lib/utils/FileSystem'
 
 export default class Stdlib {
   constructor(nameAndVersion) {

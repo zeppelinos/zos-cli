@@ -1,5 +1,5 @@
 import KernelWrapper from "./KernelWrapper";
-import ContractsProvider from '../../models/ContractsProvider'
+import ContractsProvider from '../utils/ContractsProvider'
 
 export default {
   async fromKernelNetworkFile(network, txParams = {}) {

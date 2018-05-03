@@ -1,4 +1,4 @@
-import fs from '../../models/FileSystem'
+import fs from '../../zos-lib/utils/FileSystem'
 
 export default {
   from(name, network) {

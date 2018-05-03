@@ -1,6 +1,6 @@
 import Logger from '../../utils/Logger'
 import AppManagerWrapper from "./AppManagerWrapper"
-import ContractsProvider from "../../models/ContractsProvider"
+import ContractsProvider from "../utils/ContractsProvider"
 
 const log = new Logger('AppManagerDeployer')
 

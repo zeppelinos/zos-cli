@@ -1,5 +1,5 @@
 import sync from './sync'
-import StdlibDeployer from "../zos-lib/stdlib/StdlibDeployer";
+import StdlibDeployer from "../models/stdlib/StdlibDeployer";
 
 // TODO: This file should a middle layer instead of invoking another command
 // See https://github.com/zeppelinos/zos-cli/issues/1

@@ -1,5 +1,4 @@
-import test from '../helpers/setup'
-import fs from '../../src/models/FileSystem';
+import fs from '../../src/zos-lib/utils/FileSystem';
 import deployAll from "../../src/scripts/deploy-all";
 import sync from "../../src/scripts/sync.js";
 import setStdlib from "../../src/scripts/set-stdlib.js";
@@ -15,7 +14,7 @@ const should = require('chai')
   .use(require('../helpers/assertions'))
   .should();
 
-test('deployAll', function([_, owner]) {
+contract('deployAll', function([_, owner]) {
 
   const from = owner;
   const txParams = { from };

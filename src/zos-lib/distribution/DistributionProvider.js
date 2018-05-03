@@ -1,6 +1,6 @@
 import Logger from '../../utils/Logger'
 import DistributionWrapper from "./DistributionWrapper";
-import ContractsProvider from "../../models/ContractsProvider";
+import ContractsProvider from "../utils/ContractsProvider";
 
 const log = new Logger('DistributionProvider')
 

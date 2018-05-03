@@ -3,19 +3,24 @@ import truffleProvision from 'truffle-provisioner'
 
 const ContractsProvider = {
   kernel() {
-    return this.getByJSONData(require('zos-kernel/build/contracts/Kernel.json'))
+    return this.getFromKernel('Kernel')
   },
 
   release() {
-    return this.getByJSONData(require('zos-kernel/build/contracts/Release.json'))
+    return this.getFromKernel('Release')
   },
 
   zepToken() {
-    return this.getByJSONData(require('zos-kernel/build/contracts/ZepToken.json'))
+    return this.getFromKernel('ZepToken')
   },
 
   vouching() {
-    return this.getByJSONData(require('zos-kernel/build/contracts/Vouching.json'))
+    return this.getFromKernel('Vouching')
+  },
+
+  getFromKernel(contractName) {
+    const data = require(`zos-kernel/build/contracts/${contractName}.json`);
+    return this.getByJSONData(data)
   },
 
   getFromArtifacts(name) {
@@ -23,8 +28,8 @@ const ContractsProvider = {
   },
 
   getByName(name) {
-    const data = require(`../../build/contracts/${name}.json`)
-    return this.getByJSONData(data)
+    const path = `${process.cwd()}/build/contracts/${name}.json`
+    return this.getByJSONData(require(path))
   },
 
   getByJSONData(data) {
