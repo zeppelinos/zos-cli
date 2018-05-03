@@ -1,4 +1,5 @@
-import Distribution from '../../src/models/Distribution'
+import DistributionProvider from "../../src/zos-lib/distribution/DistributionProvider";
+import DistributionDeployer from "../../src/zos-lib/distribution/DistributionDeployer";
 
 const ImplV1 = artifacts.require('ImplV1')
 const ImplV2 = artifacts.require('ImplV2')
@@ -26,8 +27,7 @@ contract('Distribution', function ([_, owner]) {
 
 
   beforeEach("deploying", async function () {
-    this.distribution = new Distribution(owner)
-    await this.distribution.deploy()
+    this.distribution = await DistributionDeployer.call(owner)
   })
 
 
@@ -38,8 +38,7 @@ contract('Distribution', function ([_, owner]) {
 
   describe('connect', function () {
     beforeEach("connecting to existing instance", async function () {
-      const connectedDistribution = new Distribution(owner)
-      await connectedDistribution.connect(this.distribution.address())
+      const connectedDistribution = await DistributionProvider.from(owner, this.distribution.address())
       this.distribution = connectedDistribution
     })
 
@@ -62,13 +61,13 @@ contract('Distribution', function ([_, owner]) {
     beforeEach('creating a new release', createRelease)
 
     it('should not be frozen by default', async function () {
-      const frozen = await this.distribution.frozen(initialVersion)
+      const frozen = await this.distribution.isFrozen(initialVersion)
       frozen.should.be.false
     })
 
     it('should be freezable', async function () {
       await this.distribution.freeze(initialVersion)
-      const frozen = await this.distribution.frozen(initialVersion)
+      const frozen = await this.distribution.isFrozen(initialVersion)
       frozen.should.be.true
     })
   })
