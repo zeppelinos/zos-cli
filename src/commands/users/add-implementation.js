@@ -7,7 +7,7 @@ module.exports = function(program) {
     .description(`Register a contract implementation.
       Provide the name of the contract under <contractName>.
       Provide an [alias] to register your contract, otherwise <contractName> will be used by default.`)
-    .action(function (contractName, alias) {
-      addImplementation(contractName, alias)
+    .action(function (contractName, contractAlias) {
+      addImplementation({ contractName, contractAlias })
     })
 }

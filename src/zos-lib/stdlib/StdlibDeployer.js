@@ -5,8 +5,8 @@ import ContractsProvider from "../../models/ContractsProvider"
 const log = new Logger('StdlibFactory')
 
 export default {
-  async call(owner, name) {
-    this.txParams = { from: owner }
+  async call(name, txParams = {}) {
+    this.txParams = txParams
     this._parseJsonData(name)
     await this._createContractDirectory()
     await this._deployContracts(name)

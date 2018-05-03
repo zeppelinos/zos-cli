@@ -9,7 +9,7 @@ const BASE_PACKAGE = {
   stdlib: {}
 }
 
-async function init(name, version, { packageFileName, stdlibNameVersion, installDeps }) {
+export default async function init({ name, version, stdlibNameVersion = null, installDeps = false, packageFileName = null }) {
   if (name === undefined) throw 'Must provide a project name'
   const files = new PackageFilesInterface(packageFileName)
   const zosPackage = BASE_PACKAGE
@@ -19,11 +19,9 @@ async function init(name, version, { packageFileName, stdlibNameVersion, install
   zosPackage.stdlib = {}
 
   if(stdlibNameVersion) {
-    const stdlib = installDeps ? StdlibInstaller.call(stdlibNameVersion) : new Stdlib(stdlibNameVersion)
+    const stdlib = installDeps ? await StdlibInstaller.call(stdlibNameVersion) : new Stdlib(stdlibNameVersion)
     await files.setStdlib(zosPackage, stdlib)
   }
 
   files.write(zosPackage)
 }
-
-module.exports = init

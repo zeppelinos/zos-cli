@@ -1,7 +1,7 @@
-const deployAll = require('../../scripts/deploy-all')
-const runWithTruffle = require('../../utils/runWithTruffle')
+import deployAll from '../../scripts/deploy-all'
+import runWithTruffle from '../../utils/runWithTruffle'
 
-module.exports = function(program) {
+export default function(program) {
   program
     .command('deploy-all')
     .description("Deploy your entire application to the target network, along with the standard library you are using and all its contracts.")

@@ -7,15 +7,14 @@ const encodeCall = require('zos-lib').encodeCall
 
 export default class AppManagerWrapper {
   
-  constructor(owner, appManager, factory, appDirectory, _package, version) {
-    this.owner = owner
+  constructor(appManager, factory, appDirectory, _package, version, txParams = {}) {
     this.appManager = appManager
     this.factory = factory
     this.package = _package
     this.version = version
     this.directories = {}
     this.directories[version] = appDirectory
-    this.txParams = { from: owner }
+    this.txParams = txParams
   }
 
   address() {

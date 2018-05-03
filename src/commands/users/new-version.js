@@ -8,6 +8,6 @@ module.exports = function(program) {
     .option('--no-install', 'Skip installing stdlib npm dependencies')
     .action(function (version, options) {
       const { stdlib: stdlibNameVersion, install: installDeps } = options
-      newVersion(version, { stdlibNameVersion, installDeps })
+      newVersion({ version, stdlibNameVersion, installDeps })
     })
 }

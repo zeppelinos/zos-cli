@@ -1,7 +1,7 @@
-const register = require('../../scripts/register')
-const runWithTruffle = require('../../utils/runWithTruffle')
+import register from '../../scripts/register'
+import runWithTruffle from '../../utils/runWithTruffle'
 
-module.exports = function(program) {
+export default function(program) {
   program
     .command('register <release>')
     .description(`Register an already deployed stdlib release to zeppelin_os kernel.
@@ -9,8 +9,8 @@ module.exports = function(program) {
     .usage('<release> --network <network>')
     .option('-f, --from <from>', 'Set the transactions sender')
     .option('-n, --network <network>', 'Provide a network to be used')
-    .action(function (release, options) {
+    .action(function (releaseAddress, options) {
       const { network, from } = options
-      runWithTruffle(() => register(release, { network, from }), network)
+      runWithTruffle(() => register({ releaseAddress, network, from }), network)
     })
 }

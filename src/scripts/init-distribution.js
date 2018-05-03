@@ -7,7 +7,7 @@ const BASE_DISTRIBUTION = {
   }
 }
 
-async function initDistribution(name, kernelAddress, { packageFileName }) {
+export default function initDistribution({ name, kernelAddress, packageFileName = null }) {
   if (name === undefined) throw 'Must provide a distribution name'
   if (kernelAddress === undefined) throw 'Must provide a kernel address'
 
@@ -18,5 +18,3 @@ async function initDistribution(name, kernelAddress, { packageFileName }) {
   zosPackage.kernel = { address: kernelAddress }
   files.write(zosPackage)
 }
-
-module.exports = initDistribution

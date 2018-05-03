@@ -1,7 +1,7 @@
-const unvouch = require('../../scripts/unvouch')
-const runWithTruffle = require('../../utils/runWithTruffle')
+import unvouch from '../../scripts/unvouch'
+import runWithTruffle from '../../utils/runWithTruffle'
 
-module.exports = function(program) {
+export default function(program) {
   program
     .command('unvouch <release> <amount>')
     .description(`Unvouches a requested amount of ZEP tokens to a given release.
@@ -10,8 +10,8 @@ module.exports = function(program) {
     .usage('<release> <amount> --network <network>')
     .option('-f, --from <from>', 'Set the transactions sender')
     .option('-n, --network <network>', 'Provide a network to be used')
-    .action(function (release, amount, options) {
+    .action(function (releaseAddress, rawAmount, options) {
       const { network, from } = options
-      runWithTruffle(() => unvouch(release, amount, { network, from }), network)
+      runWithTruffle(() => unvouch({ releaseAddress, rawAmount, network, from }), network)
     })
 }

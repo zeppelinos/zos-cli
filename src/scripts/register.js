@@ -1,10 +1,10 @@
 import kernelAddress from '../utils/kernelAddress'
 import KernelProvider from "../zos-lib/kernel/KernelProvider";
 
-async function register(releaseAddress, { network, from }) {
+export default async function register({ releaseAddress, network, txParams = {} }) {
   if(!releaseAddress) throw 'You must provide a release address'
   const address = kernelAddress(network)
-  const kernel = await KernelProvider.from(from, address)
+  const kernel = await KernelProvider.from(address, txParams)
   await kernel.validateCanRegister(releaseAddress)
 
   try {
@@ -13,5 +13,3 @@ async function register(releaseAddress, { network, from }) {
     console.error('There was an error trying to register your release.', error)
   }
 }
-
-module.exports = register

@@ -5,11 +5,10 @@ import ContractsProvider from "../models/ContractsProvider"
 import AppManagerDeployer from "./app_manager/AppManagerDeployer"
 
 export default {
-  async call(owner, packageData = null) {
-    this.owner = owner
-    this.txParams = { from: owner }
+  async call(packageData = null, txParams = {}) {
+    this.txParams = txParams
     if(!packageData) packageData = JSON.parse(fs.readFileSync('package.zos.json'))
-    const appManager = await AppManagerDeployer.call(owner, packageData.version)
+    const appManager = await AppManagerDeployer.call(packageData.version, this.txParams)
     const directory = appManager.currentDirectory()
     await this._deployStdlib(directory, packageData)
     await this._deployAllContracts(directory, packageData)
@@ -26,7 +25,7 @@ export default {
 
   async _deployStdlib(directory, packageData) {
     if (!_.isEmpty(packageData.stdlib)) {
-      const stdlibAddress = await StdlibDeployer.call(this.owner, packageData.stdlib.name)
+      const stdlibAddress = await StdlibDeployer.call(packageData.stdlib.name, this.txParams)
       await directory.setStdlib(stdlibAddress, this.txParams)
     }
   }
