@@ -35,6 +35,7 @@ export default {
     return contract
   },
 
+  // TODO: Remove repeated logic from Stdlib#getContract
   async _getContractClass(name, contractName) {
     const implementationName = this.jsonData.contracts[contractName]
     if (!implementationName) throw `Contract ${contractName} not found in package`

@@ -6,6 +6,7 @@ import AppManagerProvider from "../zos-lib/app_manager/AppManagerProvider";
 import AppManagerDeployer from "../zos-lib/app_manager/AppManagerDeployer";
 import StdlibProvider from './stdlib/StdlibProvider';
 import StdlibDeployer from './stdlib/StdlibDeployer';
+import Stdlib from './stdlib/Stdlib';
 
 const log = new Logger('AppController');
 
@@ -35,14 +36,25 @@ export default class AppController {
     this.package.contracts = {};
   }
 
-  // newVersion(version) {
+  newVersion(version) {
+    if (!version) {
+      throw new Error('Missign required argument version for initializing new version')
+    }
+    this.package.version = version;
 
-  // }
+    // TODO: Do not clean up contracts listing and stdlib, inherit from previous version
+    this.package.contracts = {};
+    delete this.package['stdlib'];
+  }
 
-  async setStdlib(stdlib) {
-    this.package.stdlib = {
-      name: stdlib.getName(),
-      version: stdlib.getVersion()
+  setStdlib(stdlibNameVersion, installDeps = false) {
+    if (stdlibNameVersion) {
+      const stdlib = new Stdlib(stdlibNameVersion);
+      if (installDeps) stdlib.install();
+      this.package.stdlib = {
+        name: stdlib.getName(),
+        version: stdlib.getVersion()
+      };
     }
   }
 
@@ -50,11 +62,27 @@ export default class AppController {
     return !_.isEmpty(this.package.stdlib);
   }
 
+  addImplementation(contractAlias, contractName) {
+    this.package.contracts[contractAlias] = contractName;
+  }
+
   get package() {
     if (!this._package) {
       this._package = parseJsonIfExists(this.packageFileName) || {};
     }
     return this._package;
+  }
+
+  async getContractClass(contractAlias) {
+    const contractName = this.package.contracts[contractAlias];
+    if (contractName) {
+      return ContractsProvider.getFromArtifacts(contractName);
+    } else if (this.hasStdlib()) {
+      const stdlib = new Stdlib(this.package.stdlib.name);
+      return await stdlib.getContract(contractAlias);
+    } else {
+      throw new Error(`Could not find ${contractAlias} contract in zOS package file`);
+    }
   }
 
   writePackage() {
@@ -92,6 +120,48 @@ class NetworkAppController {
     this.networkPackage.stdlib = { address: stdlibAddress, customDeploy: true, ... this.package.stdlib };
   }
 
+  async createProxy(contractAlias, initMethod, initArgs) {
+    if (contractAlias === undefined) throw new Error('Missing required argument contractAlias for createProxy')
+
+    await this.loadApp();
+    const contractClass = await this.appController.getContractClass(contractAlias);
+    const proxyInstance = await this.appManagerWrapper.createProxy(contractClass, contractAlias, initMethod, initArgs);
+    
+    const proxyInfo = {
+      address: proxyInstance.address,
+      version: this.appManagerWrapper.version
+    };
+
+    const proxies = this.networkPackage.proxies;
+    if (!proxies[contractAlias]) proxies[contractAlias] = [];
+    proxies[contractAlias].push(proxyInfo);
+  }
+
+  async upgradeProxy(contractAlias, proxyAddress, initMethod, initArgs) {
+    if (contractAlias === undefined) throw new Error(`Must provide a contract name`)
+
+    const proxyInfo = this.findProxy(contractAlias, proxyAddress);
+    if (!proxyInfo) throw new Error(`Could not find a ${contractAlias} proxy with address ${proxyAddress}`)
+
+    await this.loadApp();
+    const contractClass = await this.appController.getContractClass(contractAlias)
+    await this.appManagerWrapper.upgradeProxy(proxyAddress, contractClass, contractAlias, initMethod, initArgs)
+
+    proxyInfo.version = this.appManagerWrapper.version
+  }
+
+  findProxy(contractAlias, proxyAddress) {
+    const proxies = this.networkPackage.proxies;
+    if (_.isEmpty(proxies[contractAlias])) return null;
+    if (proxies[contractAlias].length > 1 && proxyAddress === undefined) throw new Error(`Must provide a proxy address for contracts that have more than one proxy`)
+    
+    const proxyInfo = proxies[contractAlias].length === 1
+      ? proxies[contractAlias][0]
+      : _.find(proxies[contractAlias], proxy => proxy.address == proxyAddress);
+
+    return proxyInfo;
+  }
+
   get package() {
     return this.appController.package;
   }
@@ -114,6 +184,12 @@ class NetworkAppController {
       ? await AppManagerProvider.from(address, this.txParams)
       : await AppManagerDeployer.call(this.package.version, this.txParams);
     this.networkPackage.app.address = this.appManagerWrapper.address();
+  }
+
+  async loadApp() {
+    const address = this.networkPackage.app && this.networkPackage.app.address;
+    if (!address) throw new Error("Must deploy app to network");
+    this.appManagerWrapper = await AppManagerProvider.from(address, this.txParams);
   }
 
   async syncVersion() {

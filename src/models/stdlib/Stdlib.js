@@ -1,4 +1,5 @@
 import fs from '../../zos-lib/utils/FileSystem'
+import StdlibInstaller from './StdlibInstaller';
 
 export default class Stdlib {
   constructor(nameAndVersion) {
@@ -9,13 +10,25 @@ export default class Stdlib {
     return this.name
   }
 
+  // TODO: Provided version and package.json version may not match, raise an error if so
   getVersion() {
-    if(this.version) return this.version
+    if (this.version) return this.version
     return this._packageJson().version
   }
 
+  async getContract(contractAlias) {
+    const implementationName = this.jsonData.contracts[contractAlias]
+    if (!implementationName) throw `Contract ${contractAlias} not found in package`
+    const contractData = fs.parseJson(`node_modules/${name}/build/contracts/${implementationName}.json`)
+    return ContractsProvider.getByJSONData(contractData)
+  }
+  
+  async install() {
+    return StdlibInstaller.call(this.nameAndVersion)
+  }
+
   _packageJson() {
-    if(this.packageJson) return this.packageJson
+    if (this.packageJson) return this.packageJson
     const filename = `node_modules/${this.name}/package.zos.json`
     this.packageJson = fs.parseJson(filename)
   }
@@ -24,5 +37,6 @@ export default class Stdlib {
     const [name, version] = nameAndVersion.split('@')
     this.name = name
     this.version = version
+    this.nameAndVersion = nameAndVersion;
   }
 }

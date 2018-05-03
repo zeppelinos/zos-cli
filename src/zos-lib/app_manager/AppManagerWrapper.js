@@ -75,7 +75,7 @@ export default class AppManagerWrapper {
   }
 
   async upgradeProxy(proxyAddress, contractClass, contractName, initMethodName, initArgs) {
-    log.info(`Updating ${contractName} proxy...`)
+    log.info(`Updating ${contractName} proxy at ${proxyAddress}...`)
     const { receipt } = typeof(initArgs) === 'undefined'
       ? await this._updateProxy(proxyAddress, contractName)
       : await this._updateProxyAndCall(proxyAddress, contractClass, contractName, initMethodName, initArgs)
