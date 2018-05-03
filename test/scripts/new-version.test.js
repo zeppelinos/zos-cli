@@ -1,3 +1,4 @@
+import test from '../helpers/setup'
 import init from "../../src/scripts/init.js";
 import newVersion from "../../src/scripts/new-version.js";
 import PackageFilesInterface from '../../src/utils/PackageFilesInterface';
@@ -7,7 +8,7 @@ const should = require('chai')
       .use(require('chai-as-promised'))
       .should();
 
-contract('new-version command', function() {
+test('new-version command', function() {
   const appName = "MyApp";
   const defaultVersion = "0.1.0";
   const packageFileName = "package.test.zos.json";

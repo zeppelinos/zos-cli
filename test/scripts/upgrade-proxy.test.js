@@ -1,3 +1,4 @@
+import test from '../helpers/setup'
 import init from "../../src/scripts/init.js";
 import addImplementation from "../../src/scripts/add-implementation.js";
 import sync from "../../src/scripts/sync.js";
@@ -11,7 +12,7 @@ const should = require('chai')
       .use(require('chai-as-promised'))
       .should();
 
-contract('upgrade-proxy command', function([_, owner]) {
+test('upgrade-proxy command', function([_, owner]) {
 
   const from = owner;
   const appName = "MyApp";

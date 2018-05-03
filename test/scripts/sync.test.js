@@ -1,3 +1,4 @@
+import test from '../helpers/setup'
 import fs from '../../src/models/FileSystem';
 import sync from "../../src/scripts/sync.js";
 import { cleanup, cleanupfn } from '../helpers/cleanup';
@@ -10,7 +11,7 @@ const should = require('chai')
   .use(require('chai-as-promised'))
   .should();
 
-contract('sync', function([_, owner]) {
+test('sync', function([_, owner]) {
 
   const network = "test";
   const from = owner;
