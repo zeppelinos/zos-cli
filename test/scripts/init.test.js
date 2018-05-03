@@ -1,3 +1,4 @@
+import test from '../helpers/setup'
 import fs from '../../src/models/FileSystem'
 import init from "../../src/scripts/init.js"
 import PackageFilesInterface from '../../src/utils/PackageFilesInterface';
@@ -7,7 +8,7 @@ const should = require('chai')
       .use(require('chai-as-promised'))
       .should();
 
-contract('init command', function() {
+test('init command', function() {
 
   const packageFileName = "package.test.zos.json";
   const appName = "MyApp";

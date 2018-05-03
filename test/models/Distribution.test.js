@@ -1,3 +1,4 @@
+import test from '../helpers/setup'
 import DistributionProvider from "../../src/zos-lib/distribution/DistributionProvider";
 import DistributionDeployer from "../../src/zos-lib/distribution/DistributionDeployer";
 
@@ -9,7 +10,7 @@ const should = require('chai')
   .use(require('chai-as-promised'))
   .should()
 
-contract('Distribution', function ([_, owner]) {
+test('Distribution', function ([_, owner]) {
   const txParams = { from: owner }
   const contractName = 'Impl'
   const initialVersion = "1.0"

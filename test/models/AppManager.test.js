@@ -1,3 +1,4 @@
+import test from '../helpers/setup'
 import fs from '../../src/models/FileSystem';
 import ProjectDeployer from "../../src/zos-lib/ProjectDeployer";
 import AppManagerProvider from "../../src/zos-lib/app_manager/AppManagerProvider";
@@ -10,7 +11,7 @@ const should = require('chai')
   .use(require('chai-as-promised'))
   .should();
 
-contract('AppManager', function ([_, owner]) {
+test('AppManager', function ([_, owner]) {
   const txParams = { from: owner }
   const initialVersion = "1.0";
   const contractName = 'Impl';

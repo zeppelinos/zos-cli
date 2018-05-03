@@ -1,3 +1,4 @@
+import test from '../helpers/setup'
 import init from "../../src/scripts/init.js";
 import sync from "../../src/scripts/sync.js";
 import { cleanup, cleanupfn } from "../helpers/cleanup.js";
@@ -9,7 +10,7 @@ const should = require('chai')
       .use(require('chai-as-promised'))
       .should();
 
-contract('create-proxy command', function([_, owner]) {
+test('create-proxy command', function([_, owner]) {
 
   const from = owner;
   const appName = "MyApp";
