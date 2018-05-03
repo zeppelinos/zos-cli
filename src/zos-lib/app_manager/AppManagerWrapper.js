@@ -39,8 +39,11 @@ export default class AppManagerWrapper {
   }
 
   async setStdlib(stdlibAddress = 0x0) {
-    log.info(`Setting stdlib ${stdlibAddress}...`)
-    await this.currentDirectory().setStdlib(stdlibAddress, this.txParams)
+    const currentStdlib = await this.currentDirectory().stdlib();
+    if (currentStdlib != stdlibAddress) {
+      log.info(`Setting stdlib ${stdlibAddress}...`)
+      await this.currentDirectory().setStdlib(stdlibAddress, this.txParams)
+    }
     return stdlibAddress
   }
 

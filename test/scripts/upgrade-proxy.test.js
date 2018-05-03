@@ -21,24 +21,24 @@ contract('upgrade-proxy command', function([_, owner]) {
   const version = "0.2.0";
   const packageFileName = "package.test.zos.json";
   const network = "test";
-  const networkPackageFileName = `package.zos.${network}.json`;
+  const networkFileName = `package.zos.${network}.json`;
   const files = new PackageFilesInterface(packageFileName);
 
   beforeEach('setup', async function() {
     cleanup(packageFileName)
-    cleanup(networkPackageFileName)
+    cleanup(networkFileName)
 
     await init({ name: appName, version: defaultVersion, packageFileName });
     await addImplementation({ contractName, contractAlias, packageFileName });
-    await sync({ packageFileName, network, from });
+    await sync({ packageFileName, networkFileName, network, from });
     await createProxy({ contractAlias, packageFileName, network, from });
     await newVersion({ version, packageFileName, from });
     await addImplementation({ contractName, contractAlias, packageFileName });
-    await sync({ packageFileName, network, from });
+    await sync({ packageFileName, networkFileName, network, from });
   });
 
   after(cleanupfn(packageFileName));
-  after(cleanupfn(networkPackageFileName));
+  after(cleanupfn(networkFileName));
 
   it('should upgrade the version of a proxy', async function() {
     await upgradeProxy({ contractAlias, proxyAddress: null, network, packageFileName, from });

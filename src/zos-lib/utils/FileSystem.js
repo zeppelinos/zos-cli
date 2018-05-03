@@ -1,20 +1,32 @@
 import fs from 'fs'
 
-export default {
-  read(filename) {
-    return fs.readFileSync(filename)
-  },
+export function read(filename) {
+  return fs.readFileSync(filename)
+};
 
-  exists(filename) {
-    return fs.existsSync(filename)
-  },
+export function exists(filename) {
+  return fs.existsSync(filename)
+};
 
-  parseJson(filename) {
-    return JSON.parse(this.read(filename))
-  },
+export function parseJson(filename) {
+  return JSON.parse(read(filename))
+};
 
-  writeJson(filename, data) {
-    const json = JSON.stringify(data, null, 2)
-    fs.writeFileSync(filename, json)
+export function parseJsonIfExists(filename) {
+  if (exists(filename)) {
+    return JSON.parse(read(filename))
   }
-}
+};
+
+export function writeJson(filename, data) {
+  const json = JSON.stringify(data, null, 2)
+  fs.writeFileSync(filename, json)
+};
+
+export default {
+  read,
+  exists,
+  parseJson,
+  parseJsonIfExists,
+  writeJson
+};

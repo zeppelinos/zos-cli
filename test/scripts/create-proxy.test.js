@@ -18,19 +18,19 @@ contract('create-proxy command', function([_, owner]) {
   const defaultVersion = "0.1.0";
   const packageFileName = "package.test.zos.json";
   const network = "test";
-  const networkPackageFileName = `package.zos.${network}.json`;
+  const networkFileName = `package.zos.${network}.json`;
   const files = new PackageFilesInterface(packageFileName);
 
   beforeEach('setup', async function() {
     cleanup(packageFileName)
-    cleanup(networkPackageFileName)
+    cleanup(networkFileName)
     await init({ name: appName, version: defaultVersion, packageFileName });
     await addImplementation({ contractName, contractAlias, packageFileName });
-    await sync({ packageFileName, network, from });
+    await sync({ packageFileName, networkFileName, network, from });
   });
 
   after(cleanupfn(packageFileName))
-  after(cleanupfn(networkPackageFileName))
+  after(cleanupfn(networkFileName))
 
   it('should create a proxy for one of its contracts', async function() {
     await createProxy({ contractAlias, packageFileName, network, from });
@@ -51,7 +51,7 @@ contract('create-proxy command', function([_, owner]) {
   it('should be able to handle proxies for more than one contract', async function() {
     const customAlias = 'SomeOtherAlias';
     await addImplementation({ contractName: 'ImplV2', contractAlias: customAlias, packageFileName });
-    await sync({ packageFileName, network, from });
+    await sync({ packageFileName, networkFileName, network, from });
     await createProxy({ contractAlias, packageFileName, network, from });
     await createProxy({ contractAlias: customAlias, packageFileName, network, from });
     const data = files.readNetworkFile(network);

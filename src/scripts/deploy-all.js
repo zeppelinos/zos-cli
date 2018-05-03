@@ -1,12 +1,13 @@
-import sync from './sync'
-import StdlibDeployer from "../models/stdlib/StdlibDeployer";
+import Logger from '../utils/Logger'
+import AppController from '../models/AppController';
+import StdlibDeployer from '../models/stdlib/StdlibDeployer';
 
-// TODO: This file should a middle layer instead of invoking another command
-// See https://github.com/zeppelinos/zos-cli/issues/1
+const log = new Logger('deployAll')
+
 export default async function deployAll({ network, txParams = {}, packageFileName = null }) {
-  await sync({ network, txParams, packageFileName, deployStdlib: async function(appManager, stdlibName) {
-    const stdlibAddress = await StdlibDeployer.call(stdlibName, txParams);
-    await appManager.setStdlib(stdlibAddress);
-    return stdlibAddress;
-  }});
+  const appController = new AppController(packageFileName).onNetwork(network, txParams);
+  
+  await appController.deployStdlib();
+  await appController.sync();
+  appController.writeNetworkPackage();
 }
