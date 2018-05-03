@@ -4,6 +4,9 @@ import ContractsProvider from '../models/ContractsProvider'
 import AppManagerProvider from "../zos-lib/app_manager/AppManagerProvider";
 import AppManagerDeployer from "../zos-lib/app_manager/AppManagerDeployer";
 import PackageFilesInterface from '../utils/PackageFilesInterface'
+import Logger from '../utils/Logger'
+
+const log = new Logger('sync')
 
 export default async function sync({ network, deployStdlib, txParams = {}, packageFileName = null }) {
   const files = new PackageFilesInterface(packageFileName)
@@ -39,13 +42,24 @@ export default async function sync({ network, deployStdlib, txParams = {}, packa
     zosNetworkFile.contracts[contractAlias] = contractInstance.address
   }
 
-  if (!_.isEmpty(zosPackage.stdlib)) {
-    const stdlibName = zosPackage.stdlib.name
-    const stdlibAddress = deployStdlib
-      ? await deployStdlib(appManager, stdlibName)
-      : StdlibProvider.from(stdlibName, network)
-    await appManager.setStdlib(stdlibAddress)
-    zosNetworkFile.stdlib = { address: stdlibAddress }
+  // If being called from deploy all, delegate to caller handling the stdlib deployment and flag as customDeploy
+  if (!_.isEmpty(zosPackage.stdlib) && deployStdlib) {
+    const stdlibAddress = await deployStdlib(appManager, zosPackage.stdlib.name)
+    zosNetworkFile.stdlib = { address: stdlibAddress, customDeploy: true, ... zosPackage.stdlib }
+  } else if (!_.isEmpty(zosPackage.stdlib)) {
+    const networkStdlibInfo = zosNetworkFile.stdlib
+    // If syncing on top of a custom deploy of a stdlib, link to that deploy
+    if (networkStdlibInfo && networkStdlibInfo.customDeploy && networkStdlibInfo.name === zosPackage.stdlib.name) {
+      log.info("Using existing custom deployment of stdlib")
+      await appManager.setStdlib(networkStdlibInfo.address)
+    // Otherwise, link to the public deployed version
+    } else {
+      log.info("Connecting to public deployment of stdlib")
+      const stdlibAddress = StdlibProvider.from(zosPackage.stdlib.name, network);
+      await appManager.setStdlib(stdlibAddress)
+      zosNetworkFile.stdlib = { address: stdlibAddress, ... zosPackage.stdlib }
+    }
+  // If no stdlib requested, clear everything
   } else {
     delete zosNetworkFile['stdlib']
     await appManager.setStdlib()

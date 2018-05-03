@@ -5,6 +5,8 @@ import StdlibDeployer from "../zos-lib/stdlib/StdlibDeployer";
 // See https://github.com/zeppelinos/zos-cli/issues/1
 export default async function deployAll({ network, txParams = {}, packageFileName = null }) {
   await sync({ network, txParams, packageFileName, deployStdlib: async function(appManager, stdlibName) {
-    return StdlibDeployer.call(stdlibName, txParams);
+    const stdlibAddress = await StdlibDeployer.call(stdlibName, txParams);
+    await appManager.setStdlib(stdlibAddress);
+    return stdlibAddress;
   }});
 }

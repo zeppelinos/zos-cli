@@ -26,7 +26,7 @@ test('create-proxy command', function([_, owner]) {
     cleanup(packageFileName)
     cleanup(networkPackageFileName)
     await init({ name: appName, version: defaultVersion, packageFileName });
-    addImplementation({ contractName, contractAlias, packageFileName });
+    await addImplementation({ contractName, contractAlias, packageFileName });
     await sync({ packageFileName, network, from });
   });
 
