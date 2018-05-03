@@ -1,4 +1,3 @@
-import test from '../helpers/setup'
 import fs from '../../src/zos-lib/utils/FileSystem';
 import deployAll from "../../src/scripts/deploy-all";
 import { cleanup, cleanupfn } from '../helpers/cleanup';
@@ -11,7 +10,7 @@ const should = require('chai')
   .use(require('chai-as-promised'))
   .should();
 
-test('deployAll', function([_, owner]) {
+contract('deployAll', function([_, owner]) {
 
   const from = owner;
   const network = "test";

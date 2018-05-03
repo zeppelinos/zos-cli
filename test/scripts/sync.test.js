@@ -1,4 +1,3 @@
-import test from '../helpers/setup'
 import fs from '../../src/zos-lib/utils/FileSystem';
 import sync from "../../src/scripts/sync.js";
 import { cleanup, cleanupfn } from '../helpers/cleanup';
@@ -11,7 +10,7 @@ const should = require('chai')
   .use(require('chai-as-promised'))
   .should();
 
-test('sync', function([_, owner]) {
+contract('sync', function([_, owner]) {
 
   const network = "test";
   const from = owner;

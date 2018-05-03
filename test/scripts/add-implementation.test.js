@@ -1,4 +1,3 @@
-import test from '../helpers/setup'
 import init from "../../src/scripts/init.js";
 import addImplementation from "../../src/scripts/add-implementation.js";
 import PackageFilesInterface from '../../src/utils/PackageFilesInterface';
@@ -8,8 +7,7 @@ const should = require('chai')
       .use(require('chai-as-promised'))
       .should();
 
-test('add-implementation command', function() {
-
+contract('add-implementation command', function() {
   const packageFileName = "package.test.zos.json";
   const appName = "MyApp";
   const contractName = "MyContract_v0.sol";

@@ -1,4 +1,3 @@
-import test from '../helpers/setup'
 import { assertRevert } from 'zos-lib'
 import DistributionProvider from "../../src/zos-lib/distribution/DistributionProvider";
 import DistributionDeployer from "../../src/zos-lib/distribution/DistributionDeployer";
@@ -10,7 +9,7 @@ const should = require('chai')
   .use(require('chai-as-promised'))
   .should()
 
-test('Distribution', function ([_, owner]) {
+contract('Distribution', function ([_, owner]) {
   const txParams = { from: owner }
   const contractName = 'Impl'
   const initialVersion = "1.0"

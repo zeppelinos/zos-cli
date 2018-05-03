@@ -10,12 +10,9 @@ const DEFAULT_TX_PARAMS = {
   from: web3.eth.accounts[0]
 }
 
-export default function(testName, test) {
-  muteLogging()
-  doNotInstallStdlib()
-  provideContractsFromTruffle()
-  contract(testName, test)
-}
+muteLogging()
+doNotInstallStdlib()
+provideContractsFromTruffle()
 
 function muteLogging() {
   Logger.prototype.info = msg => {}
