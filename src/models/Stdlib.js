@@ -1,4 +1,4 @@
-import fs from 'fs'
+import fs from './FileSystem'
 
 export default class Stdlib {
   constructor(nameAndVersion) {
@@ -17,7 +17,7 @@ export default class Stdlib {
   _packageJson() {
     if(this.packageJson) return this.packageJson
     const filename = `node_modules/${this.name}/package.zos.json`
-    this.packageJson = JSON.parse(fs.readFileSync(filename))
+    this.packageJson = fs.parseJson(filename)
   }
 
   _parseNameVersion(nameAndVersion) {

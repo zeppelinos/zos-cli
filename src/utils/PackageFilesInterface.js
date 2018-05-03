@@ -1,4 +1,4 @@
-import fs from 'fs'
+import fs from '../models/FileSystem'
 import Logger from './Logger'
 import Stdlib from '../models/Stdlib'
 import ContractsProvider from '../models/ContractsProvider'
@@ -10,16 +10,12 @@ export default class PackageFilesInterface {
     this.packageFileName = packageFileName || 'package.zos.json'
   }
 
-  /*
-  * Package file functions
-  */
-
   exists() {
-    return this._exists(this.packageFileName)
+    return fs.exists(this.packageFileName)
   }
 
   read() {
-    return this.readFrom(this.packageFileName)
+    return fs.parseJson(this.packageFileName)
   }
 
   write(zosPackage) {
@@ -56,12 +52,12 @@ export default class PackageFilesInterface {
 
   existsNetworkFile(network) {
     const fileName = this.fileNameFor(network)
-    return this._exists(fileName)
+    return fs.exists(fileName)
   }
 
   readNetworkFile(network) {
     const fileName = this.fileNameFor(network)
-    return this.readFrom(fileName)
+    return fs.parseJson(fileName)
   }
 
   writeNetworkFile(network, data) {
@@ -73,22 +69,12 @@ export default class PackageFilesInterface {
   * Helpers
   */
 
-  _exists(fileName) {
-    return fs.existsSync(fileName)
-  }
-
   fileNameFor(network) {
     return `package.zos.${network}.json`
   }
 
-  readFrom(fileName) {
-    const data = fs.readFileSync(fileName)
-    return JSON.parse(data)
-  }
-
   writeTo(fileName, zosPackage) {
-    const data = JSON.stringify(zosPackage, null, 2)
-    fs.writeFileSync(fileName, data)
+    fs.writeJson(fileName, zosPackage)
     log.info(`Successfully written ${fileName}`)
   }
 }

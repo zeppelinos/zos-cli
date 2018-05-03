@@ -1,4 +1,4 @@
-import fs from 'fs';
+import fs from '../../src/models/FileSystem';
 import ProjectDeployer from "../../src/zos-lib/ProjectDeployer";
 import AppManagerProvider from "../../src/zos-lib/app_manager/AppManagerProvider";
 import AppManagerDeployer from "../../src/zos-lib/app_manager/AppManagerDeployer";
@@ -220,7 +220,7 @@ contract('AppManager', function ([_, owner]) {
 
   describe('from package data', async function () {
     beforeEach("deploying all contracts", async function () {
-      const packageData = JSON.parse(fs.readFileSync('test/mocks/packages/package-with-contracts-and-stdlib.zos.json'));
+      const packageData = fs.parseJson('test/mocks/packages/package-with-contracts-and-stdlib.zos.json')
       this.app = await ProjectDeployer.call(packageData, txParams)
       this.directory = this.app.currentDirectory();
     });

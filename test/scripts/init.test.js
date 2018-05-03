@@ -1,5 +1,5 @@
-import init from "../../src/scripts/init.js";
-import fs from 'fs';
+import fs from '../../src/models/FileSystem'
+import init from "../../src/scripts/init.js"
 import PackageFilesInterface from '../../src/utils/PackageFilesInterface';
 import { cleanupfn } from "../helpers/cleanup.js";
 
@@ -21,7 +21,7 @@ contract('init command', function() {
 
     it('should exist', async function() {
       await init({ name: appName, version: defaultVersion, packageFileName });
-      assert.equal(true, fs.existsSync(packageFileName));
+      assert.equal(true, fs.exists(packageFileName));
     });
 
     it('should have the appropriate app name', async function() {

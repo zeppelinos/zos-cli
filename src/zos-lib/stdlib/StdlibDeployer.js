@@ -1,4 +1,4 @@
-import fs from 'fs'
+import fs from '../../models/FileSystem'
 import Logger from '../../utils/Logger'
 import ContractsProvider from "../../models/ContractsProvider"
 
@@ -39,7 +39,7 @@ export default {
     const implementationName = this.jsonData.contracts[contractName]
     if (!implementationName) throw `Contract ${contractName} not found in package`
     const contractSchema = `node_modules/${name}/build/contracts/${implementationName}.json`;
-    const data = JSON.parse(fs.readFileSync(contractSchema))
+    const data = fs.parseJson(contractSchema)
     return ContractsProvider.getByJSONData(data)
   },
   
@@ -49,6 +49,6 @@ export default {
   
   _parseJsonData(name) {
     const filename = `node_modules/${name}/package.zos.json`
-    this.jsonData = JSON.parse(fs.readFileSync(filename))
+    this.jsonData = fs.parseJson(filename)
   }
 }

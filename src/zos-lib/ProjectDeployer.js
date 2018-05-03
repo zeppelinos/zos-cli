@@ -1,5 +1,5 @@
-import fs from 'fs'
 import _ from 'lodash'
+import fs from '../models/FileSystem'
 import StdlibDeployer from "./stdlib/StdlibDeployer"
 import ContractsProvider from "../models/ContractsProvider"
 import AppManagerDeployer from "./app_manager/AppManagerDeployer"
@@ -7,7 +7,7 @@ import AppManagerDeployer from "./app_manager/AppManagerDeployer"
 export default {
   async call(packageData = null, txParams = {}) {
     this.txParams = txParams
-    if(!packageData) packageData = JSON.parse(fs.readFileSync('package.zos.json'))
+    if(!packageData) packageData = fs.parseJson('package.zos.json')
     const appManager = await AppManagerDeployer.call(packageData.version, this.txParams)
     const directory = appManager.currentDirectory()
     await this._deployStdlib(directory, packageData)
