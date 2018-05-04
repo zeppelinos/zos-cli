@@ -13,24 +13,18 @@ export default class Stdlib {
   // TODO: Provided version and package.json version may not match, raise an error if so
   getVersion() {
     if (this.version) return this.version
-    return this._packageJson().version
+    return this.getPackage().version
   }
 
-  async getContract(contractAlias) {
-    const implementationName = this.jsonData.contracts[contractAlias]
-    if (!implementationName) throw `Contract ${contractAlias} not found in package`
-    const contractData = fs.parseJson(`node_modules/${name}/build/contracts/${implementationName}.json`)
-    return ContractsProvider.getByJSONData(contractData)
+  getPackage() {
+    if (this._packageJson) return this._packageJson
+    const filename = `node_modules/${this.name}/package.zos.json`
+    this._packageJson = fs.parseJson(filename)
+    return this._packageJson
   }
   
   async install() {
     await StdlibInstaller.call(this.nameAndVersion)
-  }
-
-  _packageJson() {
-    if (this.packageJson) return this.packageJson
-    const filename = `node_modules/${this.name}/package.zos.json`
-    this.packageJson = fs.parseJson(filename)
   }
 
   _parseNameVersion(nameAndVersion) {

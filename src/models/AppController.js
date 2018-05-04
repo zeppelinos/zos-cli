@@ -71,8 +71,7 @@ export default class AppController {
     if (contractName) {
       return ContractsProvider.getFromArtifacts(contractName);
     } else if (this.hasStdlib()) {
-      const stdlib = new Stdlib(this.package.stdlib.name);
-      return await stdlib.getContract(contractAlias);
+      return ContractsProvider.getFromStdlib(this.package.stdlib.name, contractAlias);
     } else {
       throw new Error(`Could not find ${contractAlias} contract in zOS package file`);
     }
