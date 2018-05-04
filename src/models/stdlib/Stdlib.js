@@ -24,7 +24,7 @@ export default class Stdlib {
   }
   
   async install() {
-    return StdlibInstaller.call(this.nameAndVersion)
+    await StdlibInstaller.call(this.nameAndVersion)
   }
 
   _packageJson() {

@@ -4,6 +4,6 @@ import AppController from  '../models/AppController'
 export default async function newVersion({ version, stdlibNameVersion = null, installDeps = false, packageFileName = null }) {
   const appController = new AppController(packageFileName)
   appController.newVersion(version)
-  appController.setStdlib(stdlibNameVersion, installDeps)
+  await appController.setStdlib(stdlibNameVersion, installDeps)
   appController.writePackage()
 }

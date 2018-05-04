@@ -6,6 +6,6 @@ export default async function init({ name, version, stdlibNameVersion = null, in
   
   const appController = new AppController(packageFileName)
   appController.init(name, version)  
-  appController.setStdlib(stdlibNameVersion, installDeps)
+  await appController.setStdlib(stdlibNameVersion, installDeps)
   appController.writePackage()
 }

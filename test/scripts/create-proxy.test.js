@@ -1,7 +1,7 @@
 import init from "../../src/scripts/init.js";
 import sync from "../../src/scripts/sync.js";
 import { cleanup, cleanupfn } from "../helpers/cleanup.js";
-import { parseJson } from "zos-lib/lib/utils/FileSystem";
+import { FileSystem as fs } from "zos-lib";
 import createProxy from "../../src/scripts/create-proxy.js";
 import addImplementation from "../../src/scripts/add-implementation.js";
 
@@ -34,7 +34,7 @@ contract('create-proxy command', function([_, owner]) {
 
   it('should create a proxy for one of its contracts', async function() {
     await createProxy({ contractAlias, packageFileName, network, txParams });
-    const data = parseJson(networkFileName);
+    const data = fs.parseJson(networkFileName);
     const proxy0 = data.proxies[contractAlias][0];
     proxy0.address.should.be.not.null;
     proxy0.version.should.be.eq(defaultVersion);
@@ -44,7 +44,7 @@ contract('create-proxy command', function([_, owner]) {
     await createProxy({ contractAlias, packageFileName, network, txParams });
     await createProxy({ contractAlias, packageFileName, network, txParams });
     await createProxy({ contractAlias, packageFileName, network, txParams });
-    const data = parseJson(networkFileName);
+    const data = fs.parseJson(networkFileName);
     assert.equal(3, data.proxies[contractAlias].length);
   });
 
@@ -54,7 +54,7 @@ contract('create-proxy command', function([_, owner]) {
     await sync({ packageFileName, network, txParams });
     await createProxy({ contractAlias, packageFileName, network, txParams });
     await createProxy({ contractAlias: customAlias, packageFileName, network, txParams });
-    const data = parseJson(networkFileName);
+    const data = fs.parseJson(networkFileName);
     const proxy0 = data.proxies[contractAlias][0];
     const proxy1 = data.proxies[customAlias][0];
     proxy0.address.should.be.not.null;

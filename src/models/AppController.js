@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import { Logger } from 'zos-lib';
-import { parseJsonIfExists, writeJson } from "zos-lib/lib/utils/FileSystem";
-import { ContractsProvider, AppManagerProvider, AppManagerDeployer } from "zos-lib";
+import { FileSystem as fs, ContractsProvider, AppManagerProvider, AppManagerDeployer } from "zos-lib";
 import StdlibProvider from './stdlib/StdlibProvider';
 import StdlibDeployer from './stdlib/StdlibDeployer';
 import Stdlib from './stdlib/Stdlib';
@@ -12,8 +11,8 @@ const log = new Logger('AppController');
 const DEFAULT_VERSION = '0.1.0';
 
 export default class AppController {
-  constructor(packageFileName) {
-    this.packageFileName = packageFileName || 'package.zos.json';
+  constructor(packageFileName = 'package.zos.json') {
+    this.packageFileName = packageFileName;
   }
 
   onNetwork(network, txParams, networkFileName) {
@@ -41,10 +40,10 @@ export default class AppController {
     delete this.package['stdlib'];
   }
 
-  setStdlib(stdlibNameVersion, installDeps = false) {
+  async setStdlib(stdlibNameVersion, installDeps = false) {
     if (stdlibNameVersion) {
       const stdlib = new Stdlib(stdlibNameVersion);
-      if (installDeps) stdlib.install();
+      if (installDeps) await stdlib.install();
       this.package.stdlib = {
         name: stdlib.getName(),
         version: stdlib.getVersion()
@@ -62,7 +61,7 @@ export default class AppController {
 
   get package() {
     if (!this._package) {
-      this._package = parseJsonIfExists(this.packageFileName) || {};
+      this._package = fs.parseJsonIfExists(this.packageFileName) || {};
     }
     return this._package;
   }
@@ -80,7 +79,7 @@ export default class AppController {
   }
 
   writePackage() {
-    writeJson(this.packageFileName, this.package);
+    fs.writeJson(this.packageFileName, this.package);
     log.info(`Successfully written ${this.packageFileName}`)
   }
 }

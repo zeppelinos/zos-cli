@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import { Logger } from 'zos-lib';
-import { parseJsonIfExists, writeJson } from "zos-lib/lib/utils/FileSystem";
-import { ContractsProvider, AppManagerProvider, AppManagerDeployer } from "zos-lib";
+import { FileSystem as fs, ContractsProvider, AppManagerProvider, AppManagerDeployer } from "zos-lib";
 import StdlibProvider from './stdlib/StdlibProvider';
 import StdlibDeployer from './stdlib/StdlibDeployer';
 import Stdlib from './stdlib/Stdlib';
@@ -91,13 +90,13 @@ export default class NetworkAppController {
 
   get networkPackage() {
     if (!this._networkPackage) {
-      this._networkPackage = parseJsonIfExists(this.networkFileName) || _.cloneDeep(EMPTY_NETWORK_PACKAGE);
+      this._networkPackage = fs.parseJsonIfExists(this.networkFileName) || _.cloneDeep(EMPTY_NETWORK_PACKAGE);
     }
     return this._networkPackage;
   }
 
   writeNetworkPackage() {
-    writeJson(this.networkFileName, this.networkPackage);
+    fs.writeJson(this.networkFileName, this.networkPackage);
     log.info(`Successfully written ${this.networkFileName}`)
   }
 
