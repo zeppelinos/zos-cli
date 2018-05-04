@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { Logger } from 'zos-lib';
-import { FileSystem as fs, ContractsProvider, AppManagerProvider, AppManagerDeployer } from "zos-lib";
+import { FileSystem as fs, AppManagerProvider, AppManagerDeployer } from "zos-lib";
 import StdlibProvider from './stdlib/StdlibProvider';
 import StdlibDeployer from './stdlib/StdlibDeployer';
 import Stdlib from './stdlib/Stdlib';
