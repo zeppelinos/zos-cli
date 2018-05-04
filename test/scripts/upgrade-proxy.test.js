@@ -11,7 +11,7 @@ const should = require('chai')
       .use(require('chai-as-promised'))
       .should();
 
-contract.skip('upgrade-proxy command', function([_, owner]) {
+contract('upgrade-proxy command', function([_, owner]) {
 
   const from = owner;
   const txParams = { from };

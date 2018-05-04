@@ -145,7 +145,7 @@ class NetworkAppController {
 
     await this.loadApp();
     const contractClass = await this.appController.getContractClass(contractAlias)
-    await this.appManagerWrapper.upgradeProxy(proxyAddress, contractClass, contractAlias, initMethod, initArgs)
+    await this.appManagerWrapper.upgradeProxy(proxyInfo.address, contractClass, contractAlias, initMethod, initArgs)
 
     proxyInfo.version = this.appManagerWrapper.version
   }
