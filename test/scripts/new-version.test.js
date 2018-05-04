@@ -1,6 +1,6 @@
 import init from "../../src/scripts/init.js";
 import newVersion from "../../src/scripts/new-version.js";
-import { parseJson } from  '../../src/zos-lib/utils/FileSystem';
+import { parseJson } from  'zos-lib/lib/utils/FileSystem';
 import { cleanup, cleanupfn } from "../helpers/cleanup.js";
 
 const should = require('chai')

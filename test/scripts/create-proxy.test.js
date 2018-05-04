@@ -1,7 +1,7 @@
 import init from "../../src/scripts/init.js";
 import sync from "../../src/scripts/sync.js";
 import { cleanup, cleanupfn } from "../helpers/cleanup.js";
-import { parseJson } from "../../src/zos-lib/utils/FileSystem";
+import { parseJson } from "zos-lib/lib/utils/FileSystem";
 import createProxy from "../../src/scripts/create-proxy.js";
 import addImplementation from "../../src/scripts/add-implementation.js";
 

@@ -4,7 +4,7 @@ import sync from "../../src/scripts/sync.js";
 import newVersion from "../../src/scripts/new-version.js";
 import createProxy from "../../src/scripts/create-proxy.js";
 import upgradeProxy from "../../src/scripts/upgrade-proxy.js";
-import { parseJson } from "../../src/zos-lib/utils/FileSystem";
+import { parseJson } from "zos-lib/lib/utils/FileSystem";
 import { cleanup, cleanupfn } from "../helpers/cleanup.js";
 
 const should = require('chai')

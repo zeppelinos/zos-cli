@@ -1,9 +1,7 @@
-import Logger from '../utils/Logger';
-import { parseJsonIfExists, writeJson } from "../zos-lib/utils/FileSystem";
 import _ from 'lodash';
-import ContractsProvider from "../zos-lib/utils/ContractsProvider";
-import AppManagerProvider from "../zos-lib/app_manager/AppManagerProvider";
-import AppManagerDeployer from "../zos-lib/app_manager/AppManagerDeployer";
+import { Logger } from 'zos-lib';
+import { parseJsonIfExists, writeJson } from "zos-lib/lib/utils/FileSystem";
+import { ContractsProvider, AppManagerProvider, AppManagerDeployer } from "zos-lib";
 import StdlibProvider from './stdlib/StdlibProvider';
 import StdlibDeployer from './stdlib/StdlibDeployer';
 import Stdlib from './stdlib/Stdlib';

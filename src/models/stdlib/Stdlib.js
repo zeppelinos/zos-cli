@@ -1,5 +1,5 @@
-import fs from '../../zos-lib/utils/FileSystem'
 import StdlibInstaller from './StdlibInstaller';
+import { FileSystem as fs } from 'zos-lib'
 
 export default class Stdlib {
   constructor(nameAndVersion) {
