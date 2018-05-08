@@ -144,4 +144,23 @@ contract('upgrade-proxy command', function([_, owner]) {
     await assertProxyInfo('Impl', 0, { version: v2string, implementation: this.implV2Address, value: 42 });
     await assertProxyInfo('Impl', 1, { version: v2string, implementation: this.implV2Address, value: 42 });
   });
+
+  describe('with local modifications', function () {
+    beforeEach("changing local network file to have a different bytecode", async function () {
+      const data = fs.parseJson(networkFileName);
+      data.contracts[contractAlias].bytecode = "0xabcd";
+      fs.writeJson(networkFileName, data);
+    });
+
+    it('should refuse to upgrade a proxy for a modified contract', async function () {
+      await upgradeProxy({ contractAlias, packageFileName, network, txParams }).should.be.rejected;
+    });
+
+    it('should upgrade a proxy for a modified contract if force is set', async function () {
+      await upgradeProxy({ contractAlias, packageFileName, network, txParams, force: true });
+      const data = fs.parseJson(networkFileName);
+      const proxy = data.proxies[contractAlias][0];
+      proxy.version.should.eq(version);
+    });
+  });
 });

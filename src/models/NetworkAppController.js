@@ -165,13 +165,16 @@ export default class NetworkAppController {
   }
 
   async uploadContracts() {
-    // TODO: Store the implementation's hash or full source code to avoid unnecessary deployments
+    // TODO: Store the implementation's hash or full source/byte code to avoid unnecessary deployments
     return Promise.all(_.map(this.package.contracts, async (contractName, contractAlias) => {
       const contractClass = ContractsProvider.getFromArtifacts(contractName);
       log.info(`Uploading ${contractName} implementation for ${contractAlias}`);
       const contractInstance = await this.appManagerWrapper.setImplementation(contractClass, contractAlias);
       log.info(`Uploaded ${contractName} at ${contractInstance.address}`);
-      this.networkPackage.contracts[contractAlias] = contractInstance.address;
+      this.networkPackage.contracts[contractAlias] = {
+        address: contractInstance.address,
+        bytecode: contractClass.bytecode
+      };
     }));
   }
 
@@ -198,5 +201,34 @@ export default class NetworkAppController {
     const stdlibAddress = StdlibProvider.from(this.package.stdlib.name, this.network);
     await this.appManagerWrapper.setStdlib(stdlibAddress);
     this.networkPackage.stdlib = { address: stdlibAddress, ... this.package.stdlib };
+  }
+
+  checkContractsChanged(throwIfChanged = false) {
+    const contractsChanged = _(this.package.contracts).keys().filter((alias) => this.hasContractChanged(alias)).value();
+    if (!_.isEmpty(contractsChanged)) {
+      const msg = `Contracts ${contractsChanged.join(', ')} have changed since the last deploy.`;
+      if (throwIfChanged) throw new Error(msg);
+      else log.info(msg);
+    }
+    return contractsChanged;
+  }
+
+  checkContractChanged(contractAlias, throwIfChanged = false) {
+    if (this.hasContractChanged(contractAlias)) {
+      const msg = `Contract ${contractAlias} has changed since the last deploy.`;
+      if (throwIfChanged) throw new Error(msg);
+      else log.info(msg);
+      return true;
+    }
+    return false;
+  }
+
+  hasContractChanged(contractAlias) {
+    const contractName = this.package.contracts[contractAlias];
+    if (!contractName) return false; // If not part of the package, the contract must be part of the stdlib, so we assume it did not change
+    const contractClass = ContractsProvider.getFromArtifacts(contractName);
+    const currentBytecode = contractClass.bytecode;
+    const deployedBytecode = this.networkPackage.contracts[contractAlias].bytecode;
+    return currentBytecode != deployedBytecode;
   }
 }
