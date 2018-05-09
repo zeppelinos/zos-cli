@@ -20,6 +20,9 @@ export default class AppController {
   }
 
   init(name, version) {
+    if (fs.exists(this.packageFileName)) {
+      throw new Error(`Cannot overwrite existing file ${this.packageFileName}`)
+    }
     if (this.package.name) {
       throw new Error(`Cannot initialize already initialized package ${this.package.name}`)
     }
