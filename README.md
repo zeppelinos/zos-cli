@@ -14,7 +14,7 @@ ZeppelinOS is a platform to develop, manage and operate smart contract applicati
 
 - [Getting Started](#getting-started)
   - [Install](#install)
-  - [Basic Usage](#basic-usage)
+  - [Basic usage](#basic-usage)
 - [Examples](#examples)
 - [Links](#links)
 - [License](#license)
@@ -28,7 +28,7 @@ To install `zos` simply run:
 npm install --global zos
 ```
 
-### Basic Usage
+### Basic usage
 
 #### Before you begin
 `zos` integrates with [Truffle](http://truffleframework.com/), an Ethereum development environment. Please install Truffle and initialize your project with it:
@@ -64,12 +64,15 @@ zos init myproject 0.1 --network development
 
 ## Links
 
+### Documentation
 - [ZeppelinOS](http://zeppelinos.org)
 - [ZeppelinOS Blog](https://blog.zeppelinos.org)
+- [Proxy Patterns](https://blog.zeppelinos.org/proxy-patterns)
+
+### Code
 - [ZeppelinOS library (`zos-lib`)](https://github.com/zeppelinos/zos-lib)
 - [ZeppelinOS kernel](https://github.com/zeppelinos/kernel)
-- [Proxy Patterns](https://blog.zeppelinos.org/proxy-patterns)
 
 ## License
 
-Code released under the [MIT](LICENSE) License
+Code released under the [MIT License](LICENSE)
