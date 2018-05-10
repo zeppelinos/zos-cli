@@ -55,6 +55,15 @@ contract('create-proxy command', function([_, owner]) {
     await assertProxy(data.proxies[contractAlias][0], { version: defaultVersion, say: "V1" });
   });
 
+  it('should refuse to create a proxy for an undefined contract', async function() {
+    await createProxy({ contractAlias: "NotExists", packageFileName, network, txParams }).should.be.rejectedWith(/not found/);
+  });
+
+  it('should refuse to create a proxy for an undeployed contract', async function() {
+    await addImplementation({ contractName, contractAlias: "NotDeployed", packageFileName });
+    await createProxy({ contractAlias: "NotDeployed", packageFileName, network, txParams }).should.be.rejectedWith(/not deployed/);
+  });
+
   it('should be able to have multiple proxies for one of its contracts', async function() {
     await createProxy({ contractAlias, packageFileName, network, txParams });
     await createProxy({ contractAlias, packageFileName, network, txParams });
@@ -92,7 +101,7 @@ contract('create-proxy command', function([_, owner]) {
     });
 
     it('should refuse to create a proxy for a modified contract', async function () {
-      await createProxy({ contractAlias, packageFileName, network, txParams }).should.be.rejected;
+      await createProxy({ contractAlias, packageFileName, network, txParams }).should.be.rejectedWith(/has changed/);
     });
 
     it('should create a proxy for an unmodified contract', async function () {

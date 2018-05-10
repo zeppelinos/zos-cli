@@ -6,7 +6,7 @@ export default async function upgradeProxy({ contractAlias, proxyAddress, initMe
   }
 
   const appController = new AppController(packageFileName).onNetwork(network, txParams, networkFileName);
-  await appController.checkContractsChanged(!force);
+  await appController.checkLocalContractsDeployed(!force);
   await appController.upgradeProxies(contractAlias, proxyAddress, initMethod, initArgs);
   appController.writeNetworkPackage();
 }
