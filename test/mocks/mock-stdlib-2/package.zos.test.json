@@ -10,7 +10,7 @@
     "contracts": {
       "Greeter": {
         "address": "0x102030",
-        "bytecode": "0x0002"
+        "bytecodeHash": "0x0002"
       }
     }
   }

@@ -155,7 +155,7 @@ contract('upgrade-proxy command', function([_, owner]) {
   describe('with local modifications', function () {
     beforeEach("changing local network file to have a different bytecode", async function () {
       const data = fs.parseJson(networkFileName);
-      data.contracts["Impl"].bytecode = "0xabcd";
+      data.contracts["Impl"].bytecodeHash = "0xabcd";
       fs.writeJson(networkFileName, data);
     });
 

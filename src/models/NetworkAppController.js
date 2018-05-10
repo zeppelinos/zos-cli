@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import { Logger } from 'zos-lib';
 import { FileSystem as fs, AppManagerProvider, AppManagerDeployer } from "zos-lib";
+import { bytecodeDigest } from '../utils/digest';
 import StdlibProvider from './stdlib/StdlibProvider';
 import StdlibDeployer from './stdlib/StdlibDeployer';
 import Stdlib from './stdlib/Stdlib';
@@ -177,7 +178,7 @@ export default class NetworkAppController {
       log.info(`Uploaded ${contractName} at ${contractInstance.address}`);
       this.networkPackage.contracts[contractAlias] = {
         address: contractInstance.address,
-        bytecode: contractClass.bytecode
+        bytecodeHash: bytecodeDigest(contractClass.bytecode)
       };
     }));
   }
@@ -244,8 +245,8 @@ export default class NetworkAppController {
     if (!this.isApplicationContract(contractAlias)) return false;
     if (!this.isContractDeployed(contractAlias)) return true;
     const contractClass = ContractsProvider.getFromArtifacts(contractName);
-    const currentBytecode = contractClass.bytecode;
-    const deployedBytecode = this.networkPackage.contracts[contractAlias].bytecode;
+    const currentBytecode = bytecodeDigest(contractClass.bytecode);
+    const deployedBytecode = this.networkPackage.contracts[contractAlias].bytecodeHash;
     return currentBytecode != deployedBytecode;
   }
 

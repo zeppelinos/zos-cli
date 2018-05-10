@@ -96,7 +96,7 @@ contract('create-proxy command', function([_, owner]) {
   describe('with local modifications', function () {
     beforeEach("changing local network file to have a different bytecode", async function () {
       const data = fs.parseJson(networkFileName);
-      data.contracts[contractAlias].bytecode = "0xabcd";
+      data.contracts[contractAlias].bytecodeHash = "0xabcd";
       fs.writeJson(networkFileName, data);
     });
 
