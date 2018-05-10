@@ -17,4 +17,4 @@ contract AnotherImplV2 is ImplV2 {
   function say() public pure returns (string) {
     return "AnotherV2";
   }
-} 
+}
