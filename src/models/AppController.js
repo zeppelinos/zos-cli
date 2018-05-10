@@ -31,13 +31,9 @@ export default class AppController {
 
   newVersion(version) {
     if (!version) {
-      throw new Error('Missign required argument version for initializing new version')
+      throw new Error('Missing required argument version for initializing new version')
     }
     this.package.version = version;
-
-    // TODO: Do not clean up contracts listing and stdlib, inherit from previous version
-    this.package.contracts = {};
-    delete this.package['stdlib'];
   }
 
   async setStdlib(stdlibNameVersion, installDeps = false) {
