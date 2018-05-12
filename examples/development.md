@@ -34,10 +34,10 @@ npx truffle compile
 The next step is to register all the contract implementations of the first `version` of your project. To do this please run:
 
 ```
-zos add-implementation <contract_name_1> --network <network>
-zos add-implementation <contract_name_2> --network <network>
+zos add-implementation <contract_name_1>
+zos add-implementation <contract_name_2>
 ...
-zos add-implementation <contract_name_n> --network <network>
+zos add-implementation <contract_name_n>
 ```
 
 Where `<contract_name>` is the name of your Solidity contract, and `<alias>` is the name under which it will be registered 
@@ -45,7 +45,7 @@ in zeppelin_os.
 
 In our example, run:
 ```
-zos add-implementation MyContract --network development
+zos add-implementation MyContract
 ```
 
 To have your `package.zos.json` file always up-to-date, run `zos add-implementation` for every new contract you add to your project.
