@@ -7,7 +7,7 @@ Write your contracts as you would usually do, but replacing constructors with `i
 npm install zos-lib
 ```
 
-- For an upgradeable contract development full example, see [the examples folder in `zos-lib`](https://github.com/zeppelinos/zos-lib/blob/master/examples/single/contracts/MyContract_v0.sol).
+- For an upgradeable contract development full example, see [the examples folder in `zos-lib`](https://github.com/zeppelinos/zos-lib/blob/master/examples/simple/contracts/MyContract_v0.sol).
 - For an introductory smart contract development guide, see [this blog post series](https://blog.zeppelin.solutions/a-gentle-introduction-to-ethereum-programming-part-1-783cc7796094).
 
 In this example, we'll use this simple contract:
