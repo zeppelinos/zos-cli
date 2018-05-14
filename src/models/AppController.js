@@ -54,9 +54,8 @@ export default class AppController {
   }
 
   addAllImplementations() {
-    // TODO: use new zos-lib fs functions once release
     const folder = `${process.cwd()}/build/contracts`
-    require('fs').readdirSync(folder).forEach(file => {
+    fs.readDir(folder).forEach(file => {
       const path = `${folder}/${file}`
       if(this.hasBytecode(path)) {
         const contractData = fs.parseJson(path)
