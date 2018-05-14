@@ -1,5 +1,8 @@
+import { Logger } from 'zos-lib'
 import createProxy from '../../scripts/create-proxy'
 import runWithTruffle from '../../utils/runWithTruffle'
+
+const log = new Logger('CreateProxy')
 
 module.exports = function(program) {
   program
@@ -21,6 +24,12 @@ module.exports = function(program) {
       else if(typeof initArgs === 'boolean' || initMethod) initArgs = []
 
       const { from, network, force } = options
+
+      if (network === undefined) {
+        log.error('Must provide a network name')
+        return
+      }
+
       runWithTruffle(async () => await createProxy({ contractAlias, network, from, initMethod, initArgs, force }), network)
     })
 }
