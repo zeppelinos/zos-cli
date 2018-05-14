@@ -86,13 +86,13 @@ Open the `package.zos.<network>.json` and use the addresses found there to inter
 In addition to creating proxies for your own contracts, you can also re-use already deployed contracts from a zeppelin_os standard library. To do so, run the following command, with the name of the npm package of the stdlib you want to use. For example:
 
 ```bash
-zos set-stdlib openzeppelin-zos --network <network>
+zos set-stdlib openzeppelin-zos
 ```
 
 The next `sync` operation will connect your application with the chosen standard library on the target network. However, if you're using development nodes (such as testrpc or ganache), the standard library is not already deployed, since you are running from an empty blockchain. To work around this, you can add a `--deploy-stdlib` flag to the `sync` command:
 
 ```bash
-zos sync --network <network> --deploy-stdlib
+zos sync --network <network>
 ```
 
 This will deploy your entire application to the target network, along with the standard library you are using and all its contracts. This way, you can transparently work in development with the contracts provided by the stdlib.
