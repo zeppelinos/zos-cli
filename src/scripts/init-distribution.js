@@ -8,8 +8,8 @@ const BASE_DISTRIBUTION = {
 }
 
 export default function initDistribution({ name, kernelAddress, packageFileName = undefined }) {
-  if (name === undefined) throw 'Must provide a distribution name'
-  if (kernelAddress === undefined) throw 'Must provide a kernel address'
+  if (name === undefined) throw Error('Must provide a distribution name')
+  if (kernelAddress === undefined) throw Error('Must provide a kernel address')
 
   const files = new PackageFilesInterface(packageFileName)
   const zosPackage = BASE_DISTRIBUTION

@@ -7,7 +7,7 @@ const log = new Logger('deploy')
 // TODO: remove version param
 export default async function deploy({ version, network, txParams = {}, packageFileName = undefined}) {
   const files = new PackageFilesInterface(packageFileName)
-  if (! files.exists()) throw `Could not find package file ${packageFileName}`
+  if (! files.exists()) throw Error(`Could not find package file ${packageFileName}`)
 
   const zosPackage = files.read()
   let zosNetworkFile

@@ -1,8 +1,8 @@
 import { KernelProvider } from 'zos-kernel'
 
 export default async function vouch({ releaseAddress, rawAmount, network, txParams = {} }) {
-  if(!releaseAddress) throw 'You must provide a release address to vouch for'
-  if(!rawAmount) throw 'You must provide a vouching amount of ZEP tokens'
+  if(!releaseAddress) throw Error('You must provide a release address to vouch for')
+  if(!rawAmount) throw Error('You must provide a vouching amount of ZEP tokens')
 
   const data = ''
   const amount = new web3.BigNumber(rawAmount)

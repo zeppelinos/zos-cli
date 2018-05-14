@@ -14,7 +14,7 @@ ContractsProvider.getFromKernel = contractName => {
 ContractsProvider.getFromStdlib = (stdlibName, contractAlias) => {
   const contracts = (new Stdlib(stdlibName)).getPackage().contracts
   const implementationName = contracts[contractAlias]
-  if (!implementationName) throw `Contract ${contractAlias} not found in package`
+  if (!implementationName) throw Error(`Contract ${contractAlias} not found in package`)
   const contractData = fs.parseJson(`node_modules/${stdlibName}/build/contracts/${implementationName}.json`)
   return ContractsProvider.getByJSONData(contractData)
 }
