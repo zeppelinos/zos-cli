@@ -1,5 +1,8 @@
+import { Logger } from 'zos-lib'
 import sync from '../../scripts/sync'
 import runWithTruffle from '../../utils/runWithTruffle'
+
+const log = new Logger('Sync')
 
 module.exports = function(program) {
   program
@@ -11,6 +14,12 @@ module.exports = function(program) {
     .option('--deploy-stdlib', 'Deploys a copy of the stdlib (if any) instead of using the one already published to the network by its author (useful in local testrpc networks)')
     .action(function (options) {
       const { from, network, deployStdlib } = options
+
+      if (network === undefined) {
+        log.error('Must provide a network name')
+        return
+      }
+
       runWithTruffle(async () => await sync({ network, from, deployStdlib }), network)
     })
 }

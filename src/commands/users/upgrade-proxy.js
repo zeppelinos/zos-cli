@@ -1,5 +1,8 @@
+import { Logger } from 'zos-lib'
 import upgradeProxy from '../../scripts/upgrade-proxy'
 import runWithTruffle from '../../utils/runWithTruffle'
+
+const log = new Logger('UpdateProxy')
 
 module.exports = function(program) {
   program
@@ -22,6 +25,12 @@ module.exports = function(program) {
       else if(typeof initArgs === 'boolean' || initMethod) initArgs = []
 
       const { from, network, all, force } = options
+
+      if (network === undefined) {
+        log.error('Must provide a network name')
+        return
+      }
+
       runWithTruffle(async () => await upgradeProxy({ contractAlias, proxyAddress, network, from, initMethod, initArgs, all, force }), network)
     })
 }
