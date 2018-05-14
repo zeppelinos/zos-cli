@@ -31,9 +31,6 @@ export default class AppController {
   }
 
   newVersion(version) {
-    if (!version) {
-      throw Error('Missing required argument version for initializing new version')
-    }
     this.package.version = version;
   }
 
@@ -65,8 +62,8 @@ export default class AppController {
       throw Error(`Contract ${contractName} not found in folder ${folder}`);
     }
     const bytecode = fs.parseJson(path).bytecode;
-    if (!bytecode || bytecode == "0x") {
-      throw Error(`Contract ${contractName} is abstract and cannot be deployed as an implementation`);
+    if (!bytecode || bytecode === "0x") {
+      throw Error(`Contract ${contractName} is abstract and cannot be deployed as an implementation.`);
     }
   }
 
@@ -84,7 +81,7 @@ export default class AppController {
     } else if (this.hasStdlib()) {
       return ContractsProvider.getFromStdlib(this.package.stdlib.name, contractAlias);
     } else {
-      throw Error(`Could not find ${contractAlias} contract in zOS package file`);
+      throw Error(`Could not find ${contractAlias} contract in zOS project. Please provide one or make sure to set a stdlib that provides one.`);
     }
   }
 
