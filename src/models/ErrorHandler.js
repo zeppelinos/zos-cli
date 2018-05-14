@@ -1,6 +1,7 @@
 import { Logger } from 'zos-lib'
 
 const log = new Logger('Error')
+const GENERIC_ERROR_MESSAGE = 'There was an undefined error. Please execute the same command again in verbose mode if necessary.'
 
 export default class ErrorHandler {
   constructor(error, { verbose }) {
@@ -9,24 +10,13 @@ export default class ErrorHandler {
   }
 
   call() {
-    const errorName = this.error.name || 'Undefined'
-    const handlerName = `on${errorName}`
-    this[handlerName]()
-  }
-
-  onError() {
-    log.error(this.error.message)
-    this._printStackIfVerbose()
-    process.exit(1)
-  }
-
-  onUndefined() {
-    log.error('There was an undefined error. Please execute the same command again in verbose mode if necessary.')
+    const errorMessage = this.error.message || GENERIC_ERROR_MESSAGE
+    log.error(errorMessage)
     this._printStackIfVerbose()
     process.exit(1)
   }
 
   _printStackIfVerbose() {
-    if(this.verbose) console.log(this.error.stack)
+    if(this.verbose) log.error(this.error.stack)
   }
 }
