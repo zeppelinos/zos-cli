@@ -73,7 +73,7 @@ Optionally, you can use the `-i` flag to call an initialization/migration functi
 
 In our simple example, we want to call the `initialize` function, with some value (e.g: 42) thus:
 ```
-zos create MyContract -i initialize -p 40 --network development 
+zos create MyContract -i initialize -p 42 --network development 
 ```
 
 The proxy addresses, which you'll need to interact with your upgradeable contracts, will be stored in the `package.zos.<network>.json` file.
