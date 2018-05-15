@@ -23,7 +23,16 @@ ${content}
 
 function writeMd(id, title, content) {
   const data = formatContent(id, title, content);
-  writeFileSync(path.resolve(outputPath, `${id}.md`), data);
+  writeFileSync(path.resolve(outputPath, `cli_${id}.md`), data);
+}
+
+function makeSidebar(program) {
+  return { 
+    'cli-api': {
+      'OVERVIEW': ['cli_main'],
+      'COMMANDS': program.commands.map(command => `cli_${command.name()}`)
+    }
+  };
 }
 
 function run() {
@@ -38,6 +47,9 @@ function run() {
     const content = renderToStaticMarkup(React.createElement(Command, { command }));
     writeMd(command.name(), command.name(), content);
   });
+
+  const sidebar = makeSidebar(program);
+  writeFileSync(path.resolve(outputPath, 'sidebars.json'), JSON.stringify(sidebar, null, 2));
 }
 
 run();
