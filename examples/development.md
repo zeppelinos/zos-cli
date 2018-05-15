@@ -40,8 +40,7 @@ zos add <contract_name_2>
 zos add <contract_name_n>
 ```
 
-Where `<contract_name>` is the name of your Solidity contract, and `<alias>` is the name under which it will be registered 
-in ZeppelinOS. 
+Where `<contract_name>` is the name of your Solidity contract.
 
 In our example, run:
 ```
@@ -64,10 +63,10 @@ The first time you run this command for a specific network, a new `package.zos.<
 The next commands will deploy new proxies to make your contracts upgradeable:
 
 ```
-zos create <alias_1> --network <network>
-zos create <alias_2> --network <network>
+zos create <contract_name_1> --network <network>
+zos create <contract_name_2> --network <network>
 ...
-zos create <alias_n> --network <network>
+zos create <contract_name_n> --network <network>
 ```
 
 Optionally, you can use the `-i` flag to call an initialization/migration function after you create the proxy.
@@ -142,10 +141,10 @@ However, the already deployed proxies are still running with the old implementat
 each of the proxies individually. To do so, you just need to run this for every contract: 
 
 ```
-zos upgrade <alias_1> --network <network>
-zos upgrade <alias_2> --network <network>
+zos upgrade <contract_name_1> --network <network>
+zos upgrade <contract_name_2> --network <network>
 ...
-zos upgrade <alias_n> --network <network>
+zos upgrade <contract_name_n> --network <network>
 ```
 
 In our simple example:
