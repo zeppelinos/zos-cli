@@ -152,4 +152,4 @@ In our simple example:
 zos upgrade MyContract --network development
 ```
 
-Voila! Your contract has now been upgraded. The address is the same as before, but the code has been changed to the latest version. Repeat the same steps for every code update you want to perform.
+Voilà! Your contract has now been upgraded. The address is the same as before, but the code has been changed to the latest version. Repeat the same steps for every code update you want to perform.
