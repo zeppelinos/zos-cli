@@ -91,7 +91,7 @@ zos link openzeppelin-zos
 The next `push` operation will connect your application with the chosen standard library on the target network. However, if you're using development nodes (such as testrpc or ganache), the standard library is not already deployed, since you are running from an empty blockchain. To work around this, you can add a `--deploy-stdlib` flag to the `push` command:
 
 ```bash
-zos push --network <network>
+zos push --deploy-stdlib --network <network>
 ```
 
 This will deploy your entire application to the target network, along with the standard library you are using and all its contracts. This way, you can transparently work in development with the contracts provided by the stdlib.
