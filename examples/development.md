@@ -41,7 +41,7 @@ zos add <contract_name_n>
 ```
 
 Where `<contract_name>` is the name of your Solidity contract, and `<alias>` is the name under which it will be registered 
-in zeppelin_os. 
+in ZeppelinOS. 
 
 In our example, run:
 ```
@@ -83,7 +83,7 @@ Open the `package.zos.<network>.json` and use the addresses found there to inter
 
 ## Using a standard library
 
-In addition to creating proxies for your own contracts, you can also re-use already deployed contracts from a zeppelin_os standard library. To do so, run the following command, with the name of the npm package of the stdlib you want to use. For example:
+In addition to creating proxies for your own contracts, you can also re-use already deployed contracts from a ZeppelinOS standard library. To do so, run the following command, with the name of the npm package of the stdlib you want to use. For example:
 
 ```bash
 zos link openzeppelin-zos
@@ -108,7 +108,7 @@ zos create DetailedMintableToken --network <network>
 
 Some time later you might want to change your smart contract code: fix a bug, add a new feature, etc. 
 To do so, update your contracts, making sure you don't change their pre-existing storage structure. This is required
-by **zeppelin_os** upgradeability mechanism. This means you can add new state variables, but you can't remove the ones you already have. In the example above, this could be the new version of `MyContract`:
+by **ZeppelinOS** upgradeability mechanism. This means you can add new state variables, but you can't remove the ones you already have. In the example above, this could be the new version of `MyContract`:
 
 ```sol
 import "zos-lib/contracts/migrations/Initializable.sol";
@@ -142,17 +142,15 @@ However, the already deployed proxies are still running with the old implementat
 each of the proxies individually. To do so, you just need to run this for every contract: 
 
 ```
-zos upgrade-proxy <alias_1> <proxy_address_1> --network <network>
-zos upgrade-proxy <alias_2> <proxy_address_2> --network <network>
+zos upgrade <alias_1> --network <network>
+zos upgrade <alias_2> --network <network>
 ...
-zos upgrade-proxy <alias_n> <proxy_address_n> --network <network>
+zos upgrade <alias_n> --network <network>
 ```
 
 In our simple example:
 ```
-zos upgrade-proxy MyContract <proxy_address> --network development
+zos upgrade MyContract --network development
 ```
 
-Where <proxy_address> is the address found in package.zos.<network>.json.
-  
 Voila! Your contract has now been upgraded. The address is the same as before, but the code has been changed to the latest version. Repeat the same steps for every code update you want to perform.
