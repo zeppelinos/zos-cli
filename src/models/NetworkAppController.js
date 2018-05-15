@@ -22,9 +22,9 @@ export default class NetworkAppController {
     }
   }
 
-  async sync(reupload = false) {
+  async push(reupload = false) {
     await this.initApp()
-    await this.syncVersion()
+    await this.pushVersion()
     await this.fetchProvider()
     await this.uploadContracts(reupload)
     await this.setStdlib()
@@ -128,7 +128,7 @@ export default class NetworkAppController {
     this.app = await App.fetch(address, this.txParams);
   }
 
-  async syncVersion() {
+  async pushVersion() {
     // TODO: Why is version on root level in package but within app in network?
     const requestedVersion = this.package.version;
     const currentVersion = this.app.version;

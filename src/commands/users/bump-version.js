@@ -1,4 +1,4 @@
-import sync from './sync'
+import push from './push'
 import bumpVersion from '../../scripts/bump-version'
 
 module.exports = function(program) {
@@ -13,6 +13,6 @@ module.exports = function(program) {
     .action(async function (version, options) {
       const { stdlib: stdlibNameVersion, install: installDeps } = options
       await bumpVersion({ version, stdlibNameVersion, installDeps })
-      if(options.push) sync.action({ network: options.push, from: options.from })
+      if(options.push) push.action({ network: options.push, from: options.from })
     })
 }
