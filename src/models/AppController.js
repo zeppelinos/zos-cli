@@ -34,7 +34,7 @@ export default class AppController {
     this.package.version = version;
   }
 
-  async setStdlib(stdlibNameVersion, installDeps = false) {
+  async linkStdlib(stdlibNameVersion, installDeps = false) {
     if (stdlibNameVersion) {
       const stdlib = new Stdlib(stdlibNameVersion);
       if (installDeps) await stdlib.install();

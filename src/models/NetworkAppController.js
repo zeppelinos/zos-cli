@@ -27,7 +27,7 @@ export default class NetworkAppController {
     await this.pushVersion()
     await this.fetchProvider()
     await this.uploadContracts(reupload)
-    await this.setStdlib()
+    await this.linkStdlib()
   }
 
   async deployStdlib() {
@@ -166,7 +166,7 @@ export default class NetworkAppController {
     };
   }
 
-  async setStdlib() {
+  async linkStdlib() {
     if (!this.appController.hasStdlib()) {
       await this.app.setStdlib();
       delete this.networkPackage['stdlib'];

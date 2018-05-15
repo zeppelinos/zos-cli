@@ -1,6 +1,6 @@
 import init from "../../src/scripts/init.js";
 import bumpVersion from "../../src/scripts/bump-version.js";
-import setStdlib from "../../src/scripts/set-stdlib.js";
+import linkStdlib from "../../src/scripts/link-stdlib.js";
 import { FileSystem as fs } from 'zos-lib';
 import { cleanup, cleanupfn } from "../helpers/cleanup.js";
 import addImplementation from "../../src/scripts/add-implementation.js";
@@ -46,7 +46,7 @@ contract('new-version command', function() {
 
   it('should preserve stdlib if none specified', async function () {
     const version = '0.2.0';
-    await setStdlib({ stdlibNameVersion: 'mock-stdlib@1.1.0', packageFileName });
+    await linkStdlib({ stdlibNameVersion: 'mock-stdlib@1.1.0', packageFileName });
     await bumpVersion({ version, packageFileName });
     const data = fs.parseJson(packageFileName);
     data.stdlib.name.should.eq('mock-stdlib');

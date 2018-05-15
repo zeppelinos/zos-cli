@@ -4,7 +4,7 @@ import { cleanup, cleanupfn } from "../helpers/cleanup.js";
 import { FileSystem as fs } from "zos-lib";
 import createProxy from "../../src/scripts/create-proxy.js";
 import addImplementation from "../../src/scripts/add-implementation.js";
-import setStdlib from "../../src/scripts/set-stdlib.js";
+import linkStdlib from "../../src/scripts/link-stdlib.js";
 
 const ImplV1 = artifacts.require('ImplV1');
 
@@ -83,7 +83,7 @@ contract('create-proxy command', function([_, owner]) {
 
   describe('with stdlib', function () {
     beforeEach('setting stdlib', async function () {
-      await setStdlib({ stdlibNameVersion: 'mock-stdlib@1.1.0', packageFileName });
+      await linkStdlib({ stdlibNameVersion: 'mock-stdlib@1.1.0', packageFileName });
       await push({ packageFileName, network, txParams, deployStdlib: true });
     });
 

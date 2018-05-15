@@ -5,6 +5,6 @@ export default async function bumpVersion({ version, stdlibNameVersion = undefin
 
   const appController = new AppController(packageFileName)
   appController.bumpVersion(version)
-  await appController.setStdlib(stdlibNameVersion, installDeps)
+  await appController.linkStdlib(stdlibNameVersion, installDeps)
   appController.writePackage()
 }
