@@ -1,7 +1,7 @@
 import init from "../../src/scripts/init.js";
 import addImplementation from "../../src/scripts/add-implementation.js";
 import sync from "../../src/scripts/sync.js";
-import newVersion from "../../src/scripts/new-version.js";
+import bumpVersion from "../../src/scripts/bump-version.js";
 import createProxy from "../../src/scripts/create-proxy.js";
 import status from "../../src/scripts/status.js";
 import setStdlib from "../../src/scripts/set-stdlib";
@@ -63,7 +63,7 @@ contract('status command', function([_, owner]) {
     it('should log version out of sync', async function () {
       await init({ name: appName, version, packageFileName });
       await sync({ packageFileName, network, txParams });
-      await newVersion({ version: '0.2.0', packageFileName });
+      await bumpVersion({ version: '0.2.0', packageFileName });
       await status({ network, packageFileName, networkFileName, logger });
 
       logger.text.should.match(/version 0.1.0 is out of date/i);

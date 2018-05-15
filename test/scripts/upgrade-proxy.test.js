@@ -1,7 +1,7 @@
 import init from "../../src/scripts/init.js";
 import addImplementation from "../../src/scripts/add-implementation.js";
 import sync from "../../src/scripts/sync.js";
-import newVersion from "../../src/scripts/new-version.js";
+import bumpVersion from "../../src/scripts/bump-version.js";
 import createProxy from "../../src/scripts/create-proxy.js";
 import upgradeProxy from "../../src/scripts/upgrade-proxy.js";
 import { Contracts, FileSystem as fs } from "zos-lib";
@@ -76,7 +76,7 @@ contract('upgrade-proxy command', function([_, owner]) {
       await createProxy({ contractAlias: "Impl", packageFileName, network, txParams });
       await createProxy({ contractAlias: "AnotherImpl", packageFileName, network, txParams });
 
-      await newVersion({ version: v2string, packageFileName, txParams });
+      await bumpVersion({ version: v2string, packageFileName, txParams });
       const newContractsData = [{ name: 'ImplV2', alias: 'Impl' }, { name: 'AnotherImplV2', alias: 'AnotherImpl' }]
       await addImplementation({ contractsData: newContractsData, packageFileName });
       await sync({ packageFileName, network, txParams });
@@ -178,7 +178,7 @@ contract('upgrade-proxy command', function([_, owner]) {
       await createProxy({ contractAlias: "Greeter", packageFileName, network, txParams });
       await createProxy({ contractAlias: "Greeter", packageFileName, network, txParams });
 
-      await newVersion({ version: v2string, packageFileName, txParams, stdlibNameVersion: "mock-stdlib-2@1.2.0" });
+      await bumpVersion({ version: v2string, packageFileName, txParams, stdlibNameVersion: "mock-stdlib-2@1.2.0" });
       await sync({ packageFileName, network, txParams, deployStdlib: true });
     });
 
