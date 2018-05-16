@@ -40,7 +40,7 @@
     "truffle": "^4.1.6",
     "truffle-config": "^1.0.4",
     "truffle-contract": "^3.0.5",
-    "truffle-core": "^4.1.7",
+    "truffle-core": "^4.1.8",
     "truffle-workflow-compile": "^1.0.3",
     "zos-lib": "^0.1.16"
   },
