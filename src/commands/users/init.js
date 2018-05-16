@@ -16,7 +16,7 @@ module.exports = function(program) {
     .option('-f, --from <from>', 'Set the transactions sender in case you run with --push')
     .action(async function (name, version, options) {
       if (options.lib) {
-        if (options.stdlib) throw Error("Cannot set an stdlib in a library project")
+        if (options.stdlib) throw Error("Cannot set a stdlib in a library project")
         await initLib({ name, version })
       } else {
         const { stdlib: stdlibNameVersion, install: installDeps } = options
