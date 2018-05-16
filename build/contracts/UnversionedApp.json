@@ -1,0 +1,1623 @@
+{
+  "contractName": "UnversionedApp",
+  "abi": [
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "proxy",
+          "type": "address"
+        }
+      ],
+      "name": "getProxyImplementation",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "contractName",
+          "type": "string"
+        }
+      ],
+      "name": "getImplementation",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "proxy",
+          "type": "address"
+        },
+        {
+          "name": "contractName",
+          "type": "string"
+        }
+      ],
+      "name": "upgrade",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "proxy",
+          "type": "address"
+        },
+        {
+          "name": "contractName",
+          "type": "string"
+        },
+        {
+          "name": "data",
+          "type": "bytes"
+        }
+      ],
+      "name": "upgradeAndCall",
+      "outputs": [],
+      "payable": true,
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "contractName",
+          "type": "string"
+        }
+      ],
+      "name": "create",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "factory",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "contractName",
+          "type": "string"
+        },
+        {
+          "name": "data",
+          "type": "bytes"
+        }
+      ],
+      "name": "createAndCall",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": true,
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "proxy",
+          "type": "address"
+        }
+      ],
+      "name": "getProxyAdmin",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "name": "_provider",
+          "type": "address"
+        },
+        {
+          "name": "_factory",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_provider",
+          "type": "address"
+        }
+      ],
+      "name": "setProvider",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x608060405234801561001057600080fd5b50604051604080611354833981018060405281019080805190602001909291908051906020019092919050505080336000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550600073ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff16141515156100ba57600080fd5b80600160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550506101148261011b640100000000026401000000009004565b50506101f6565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561017657600080fd5b600073ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff16141515156101b257600080fd5b80600260006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555050565b61114f806102056000396000f3006080604052600436106100af576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff168063204e1c7a146100b45780636b683896146101375780636e3d9ff0146101e0578063812d3833146102695780638da5cb5b1461032b578063b6a46b3b14610382578063c45a01551461042b578063cfd8d6c014610482578063e1caa0c7146104c5578063f2fde38b146105a7578063f3b7dead146105ea575b600080fd5b3480156100c057600080fd5b506100f5600480360381019080803573ffffffffffffffffffffffffffffffffffffffff16906020019092919050505061066d565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b34801561014357600080fd5b5061019e600480360381019080803590602001908201803590602001908080601f0160208091040260200160405190810160405280939291908181526020018383808284378201915050505050509192919290505050610715565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b3480156101ec57600080fd5b50610267600480360381019080803573ffffffffffffffffffffffffffffffffffffffff169060200190929190803590602001908201803590602001908080601f0160208091040260200160405190810160405280939291908181526020018383808284378201915050505050509192919290505050610834565b005b610329600480360381019080803573ffffffffffffffffffffffffffffffffffffffff169060200190929190803590602001908201803590602001908080601f0160208091040260200160405190810160405280939291908181526020018383808284378201915050505050509192919290803590602001908201803590602001908080601f0160208091040260200160405190810160405280939291908181526020018383808284378201915050505050509192919290505050610954565b005b34801561033757600080fd5b50610340610ae3565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b34801561038e57600080fd5b506103e9600480360381019080803590602001908201803590602001908080601f0160208091040260200160405190810160405280939291908181526020018383808284378201915050505050509192919290505050610b08565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b34801561043757600080fd5b50610440610c4a565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b34801561048e57600080fd5b506104c3600480360381019080803573ffffffffffffffffffffffffffffffffffffffff169060200190929190505050610c70565b005b610565600480360381019080803590602001908201803590602001908080601f0160208091040260200160405190810160405280939291908181526020018383808284378201915050505050509192919290803590602001908201803590602001908080601f0160208091040260200160405190810160405280939291908181526020018383808284378201915050505050509192919290505050610d4b565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b3480156105b357600080fd5b506105e8600480360381019080803573ffffffffffffffffffffffffffffffffffffffff169060200190929190505050610efc565b005b3480156105f657600080fd5b5061062b600480360381019080803573ffffffffffffffffffffffffffffffffffffffff169060200190929190505050611051565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b60008173ffffffffffffffffffffffffffffffffffffffff16635c60da1b6040518163ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401602060405180830381600087803b1580156106d357600080fd5b505af11580156106e7573d6000803e3d6000fd5b505050506040513d60208110156106fd57600080fd5b81019080805190602001909291905050509050919050565b600061071f6110f9565b73ffffffffffffffffffffffffffffffffffffffff16636b683896836040518263ffffffff167c01000000000000000000000000000000000000000000000000000000000281526004018080602001828103825283818151815260200191508051906020019080838360005b838110156107a657808201518184015260208101905061078b565b50505050905090810190601f1680156107d35780820380516001836020036101000a031916815260200191505b5092505050602060405180830381600087803b1580156107f257600080fd5b505af1158015610806573d6000803e3d6000fd5b505050506040513d602081101561081c57600080fd5b81019080805190602001909291905050509050919050565b60008060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561089157600080fd5b61089a82610715565b90508273ffffffffffffffffffffffffffffffffffffffff16633659cfe6826040518263ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001915050600060405180830381600087803b15801561093757600080fd5b505af115801561094b573d6000803e3d6000fd5b50505050505050565b60008060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161415156109b157600080fd5b6109ba83610715565b90508373ffffffffffffffffffffffffffffffffffffffff16634f1ef2863483856040518463ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401808373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200180602001828103825283818151815260200191508051906020019080838360005b83811015610a78578082015181840152602081019050610a5d565b50505050905090810190601f168015610aa55780820380516001836020036101000a031916815260200191505b5093505050506000604051808303818588803b158015610ac457600080fd5b505af1158015610ad8573d6000803e3d6000fd5b505050505050505050565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600080610b1483610715565b9050600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff166325b5672730836040518363ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401808373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020018273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200192505050602060405180830381600087803b158015610c0757600080fd5b505af1158015610c1b573d6000803e3d6000fd5b505050506040513d6020811015610c3157600080fd5b8101908080519060200190929190505050915050919050565b600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff16141515610ccb57600080fd5b600073ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff1614151515610d0757600080fd5b80600260006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555050565b600080610d5784610715565b9050600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1663c6e8b4f3343084876040518563ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401808473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020018373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200180602001828103825283818151815260200191508051906020019080838360005b83811015610e6a578082015181840152602081019050610e4f565b50505050905090810190601f168015610e975780820380516001836020036101000a031916815260200191505b509450505050506020604051808303818588803b158015610eb757600080fd5b505af1158015610ecb573d6000803e3d6000fd5b50505050506040513d6020811015610ee257600080fd5b810190808051906020019092919050505091505092915050565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff16141515610f5757600080fd5b600073ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff1614151515610f9357600080fd5b8073ffffffffffffffffffffffffffffffffffffffff166000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff167f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e060405160405180910390a3806000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555050565b60008173ffffffffffffffffffffffffffffffffffffffff1663f851a4406040518163ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401602060405180830381600087803b1580156110b757600080fd5b505af11580156110cb573d6000803e3d6000fd5b505050506040513d60208110156110e157600080fd5b81019080805190602001909291905050509050919050565b6000600260009054906101000a900473ffffffffffffffffffffffffffffffffffffffff169050905600a165627a7a72305820869f601bb0d7abc284d465beb65a2edf1c679a45e9bc905540b78a6678e379460029",
+  "deployedBytecode": "0x6080604052600436106100af576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff168063204e1c7a146100b45780636b683896146101375780636e3d9ff0146101e0578063812d3833146102695780638da5cb5b1461032b578063b6a46b3b14610382578063c45a01551461042b578063cfd8d6c014610482578063e1caa0c7146104c5578063f2fde38b146105a7578063f3b7dead146105ea575b600080fd5b3480156100c057600080fd5b506100f5600480360381019080803573ffffffffffffffffffffffffffffffffffffffff16906020019092919050505061066d565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b34801561014357600080fd5b5061019e600480360381019080803590602001908201803590602001908080601f0160208091040260200160405190810160405280939291908181526020018383808284378201915050505050509192919290505050610715565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b3480156101ec57600080fd5b50610267600480360381019080803573ffffffffffffffffffffffffffffffffffffffff169060200190929190803590602001908201803590602001908080601f0160208091040260200160405190810160405280939291908181526020018383808284378201915050505050509192919290505050610834565b005b610329600480360381019080803573ffffffffffffffffffffffffffffffffffffffff169060200190929190803590602001908201803590602001908080601f0160208091040260200160405190810160405280939291908181526020018383808284378201915050505050509192919290803590602001908201803590602001908080601f0160208091040260200160405190810160405280939291908181526020018383808284378201915050505050509192919290505050610954565b005b34801561033757600080fd5b50610340610ae3565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b34801561038e57600080fd5b506103e9600480360381019080803590602001908201803590602001908080601f0160208091040260200160405190810160405280939291908181526020018383808284378201915050505050509192919290505050610b08565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b34801561043757600080fd5b50610440610c4a565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b34801561048e57600080fd5b506104c3600480360381019080803573ffffffffffffffffffffffffffffffffffffffff169060200190929190505050610c70565b005b610565600480360381019080803590602001908201803590602001908080601f0160208091040260200160405190810160405280939291908181526020018383808284378201915050505050509192919290803590602001908201803590602001908080601f0160208091040260200160405190810160405280939291908181526020018383808284378201915050505050509192919290505050610d4b565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b3480156105b357600080fd5b506105e8600480360381019080803573ffffffffffffffffffffffffffffffffffffffff169060200190929190505050610efc565b005b3480156105f657600080fd5b5061062b600480360381019080803573ffffffffffffffffffffffffffffffffffffffff169060200190929190505050611051565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b60008173ffffffffffffffffffffffffffffffffffffffff16635c60da1b6040518163ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401602060405180830381600087803b1580156106d357600080fd5b505af11580156106e7573d6000803e3d6000fd5b505050506040513d60208110156106fd57600080fd5b81019080805190602001909291905050509050919050565b600061071f6110f9565b73ffffffffffffffffffffffffffffffffffffffff16636b683896836040518263ffffffff167c01000000000000000000000000000000000000000000000000000000000281526004018080602001828103825283818151815260200191508051906020019080838360005b838110156107a657808201518184015260208101905061078b565b50505050905090810190601f1680156107d35780820380516001836020036101000a031916815260200191505b5092505050602060405180830381600087803b1580156107f257600080fd5b505af1158015610806573d6000803e3d6000fd5b505050506040513d602081101561081c57600080fd5b81019080805190602001909291905050509050919050565b60008060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561089157600080fd5b61089a82610715565b90508273ffffffffffffffffffffffffffffffffffffffff16633659cfe6826040518263ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001915050600060405180830381600087803b15801561093757600080fd5b505af115801561094b573d6000803e3d6000fd5b50505050505050565b60008060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161415156109b157600080fd5b6109ba83610715565b90508373ffffffffffffffffffffffffffffffffffffffff16634f1ef2863483856040518463ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401808373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200180602001828103825283818151815260200191508051906020019080838360005b83811015610a78578082015181840152602081019050610a5d565b50505050905090810190601f168015610aa55780820380516001836020036101000a031916815260200191505b5093505050506000604051808303818588803b158015610ac457600080fd5b505af1158015610ad8573d6000803e3d6000fd5b505050505050505050565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600080610b1483610715565b9050600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff166325b5672730836040518363ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401808373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020018273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200192505050602060405180830381600087803b158015610c0757600080fd5b505af1158015610c1b573d6000803e3d6000fd5b505050506040513d6020811015610c3157600080fd5b8101908080519060200190929190505050915050919050565b600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff16141515610ccb57600080fd5b600073ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff1614151515610d0757600080fd5b80600260006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555050565b600080610d5784610715565b9050600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1663c6e8b4f3343084876040518563ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401808473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020018373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200180602001828103825283818151815260200191508051906020019080838360005b83811015610e6a578082015181840152602081019050610e4f565b50505050905090810190601f168015610e975780820380516001836020036101000a031916815260200191505b509450505050506020604051808303818588803b158015610eb757600080fd5b505af1158015610ecb573d6000803e3d6000fd5b50505050506040513d6020811015610ee257600080fd5b810190808051906020019092919050505091505092915050565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff16141515610f5757600080fd5b600073ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff1614151515610f9357600080fd5b8073ffffffffffffffffffffffffffffffffffffffff166000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff167f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e060405160405180910390a3806000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555050565b60008173ffffffffffffffffffffffffffffffffffffffff1663f851a4406040518163ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401602060405180830381600087803b1580156110b757600080fd5b505af11580156110cb573d6000803e3d6000fd5b505050506040513d60208110156110e157600080fd5b81019080805190602001909291905050509050919050565b6000600260009054906101000a900473ffffffffffffffffffffffffffffffffffffffff169050905600a165627a7a72305820869f601bb0d7abc284d465beb65a2edf1c679a45e9bc905540b78a6678e379460029",
+  "sourceMap": "262:865:9:-;;;536:163;8:9:-1;5:2;;;30:1;27;20:12;5:2;536:163:9;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;643:8;509:10:5;501:5;;:18;;;;;;;;;;;;;;;;;;705:1:7;676:31;;684:8;676:31;;;;668:40;;;;;;;;724:8;714:7;;:18;;;;;;;;;;;;;;;;;;601:136;672:22:9;684:9;672:11;;;:22;;;:::i;:::-;536:163;;262:865;;975:150;653:5:5;;;;;;;;;;;639:19;;:10;:19;;;631:28;;;;;;;;1091:1:9;1061:32;;1069:9;1061:32;;;;1053:41;;;;;;;;1111:9;1100:8;;:20;;;;;;;;;;;;;;;;;;975:150;:::o;262:865::-;;;;;;;",
+  "deployedSourceMap": "262:865:9:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;4005:134:7;;8:9:-1;5:2;;;30:1;27;20:12;5:2;4005:134:7;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1211:141;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1211:141:7;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2771:191;;8:9:-1;5:2;;;30:1;27;20:12;5:2;2771:191:7;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;3518:248;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;238:20:5;;8:9:-1;5:2;;;30:1;27;20:12;5:2;238:20:5;;;;;;;;;;;;;;;;;;;;;;;;;;;1534:200:7;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1534:200:7;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;477:41;;8:9:-1;5:2;;;30:1;27;20:12;5:2;477:41:7;;;;;;;;;;;;;;;;;;;;;;;;;;;975:150:9;;8:9:-1;5:2;;;30:1;27;20:12;5:2;975:150:9;;;;;;;;;;;;;;;;;;;;;;;;;;;;2318:257:7;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;832:174:5;;8:9:-1;5:2;;;30:1;27;20:12;5:2;832:174:5;;;;;;;;;;;;;;;;;;;;;;;;;;;;4305:116:7;;8:9:-1;5:2;;;30:1;27;20:12;5:2;4305:116:7;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;4005:134;4090:7;4112:5;:20;;;:22;;;;;;;;;;;;;;;;;;;;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;4112:22:7;;;;8:9:-1;5:2;;;45:16;42:1;39;24:38;77:16;74:1;67:27;5:2;4112:22:7;;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;4112:22:7;;;;;;;;;;;;;;;;4105:29;;4005:134;;;:::o;1211:141::-;1280:7;1302:13;:11;:13::i;:::-;:31;;;1334:12;1302:45;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;23:1:-1;8:100;33:3;30:1;27:10;8:100;;;99:1;94:3;90:11;84:18;80:1;75:3;71:11;64:39;52:2;49:1;45:10;40:15;;8:100;;;12:14;1302:45:7;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1302:45:7;;;;8:9:-1;5:2;;;45:16;42:1;39;24:38;77:16;74:1;67:27;5:2;1302:45:7;;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;1302:45:7;;;;;;;;;;;;;;;;1295:52;;1211:141;;;:::o;2771:191::-;2864:22;653:5:5;;;;;;;;;;;639:19;;:10;:19;;;631:28;;;;;;;;2889:31:7;2907:12;2889:17;:31::i;:::-;2864:56;;2926:5;:15;;;2942:14;2926:31;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;2926:31:7;;;;8:9:-1;5:2;;;45:16;42:1;39;24:38;77:16;74:1;67:27;5:2;2926:31:7;;;;2771:191;;;:::o;3518:248::-;3638:22;653:5:5;;;;;;;;;;;639:19;;:10;:19;;;631:28;;;;;;;;3663:31:7;3681:12;3663:17;:31::i;:::-;3638:56;;3700:5;:22;;;3729:9;3740:14;3756:4;3700:61;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;23:1:-1;8:100;33:3;30:1;27:10;8:100;;;99:1;94:3;90:11;84:18;80:1;75:3;71:11;64:39;52:2;49:1;45:10;40:15;;8:100;;;12:14;3700:61:7;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;3700:61:7;;;;8:9:-1;5:2;;;45:16;42:1;39;24:38;77:16;74:1;67:27;5:2;3700:61:7;;;;;3518:248;;;;:::o;238:20:5:-;;;;;;;;;;;;;:::o;1534:200:7:-;1587:24;1619:22;1644:31;1662:12;1644:17;:31::i;:::-;1619:56;;1688:7;;;;;;;;;;;:19;;;1708:4;1714:14;1688:41;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1688:41:7;;;;8:9:-1;5:2;;;45:16;42:1;39;24:38;77:16;74:1;67:27;5:2;1688:41:7;;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;1688:41:7;;;;;;;;;;;;;;;;1681:48;;1534:200;;;;:::o;477:41::-;;;;;;;;;;;;;:::o;975:150:9:-;653:5:5;;;;;;;;;;;639:19;;:10;:19;;;631:28;;;;;;;;1091:1:9;1061:32;;1069:9;1061:32;;;;1053:41;;;;;;;;1111:9;1100:8;;:20;;;;;;;;;;;;;;;;;;975:150;:::o;2318:257:7:-;2398:24;2430:22;2455:31;2473:12;2455:17;:31::i;:::-;2430:56;;2499:7;;;;;;;;;;;:26;;;2532:9;2543:4;2549:14;2565:4;2499:71;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;23:1:-1;8:100;33:3;30:1;27:10;8:100;;;99:1;94:3;90:11;84:18;80:1;75:3;71:11;64:39;52:2;49:1;45:10;40:15;;8:100;;;12:14;2499:71:7;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;2499:71:7;;;;8:9:-1;5:2;;;45:16;42:1;39;24:38;77:16;74:1;67:27;5:2;2499:71:7;;;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;2499:71:7;;;;;;;;;;;;;;;;2492:78;;2318:257;;;;;:::o;832:174:5:-;653:5;;;;;;;;;;;639:19;;:10;:19;;;631:28;;;;;;;;928:1;908:22;;:8;:22;;;;900:31;;;;;;;;970:8;942:37;;963:5;;;;;;;;;;;942:37;;;;;;;;;;;;993:8;985:5;;:16;;;;;;;;;;;;;;;;;;832:174;:::o;4305:116:7:-;4381:7;4403:5;:11;;;:13;;;;;;;;;;;;;;;;;;;;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;4403:13:7;;;;8:9:-1;5:2;;;45:16;42:1;39;24:38;77:16;74:1;67:27;5:2;4403:13:7;;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;4403:13:7;;;;;;;;;;;;;;;;4396:20;;4305:116;;;:::o;768:96:9:-;814:22;851:8;;;;;;;;;;;844:15;;768:96;:::o",
+  "source": "pragma solidity ^0.4.21;\n\nimport \"./BaseApp.sol\";\nimport \"./versioning/ImplementationProvider.sol\";\nimport \"../upgradeability/UpgradeabilityProxyFactory.sol\";\n\n/**\n * @title UnversionedApp\n * @dev Basic implementation of an upgradable app with no versioning\n */\ncontract UnversionedApp is BaseApp {\n  /*\n   * @dev stores the contract implementation addresses\n   */\n  ImplementationProvider internal provider;\n\n  /**\n   * @dev Constructor function\n   * @param _provider Implementation provider\n   * @param _factory Proxy factory\n   */\n  function UnversionedApp(ImplementationProvider _provider, UpgradeabilityProxyFactory _factory)\n    BaseApp(_factory)\n    public\n  {\n    setProvider(_provider);\n  }\n\n  /**\n   * @return Implementation provider used by the app\n   */\n  function getProvider() internal view returns (ImplementationProvider) {\n    return provider;\n  }\n\n  /**\n   * @dev Sets a new implementation provider\n   * @param _provider New implementation provider\n   */\n  function setProvider(ImplementationProvider _provider) public onlyOwner {\n    require(address(_provider) != address(0));\n    provider = _provider;\n  }\n}\n",
+  "sourcePath": "zos-lib/contracts/application/UnversionedApp.sol",
+  "ast": {
+    "absolutePath": "zos-lib/contracts/application/UnversionedApp.sol",
+    "exportedSymbols": {
+      "UnversionedApp": [
+        546
+      ]
+    },
+    "id": 547,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 493,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".21"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:9"
+      },
+      {
+        "absolutePath": "zos-lib/contracts/application/BaseApp.sol",
+        "file": "./BaseApp.sol",
+        "id": 494,
+        "nodeType": "ImportDirective",
+        "scope": 547,
+        "sourceUnit": 412,
+        "src": "26:23:9",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "zos-lib/contracts/application/versioning/ImplementationProvider.sol",
+        "file": "./versioning/ImplementationProvider.sol",
+        "id": 495,
+        "nodeType": "ImportDirective",
+        "scope": 547,
+        "sourceUnit": 655,
+        "src": "50:49:9",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "zos-lib/contracts/upgradeability/UpgradeabilityProxyFactory.sol",
+        "file": "../upgradeability/UpgradeabilityProxyFactory.sol",
+        "id": 496,
+        "nodeType": "ImportDirective",
+        "scope": 547,
+        "sourceUnit": 1147,
+        "src": "100:58:9",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 497,
+              "name": "BaseApp",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 411,
+              "src": "289:7:9",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_BaseApp_$411",
+                "typeString": "contract BaseApp"
+              }
+            },
+            "id": 498,
+            "nodeType": "InheritanceSpecifier",
+            "src": "289:7:9"
+          }
+        ],
+        "contractDependencies": [
+          160,
+          411
+        ],
+        "contractKind": "contract",
+        "documentation": "@title UnversionedApp\n@dev Basic implementation of an upgradable app with no versioning",
+        "fullyImplemented": true,
+        "id": 546,
+        "linearizedBaseContracts": [
+          546,
+          411,
+          160
+        ],
+        "name": "UnversionedApp",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": false,
+            "id": 500,
+            "name": "provider",
+            "nodeType": "VariableDeclaration",
+            "scope": 546,
+            "src": "367:40:9",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_contract$_ImplementationProvider_$654",
+              "typeString": "contract ImplementationProvider"
+            },
+            "typeName": {
+              "contractScope": null,
+              "id": 499,
+              "name": "ImplementationProvider",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 654,
+              "src": "367:22:9",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_ImplementationProvider_$654",
+                "typeString": "contract ImplementationProvider"
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          },
+          {
+            "body": {
+              "id": 514,
+              "nodeType": "Block",
+              "src": "666:33:9",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 511,
+                        "name": "_provider",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 502,
+                        "src": "684:9:9",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_contract$_ImplementationProvider_$654",
+                          "typeString": "contract ImplementationProvider"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_contract$_ImplementationProvider_$654",
+                          "typeString": "contract ImplementationProvider"
+                        }
+                      ],
+                      "id": 510,
+                      "name": "setProvider",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 545,
+                      "src": "672:11:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_nonpayable$_t_contract$_ImplementationProvider_$654_$returns$__$",
+                        "typeString": "function (contract ImplementationProvider)"
+                      }
+                    },
+                    "id": 512,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "672:22:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 513,
+                  "nodeType": "ExpressionStatement",
+                  "src": "672:22:9"
+                }
+              ]
+            },
+            "documentation": "@dev Constructor function\n@param _provider Implementation provider\n@param _factory Proxy factory",
+            "id": 515,
+            "implemented": true,
+            "isConstructor": true,
+            "isDeclaredConst": false,
+            "modifiers": [
+              {
+                "arguments": [
+                  {
+                    "argumentTypes": null,
+                    "id": 507,
+                    "name": "_factory",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 504,
+                    "src": "643:8:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_UpgradeabilityProxyFactory_$1146",
+                      "typeString": "contract UpgradeabilityProxyFactory"
+                    }
+                  }
+                ],
+                "id": 508,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 506,
+                  "name": "BaseApp",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 411,
+                  "src": "635:7:9",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_type$_t_contract$_BaseApp_$411_$",
+                    "typeString": "type(contract BaseApp)"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "635:17:9"
+              }
+            ],
+            "name": "UnversionedApp",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 505,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 502,
+                  "name": "_provider",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 515,
+                  "src": "560:32:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_ImplementationProvider_$654",
+                    "typeString": "contract ImplementationProvider"
+                  },
+                  "typeName": {
+                    "contractScope": null,
+                    "id": 501,
+                    "name": "ImplementationProvider",
+                    "nodeType": "UserDefinedTypeName",
+                    "referencedDeclaration": 654,
+                    "src": "560:22:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_ImplementationProvider_$654",
+                      "typeString": "contract ImplementationProvider"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 504,
+                  "name": "_factory",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 515,
+                  "src": "594:35:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_UpgradeabilityProxyFactory_$1146",
+                    "typeString": "contract UpgradeabilityProxyFactory"
+                  },
+                  "typeName": {
+                    "contractScope": null,
+                    "id": 503,
+                    "name": "UpgradeabilityProxyFactory",
+                    "nodeType": "UserDefinedTypeName",
+                    "referencedDeclaration": 1146,
+                    "src": "594:26:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_UpgradeabilityProxyFactory_$1146",
+                      "typeString": "contract UpgradeabilityProxyFactory"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "559:71:9"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 509,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "666:0:9"
+            },
+            "scope": 546,
+            "src": "536:163:9",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 522,
+              "nodeType": "Block",
+              "src": "838:26:9",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 520,
+                    "name": "provider",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 500,
+                    "src": "851:8:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_ImplementationProvider_$654",
+                      "typeString": "contract ImplementationProvider"
+                    }
+                  },
+                  "functionReturnParameters": 519,
+                  "id": 521,
+                  "nodeType": "Return",
+                  "src": "844:15:9"
+                }
+              ]
+            },
+            "documentation": "@return Implementation provider used by the app",
+            "id": 523,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "getProvider",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 516,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "788:2:9"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 519,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 518,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 523,
+                  "src": "814:22:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_ImplementationProvider_$654",
+                    "typeString": "contract ImplementationProvider"
+                  },
+                  "typeName": {
+                    "contractScope": null,
+                    "id": 517,
+                    "name": "ImplementationProvider",
+                    "nodeType": "UserDefinedTypeName",
+                    "referencedDeclaration": 654,
+                    "src": "814:22:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_ImplementationProvider_$654",
+                      "typeString": "contract ImplementationProvider"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "813:24:9"
+            },
+            "scope": 546,
+            "src": "768:96:9",
+            "stateMutability": "view",
+            "superFunction": 273,
+            "visibility": "internal"
+          },
+          {
+            "body": {
+              "id": 544,
+              "nodeType": "Block",
+              "src": "1047:78:9",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "commonType": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        "id": 537,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "leftExpression": {
+                          "argumentTypes": null,
+                          "arguments": [
+                            {
+                              "argumentTypes": null,
+                              "id": 532,
+                              "name": "_provider",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 525,
+                              "src": "1069:9:9",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_contract$_ImplementationProvider_$654",
+                                "typeString": "contract ImplementationProvider"
+                              }
+                            }
+                          ],
+                          "expression": {
+                            "argumentTypes": [
+                              {
+                                "typeIdentifier": "t_contract$_ImplementationProvider_$654",
+                                "typeString": "contract ImplementationProvider"
+                              }
+                            ],
+                            "id": 531,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": true,
+                            "lValueRequested": false,
+                            "nodeType": "ElementaryTypeNameExpression",
+                            "src": "1061:7:9",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_type$_t_address_$",
+                              "typeString": "type(address)"
+                            },
+                            "typeName": "address"
+                          },
+                          "id": 533,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "kind": "typeConversion",
+                          "lValueRequested": false,
+                          "names": [],
+                          "nodeType": "FunctionCall",
+                          "src": "1061:18:9",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        },
+                        "nodeType": "BinaryOperation",
+                        "operator": "!=",
+                        "rightExpression": {
+                          "argumentTypes": null,
+                          "arguments": [
+                            {
+                              "argumentTypes": null,
+                              "hexValue": "30",
+                              "id": 535,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": true,
+                              "kind": "number",
+                              "lValueRequested": false,
+                              "nodeType": "Literal",
+                              "src": "1091:1:9",
+                              "subdenomination": null,
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_rational_0_by_1",
+                                "typeString": "int_const 0"
+                              },
+                              "value": "0"
+                            }
+                          ],
+                          "expression": {
+                            "argumentTypes": [
+                              {
+                                "typeIdentifier": "t_rational_0_by_1",
+                                "typeString": "int_const 0"
+                              }
+                            ],
+                            "id": 534,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": true,
+                            "lValueRequested": false,
+                            "nodeType": "ElementaryTypeNameExpression",
+                            "src": "1083:7:9",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_type$_t_address_$",
+                              "typeString": "type(address)"
+                            },
+                            "typeName": "address"
+                          },
+                          "id": 536,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": true,
+                          "kind": "typeConversion",
+                          "lValueRequested": false,
+                          "names": [],
+                          "nodeType": "FunctionCall",
+                          "src": "1083:10:9",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        },
+                        "src": "1061:32:9",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      ],
+                      "id": 530,
+                      "name": "require",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [
+                        1164,
+                        1165
+                      ],
+                      "referencedDeclaration": 1164,
+                      "src": "1053:7:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
+                        "typeString": "function (bool) pure"
+                      }
+                    },
+                    "id": 538,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1053:41:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 539,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1053:41:9"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 542,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 540,
+                      "name": "provider",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 500,
+                      "src": "1100:8:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_contract$_ImplementationProvider_$654",
+                        "typeString": "contract ImplementationProvider"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "id": 541,
+                      "name": "_provider",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 525,
+                      "src": "1111:9:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_contract$_ImplementationProvider_$654",
+                        "typeString": "contract ImplementationProvider"
+                      }
+                    },
+                    "src": "1100:20:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_ImplementationProvider_$654",
+                      "typeString": "contract ImplementationProvider"
+                    }
+                  },
+                  "id": 543,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1100:20:9"
+                }
+              ]
+            },
+            "documentation": "@dev Sets a new implementation provider\n@param _provider New implementation provider",
+            "id": 545,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [
+              {
+                "arguments": null,
+                "id": 528,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 527,
+                  "name": "onlyOwner",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 134,
+                  "src": "1037:9:9",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_modifier$__$",
+                    "typeString": "modifier ()"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "1037:9:9"
+              }
+            ],
+            "name": "setProvider",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 526,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 525,
+                  "name": "_provider",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 545,
+                  "src": "996:32:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_ImplementationProvider_$654",
+                    "typeString": "contract ImplementationProvider"
+                  },
+                  "typeName": {
+                    "contractScope": null,
+                    "id": 524,
+                    "name": "ImplementationProvider",
+                    "nodeType": "UserDefinedTypeName",
+                    "referencedDeclaration": 654,
+                    "src": "996:22:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_ImplementationProvider_$654",
+                      "typeString": "contract ImplementationProvider"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "995:34:9"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 529,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1047:0:9"
+            },
+            "scope": 546,
+            "src": "975:150:9",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 547,
+        "src": "262:865:9"
+      }
+    ],
+    "src": "0:1128:9"
+  },
+  "legacyAST": {
+    "absolutePath": "zos-lib/contracts/application/UnversionedApp.sol",
+    "exportedSymbols": {
+      "UnversionedApp": [
+        546
+      ]
+    },
+    "id": 547,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 493,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".21"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:9"
+      },
+      {
+        "absolutePath": "zos-lib/contracts/application/BaseApp.sol",
+        "file": "./BaseApp.sol",
+        "id": 494,
+        "nodeType": "ImportDirective",
+        "scope": 547,
+        "sourceUnit": 412,
+        "src": "26:23:9",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "zos-lib/contracts/application/versioning/ImplementationProvider.sol",
+        "file": "./versioning/ImplementationProvider.sol",
+        "id": 495,
+        "nodeType": "ImportDirective",
+        "scope": 547,
+        "sourceUnit": 655,
+        "src": "50:49:9",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "zos-lib/contracts/upgradeability/UpgradeabilityProxyFactory.sol",
+        "file": "../upgradeability/UpgradeabilityProxyFactory.sol",
+        "id": 496,
+        "nodeType": "ImportDirective",
+        "scope": 547,
+        "sourceUnit": 1147,
+        "src": "100:58:9",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 497,
+              "name": "BaseApp",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 411,
+              "src": "289:7:9",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_BaseApp_$411",
+                "typeString": "contract BaseApp"
+              }
+            },
+            "id": 498,
+            "nodeType": "InheritanceSpecifier",
+            "src": "289:7:9"
+          }
+        ],
+        "contractDependencies": [
+          160,
+          411
+        ],
+        "contractKind": "contract",
+        "documentation": "@title UnversionedApp\n@dev Basic implementation of an upgradable app with no versioning",
+        "fullyImplemented": true,
+        "id": 546,
+        "linearizedBaseContracts": [
+          546,
+          411,
+          160
+        ],
+        "name": "UnversionedApp",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": false,
+            "id": 500,
+            "name": "provider",
+            "nodeType": "VariableDeclaration",
+            "scope": 546,
+            "src": "367:40:9",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_contract$_ImplementationProvider_$654",
+              "typeString": "contract ImplementationProvider"
+            },
+            "typeName": {
+              "contractScope": null,
+              "id": 499,
+              "name": "ImplementationProvider",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 654,
+              "src": "367:22:9",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_ImplementationProvider_$654",
+                "typeString": "contract ImplementationProvider"
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          },
+          {
+            "body": {
+              "id": 514,
+              "nodeType": "Block",
+              "src": "666:33:9",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 511,
+                        "name": "_provider",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 502,
+                        "src": "684:9:9",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_contract$_ImplementationProvider_$654",
+                          "typeString": "contract ImplementationProvider"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_contract$_ImplementationProvider_$654",
+                          "typeString": "contract ImplementationProvider"
+                        }
+                      ],
+                      "id": 510,
+                      "name": "setProvider",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 545,
+                      "src": "672:11:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_nonpayable$_t_contract$_ImplementationProvider_$654_$returns$__$",
+                        "typeString": "function (contract ImplementationProvider)"
+                      }
+                    },
+                    "id": 512,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "672:22:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 513,
+                  "nodeType": "ExpressionStatement",
+                  "src": "672:22:9"
+                }
+              ]
+            },
+            "documentation": "@dev Constructor function\n@param _provider Implementation provider\n@param _factory Proxy factory",
+            "id": 515,
+            "implemented": true,
+            "isConstructor": true,
+            "isDeclaredConst": false,
+            "modifiers": [
+              {
+                "arguments": [
+                  {
+                    "argumentTypes": null,
+                    "id": 507,
+                    "name": "_factory",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 504,
+                    "src": "643:8:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_UpgradeabilityProxyFactory_$1146",
+                      "typeString": "contract UpgradeabilityProxyFactory"
+                    }
+                  }
+                ],
+                "id": 508,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 506,
+                  "name": "BaseApp",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 411,
+                  "src": "635:7:9",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_type$_t_contract$_BaseApp_$411_$",
+                    "typeString": "type(contract BaseApp)"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "635:17:9"
+              }
+            ],
+            "name": "UnversionedApp",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 505,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 502,
+                  "name": "_provider",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 515,
+                  "src": "560:32:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_ImplementationProvider_$654",
+                    "typeString": "contract ImplementationProvider"
+                  },
+                  "typeName": {
+                    "contractScope": null,
+                    "id": 501,
+                    "name": "ImplementationProvider",
+                    "nodeType": "UserDefinedTypeName",
+                    "referencedDeclaration": 654,
+                    "src": "560:22:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_ImplementationProvider_$654",
+                      "typeString": "contract ImplementationProvider"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 504,
+                  "name": "_factory",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 515,
+                  "src": "594:35:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_UpgradeabilityProxyFactory_$1146",
+                    "typeString": "contract UpgradeabilityProxyFactory"
+                  },
+                  "typeName": {
+                    "contractScope": null,
+                    "id": 503,
+                    "name": "UpgradeabilityProxyFactory",
+                    "nodeType": "UserDefinedTypeName",
+                    "referencedDeclaration": 1146,
+                    "src": "594:26:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_UpgradeabilityProxyFactory_$1146",
+                      "typeString": "contract UpgradeabilityProxyFactory"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "559:71:9"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 509,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "666:0:9"
+            },
+            "scope": 546,
+            "src": "536:163:9",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 522,
+              "nodeType": "Block",
+              "src": "838:26:9",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 520,
+                    "name": "provider",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 500,
+                    "src": "851:8:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_ImplementationProvider_$654",
+                      "typeString": "contract ImplementationProvider"
+                    }
+                  },
+                  "functionReturnParameters": 519,
+                  "id": 521,
+                  "nodeType": "Return",
+                  "src": "844:15:9"
+                }
+              ]
+            },
+            "documentation": "@return Implementation provider used by the app",
+            "id": 523,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "getProvider",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 516,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "788:2:9"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 519,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 518,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 523,
+                  "src": "814:22:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_ImplementationProvider_$654",
+                    "typeString": "contract ImplementationProvider"
+                  },
+                  "typeName": {
+                    "contractScope": null,
+                    "id": 517,
+                    "name": "ImplementationProvider",
+                    "nodeType": "UserDefinedTypeName",
+                    "referencedDeclaration": 654,
+                    "src": "814:22:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_ImplementationProvider_$654",
+                      "typeString": "contract ImplementationProvider"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "813:24:9"
+            },
+            "scope": 546,
+            "src": "768:96:9",
+            "stateMutability": "view",
+            "superFunction": 273,
+            "visibility": "internal"
+          },
+          {
+            "body": {
+              "id": 544,
+              "nodeType": "Block",
+              "src": "1047:78:9",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "commonType": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        "id": 537,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "leftExpression": {
+                          "argumentTypes": null,
+                          "arguments": [
+                            {
+                              "argumentTypes": null,
+                              "id": 532,
+                              "name": "_provider",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 525,
+                              "src": "1069:9:9",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_contract$_ImplementationProvider_$654",
+                                "typeString": "contract ImplementationProvider"
+                              }
+                            }
+                          ],
+                          "expression": {
+                            "argumentTypes": [
+                              {
+                                "typeIdentifier": "t_contract$_ImplementationProvider_$654",
+                                "typeString": "contract ImplementationProvider"
+                              }
+                            ],
+                            "id": 531,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": true,
+                            "lValueRequested": false,
+                            "nodeType": "ElementaryTypeNameExpression",
+                            "src": "1061:7:9",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_type$_t_address_$",
+                              "typeString": "type(address)"
+                            },
+                            "typeName": "address"
+                          },
+                          "id": 533,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "kind": "typeConversion",
+                          "lValueRequested": false,
+                          "names": [],
+                          "nodeType": "FunctionCall",
+                          "src": "1061:18:9",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        },
+                        "nodeType": "BinaryOperation",
+                        "operator": "!=",
+                        "rightExpression": {
+                          "argumentTypes": null,
+                          "arguments": [
+                            {
+                              "argumentTypes": null,
+                              "hexValue": "30",
+                              "id": 535,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": true,
+                              "kind": "number",
+                              "lValueRequested": false,
+                              "nodeType": "Literal",
+                              "src": "1091:1:9",
+                              "subdenomination": null,
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_rational_0_by_1",
+                                "typeString": "int_const 0"
+                              },
+                              "value": "0"
+                            }
+                          ],
+                          "expression": {
+                            "argumentTypes": [
+                              {
+                                "typeIdentifier": "t_rational_0_by_1",
+                                "typeString": "int_const 0"
+                              }
+                            ],
+                            "id": 534,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": true,
+                            "lValueRequested": false,
+                            "nodeType": "ElementaryTypeNameExpression",
+                            "src": "1083:7:9",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_type$_t_address_$",
+                              "typeString": "type(address)"
+                            },
+                            "typeName": "address"
+                          },
+                          "id": 536,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": true,
+                          "kind": "typeConversion",
+                          "lValueRequested": false,
+                          "names": [],
+                          "nodeType": "FunctionCall",
+                          "src": "1083:10:9",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        },
+                        "src": "1061:32:9",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      ],
+                      "id": 530,
+                      "name": "require",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [
+                        1164,
+                        1165
+                      ],
+                      "referencedDeclaration": 1164,
+                      "src": "1053:7:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
+                        "typeString": "function (bool) pure"
+                      }
+                    },
+                    "id": 538,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1053:41:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 539,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1053:41:9"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 542,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 540,
+                      "name": "provider",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 500,
+                      "src": "1100:8:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_contract$_ImplementationProvider_$654",
+                        "typeString": "contract ImplementationProvider"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "id": 541,
+                      "name": "_provider",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 525,
+                      "src": "1111:9:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_contract$_ImplementationProvider_$654",
+                        "typeString": "contract ImplementationProvider"
+                      }
+                    },
+                    "src": "1100:20:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_ImplementationProvider_$654",
+                      "typeString": "contract ImplementationProvider"
+                    }
+                  },
+                  "id": 543,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1100:20:9"
+                }
+              ]
+            },
+            "documentation": "@dev Sets a new implementation provider\n@param _provider New implementation provider",
+            "id": 545,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [
+              {
+                "arguments": null,
+                "id": 528,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 527,
+                  "name": "onlyOwner",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 134,
+                  "src": "1037:9:9",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_modifier$__$",
+                    "typeString": "modifier ()"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "1037:9:9"
+              }
+            ],
+            "name": "setProvider",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 526,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 525,
+                  "name": "_provider",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 545,
+                  "src": "996:32:9",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_ImplementationProvider_$654",
+                    "typeString": "contract ImplementationProvider"
+                  },
+                  "typeName": {
+                    "contractScope": null,
+                    "id": 524,
+                    "name": "ImplementationProvider",
+                    "nodeType": "UserDefinedTypeName",
+                    "referencedDeclaration": 654,
+                    "src": "996:22:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_ImplementationProvider_$654",
+                      "typeString": "contract ImplementationProvider"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "995:34:9"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 529,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1047:0:9"
+            },
+            "scope": 546,
+            "src": "975:150:9",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 547,
+        "src": "262:865:9"
+      }
+    ],
+    "src": "0:1128:9"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.4.23+commit.124ca40d.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "2.0.0",
+  "updatedAt": "2018-05-16T21:00:36.274Z"
+}
