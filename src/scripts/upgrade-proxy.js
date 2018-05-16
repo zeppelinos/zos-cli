@@ -1,4 +1,4 @@
-import AppController from "../models/AppController";
+import AppController from "../models/package/AppController";
 
 export default async function upgradeProxy({ contractAlias, proxyAddress, initMethod, initArgs, all, network, txParams = {}, packageFileName = undefined, networkFileName = undefined, force = false }) {
   if (!contractAlias && !all) {

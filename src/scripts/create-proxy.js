@@ -1,4 +1,4 @@
-import AppController from '../models/AppController';
+import AppController from '../models/package/AppController';
 
 export default async function createProxy({ contractAlias, initMethod, initArgs, network, txParams = {}, packageFileName = undefined, networkFileName = undefined, force = false }) {
   if (!contractAlias) throw Error('A contract alias must be provided to create a new proxy.')
