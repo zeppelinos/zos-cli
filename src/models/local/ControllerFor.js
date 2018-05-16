@@ -1,5 +1,5 @@
-import AppController from './AppController';
-import LibController from './LibController';
+import LocalAppController from './LocalAppController';
+import LocalLibController from './LocalLibController';
 import { FileSystem as fs } from 'zos-lib';
 
 export default function(packageFileName) {
@@ -9,8 +9,8 @@ export default function(packageFileName) {
   
   const packageData = fs.parseJson(packageFileName);
   if (packageData.lib) {
-    return new LibController(packageFileName);
+    return new LocalLibController(packageFileName);
   } else {
-    return new AppController(packageFileName);
+    return new LocalAppController(packageFileName);
   }
 }

@@ -4,16 +4,16 @@ import { Contracts, FileSystem as fs, App } from "zos-lib";
 import { bytecodeDigest } from '../../utils/digest';
 import Stdlib from '../stdlib/Stdlib';
 
-const log = new Logger('BaseNetworkPackageController');
+const log = new Logger('NetworkController');
 
-export default class BaseNetworkPackageController {
-  constructor(packageController, network, txParams, networkFileName) {
-    this.packageController = packageController;
+export default class NetworkBaseController {
+  constructor(localController, network, txParams, networkFileName) {
+    this.localController = localController;
     this.txParams = txParams;
     this.network = network;
-    this.networkFileName = networkFileName || packageController.packageFileName.replace(/\.zos\.json\s*$/, `.zos.${network}.json`);
-    if (this.networkFileName === packageController.packageFileName) {
-      throw Error(`Cannot create network file name from ${packageController.packageFileName}`)
+    this.networkFileName = networkFileName || localController.packageFileName.replace(/\.zos\.json\s*$/, `.zos.${network}.json`);
+    if (this.networkFileName === localController.packageFileName) {
+      throw Error(`Cannot create network file name from ${localController.packageFileName}`)
     }
   }
 
@@ -28,7 +28,7 @@ export default class BaseNetworkPackageController {
   }
 
   get packageData() {
-    return this.packageController.packageData;
+    return this.localController.packageData;
   }
 
   get networkPackage() {
@@ -137,6 +137,6 @@ export default class BaseNetworkPackageController {
   }
 
   isLib() {
-    return this.packageController.isLib();
+    return this.localController.isLib();
   }
 }

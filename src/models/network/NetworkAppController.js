@@ -1,11 +1,11 @@
 import _ from 'lodash';
 import Stdlib from '../stdlib/Stdlib';
 import { Logger, Contracts, FileSystem as fs, App } from "zos-lib";
-import BaseNetworkPackageController from './BaseNetworkPackageController';
+import NetworkBaseController from './NetworkBaseController';
 
 const log = new Logger('NetworkAppController');
 
-export default class NetworkAppController extends BaseNetworkPackageController {
+export default class NetworkAppController extends NetworkBaseController {
   constructor(appController, network, txParams, networkFileName) {
     super(...arguments);
   }
@@ -42,7 +42,7 @@ export default class NetworkAppController extends BaseNetworkPackageController {
   }
 
   async deployStdlib() {
-    if (!this.packageController.hasStdlib()) {
+    if (!this.localController.hasStdlib()) {
       delete this.networkPackage['stdlib'];
       return;
     }
@@ -62,7 +62,7 @@ export default class NetworkAppController extends BaseNetworkPackageController {
 
   async createProxy(contractAlias, initMethod, initArgs) {
     await this.fetch();
-    const contractClass = this.packageController.getContractClass(contractAlias);
+    const contractClass = this.localController.getContractClass(contractAlias);
     const proxyInstance = await this.app.createProxy(contractClass, contractAlias, initMethod, initArgs);
     
     const proxyInfo = {
@@ -87,7 +87,7 @@ export default class NetworkAppController extends BaseNetworkPackageController {
     const newVersion = this.app.version;
     
     await Promise.all(_.flatMap(proxyInfos, (contractProxyInfos, contractAlias) => {
-      const contractClass = this.packageController.getContractClass(contractAlias);
+      const contractClass = this.localController.getContractClass(contractAlias);
       return _.map(contractProxyInfos, async (proxyInfo) => {        
         await this.app.upgradeProxy(proxyInfo.address, contractClass, contractAlias, initMethod, initArgs);
         proxyInfo.version = newVersion;
@@ -117,7 +117,7 @@ export default class NetworkAppController extends BaseNetworkPackageController {
   }
 
   async linkStdlib() {
-    if (!this.packageController.hasStdlib()) {
+    if (!this.localController.hasStdlib()) {
       await this.app.setStdlib();
       delete this.networkPackage['stdlib'];
       return;
@@ -147,7 +147,7 @@ export default class NetworkAppController extends BaseNetworkPackageController {
   }
 
   isStdlibContract(contractAlias) {
-    if (!this.packageController.hasStdlib()) return false;
+    if (!this.localController.hasStdlib()) return false;
     const stdlib = new Stdlib(this.packageData.stdlib.name);
     return stdlib.hasContract(contractAlias);
   }

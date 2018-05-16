@@ -1,9 +1,9 @@
 import { Logger, Contracts, FileSystem as fs, Package } from "zos-lib";
-import BaseNetworkPackageController from './BaseNetworkPackageController';
+import NetworkBaseController from './NetworkBaseController';
 
 const log = new Logger('NetworkLibController');
 
-export default class NetworkLibController extends BaseNetworkPackageController {
+export default class NetworkLibController extends NetworkBaseController {
   constructor(appController, network, txParams, networkFileName) {
     super(...arguments);
   }

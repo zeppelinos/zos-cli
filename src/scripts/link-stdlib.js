@@ -1,4 +1,4 @@
-import ControllerFor from "../models/package/ControllerFor";
+import ControllerFor from "../models/local/ControllerFor";
 
 export default async function linkStdlib({ stdlibNameVersion, installDeps = false, packageFileName = undefined }) {
   if (!stdlibNameVersion) {

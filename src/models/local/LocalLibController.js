@@ -1,7 +1,7 @@
-import BasePackageController from './BasePackageController';
+import LocalBaseController from './LocalBaseController';
 import NetworkLibController from '../network/NetworkLibController';
 
-export default class LibController extends BasePackageController {
+export default class LocalLibController extends LocalBaseController {
   constructor(packageFileName) {
     super(packageFileName);
   }

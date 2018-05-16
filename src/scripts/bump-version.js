@@ -1,4 +1,4 @@
-import ControllerFor from  '../models/package/ControllerFor'
+import ControllerFor from  '../models/local/ControllerFor'
 
 export default async function bumpVersion({ version, stdlibNameVersion = undefined, installDeps = false, packageFileName = undefined }) {
   if (version === undefined || version === '') throw Error('A version name must be provided to initialize a new version.')

@@ -1,9 +1,9 @@
 import _ from 'lodash';
 import Stdlib from '../stdlib/Stdlib';
 import NetworkAppController from '../network/NetworkAppController';
-import BasePackageController from './BasePackageController';
+import LocalBaseController from './LocalBaseController';
 
-export default class AppController extends BasePackageController {
+export default class LocalAppController extends LocalBaseController {
   constructor(packageFileName) {
     super(packageFileName);
     if (this.packageData.lib) {

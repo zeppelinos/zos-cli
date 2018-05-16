@@ -2,11 +2,11 @@ import _ from 'lodash';
 import Stdlib from '../stdlib/Stdlib';
 import { Contracts, Logger, FileSystem as fs } from "zos-lib";
 
-const log = new Logger('PackageController');
+const log = new Logger('LocalController');
 
 const DEFAULT_VERSION = '0.1.0';
 
-export default class BasePackageController {
+export default class LocalBaseController {
   constructor(packageFileName = 'package.zos.json') {
     this.packageFileName = packageFileName;
   }
