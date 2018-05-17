@@ -3,16 +3,19 @@
 import push from './push'
 import bumpVersion from '../scripts/bump-version'
 
+const signature = 'bump <version>'
+const description = 'bump your project to a new <version>'
 module.exports = {
+  signature, description,
   setup: function(program) {
     program
-      .command('bump <version>', {noHelp: true})
+      .command(signature, {noHelp: true})
       .usage('<version> [options]')
-      .description('Bump your project to a new <version>.')
-      .option('--link <stdlib>', 'Link to new standard library version')
-      .option('--no-install', 'Skip installing stdlib dependencies')
-      .option('--push <network>', 'Push your changes to the specified network')
-      .option('-f, --from <from>', 'Specify the transaction sender address for --push')
+      .description(description)
+      .option('--link <stdlib>', 'link to new standard library version')
+      .option('--no-install', 'skip installing stdlib dependencies')
+      .option('--push <network>', 'push changes to the specified network after bumping version')
+      .option('-f, --from <from>', 'specify transaction sender address for --push')
       .action(async function (version, options) {
         const { link: stdlibNameVersion, install: installDeps } = options
         await bumpVersion({ version, stdlibNameVersion, installDeps })
