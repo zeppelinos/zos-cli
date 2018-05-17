@@ -17,7 +17,7 @@ module.exports = {
       .option('--lib', 'create a standard library instead of an application')
       .option('--force', 'Overwrite existing project if there is one')
       .option('--link <stdlib>', 'link to a standard library')
-      .option('--no-install', 'skip installing standard library') 
+      .option('--no-install', 'skip installing stdlib dependencies locally')
       .option('--push <network>', 'push changes to the specified network')
       .option('-f, --from <from>', 'specify transaction sender address for --push')
       .action(async function (name, version, options) {

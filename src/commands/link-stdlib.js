@@ -3,15 +3,18 @@
 import push from './push'
 import linkStdlib from '../scripts/link-stdlib'
 
+const signature = 'link <stdlib>'
+const description = 'links project with a standard library located in the <stdlib> npm package'
 module.exports = {
+  signature, description,
   setup: function(program) {
     program
-      .command('link <stdlib>', {noHelp: true})
+      .command(signature, {noHelp: true})
       .usage('<stdlib> [options]')
-      .description('Links project with a standard library.\n  <stdlib> is the npm package name of the standard library.')
-      .option('--no-install', 'Skip installing stdlib npm dependencies')
-      .option('--push <network>', 'Push your changes to the specified network')
-      .option('-f, --from <from>', 'Set the transactions sender in case you run with --push')
+      .description(description)
+      .option('--no-install', 'skip installing stdlib dependencies locally')
+      .option('--push <network>', 'push changes to the specified network')
+      .option('-f, --from <from>', 'specify transaction sender address for --push')
       .action(async function (stdlibNameVersion, options) {
         const installDeps = options.install
         await linkStdlib({ stdlibNameVersion, installDeps })
