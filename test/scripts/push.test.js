@@ -8,13 +8,12 @@ import { cleanup, cleanupfn } from '../helpers/cleanup';
 const ImplV1 = artifacts.require('ImplV1');
 const PackageContract = artifacts.require('Package');
 const PackagedApp = artifacts.require('PackagedApp');
-const ImplementationDirectory = artifacts.require('ImplementationDirectory');
 const AppDirectory = artifacts.require('AppDirectory');
-
+const ImplementationDirectory = artifacts.require('ImplementationDirectory');
 
 contract('push command', function([_, owner]) {
   const network = "test";
-  const from = owner;
+  const txParams = { from: owner }
   const defaultVersion = "1.1.0";
 
   const shouldDeployPackage = function (networkFileName) {
@@ -57,7 +56,12 @@ contract('push command', function([_, owner]) {
   };
 
   const shouldDeployLib = function (networkFileName) {
-    shouldDeployPackage(networkFileName);    
+    shouldDeployPackage(networkFileName);
+
+    it('should not be frozen by default', async function() {
+      const data = fs.parseJson(networkFileName);
+      data.frozen.should.be.false;
+    });
   };
 
   const shouldDeployContracts = function ({ packageFileName, networkFileName }) {
@@ -84,14 +88,14 @@ contract('push command', function([_, owner]) {
 
     it('should not redeploy contracts if unmodified', async function () {
       const origAddress = fs.parseJson(networkFileName).contracts["Impl"].address;
-      await push({ packageFileName, network, from });
+      await push({ packageFileName, network, txParams });
       const newAddress = fs.parseJson(networkFileName).contracts["Impl"].address;
       origAddress.should.eq(newAddress);
     });
 
     it('should redeploy unmodified contract if forced', async function () {
       const origAddress = fs.parseJson(networkFileName).contracts["Impl"].address;
-      await push({ packageFileName, network, from, reupload: true });
+      await push({ packageFileName, network, txParams, reupload: true });
       const newAddress = fs.parseJson(networkFileName).contracts["Impl"].address;
       origAddress.should.not.eq(newAddress);
     });
@@ -102,7 +106,7 @@ contract('push command', function([_, owner]) {
       networkData.contracts["Impl"].bytecodeHash = "0xabab";
       fs.writeJson(networkFileName, networkData);
 
-      await push({ packageFileName, network, from });
+      await push({ packageFileName, network, txParams });
       const newAddress = fs.parseJson(networkFileName).contracts["Impl"].address;
       origAddress.should.not.eq(newAddress);
     });
@@ -111,12 +115,12 @@ contract('push command', function([_, owner]) {
   const shouldBumpVersion = function ({ newPackageFileName, networkFileName }) {
     it('should keep package address when bumping version', async function () {
       const origPackageAddress = fs.parseJson(networkFileName).package.address;
-      await push({ packageFileName: newPackageFileName, networkFileName, network, from });
+      await push({ packageFileName: newPackageFileName, networkFileName, network, txParams });
       fs.parseJson(networkFileName).package.address.should.eq(origPackageAddress)
     });
 
     it('should update provider address when bumping version', async function () {
-      await push({ packageFileName: newPackageFileName, networkFileName, network, from });
+      await push({ packageFileName: newPackageFileName, networkFileName, network, txParams });
       const data = fs.parseJson(networkFileName);
       const providerAddress = data.provider.address;
       const apackage = await Package.fetch(data.package.address);
@@ -124,7 +128,7 @@ contract('push command', function([_, owner]) {
     });
 
     it('should upload contracts to new directory when bumping version', async function () {
-      await push({ packageFileName: newPackageFileName, networkFileName, network, from });
+      await push({ packageFileName: newPackageFileName, networkFileName, network, txParams });
       const data = fs.parseJson(networkFileName);
       const implAddress = data.contracts["Impl"].address;
       const apackage = await Package.fetch(data.package.address);
@@ -138,7 +142,7 @@ contract('push command', function([_, owner]) {
 
     beforeEach("pushing package-empty", async function () {
       cleanup(networkFileName)
-      await push({ packageFileName, network, from })
+      await push({ packageFileName, network, txParams })
     });
 
     after(cleanupfn(networkFileName));
@@ -154,7 +158,7 @@ contract('push command', function([_, owner]) {
 
     beforeEach("pushing package-with-contracts", async function () {
       cleanup(networkFileName)
-      await push({ packageFileName, network, from })
+      await push({ packageFileName, network, txParams })
     });
 
     after(cleanupfn(networkFileName));
@@ -172,7 +176,7 @@ contract('push command', function([_, owner]) {
 
     beforeEach("pushing package-stdlib", async function () {
       cleanup(networkFileName)
-      await push({ packageFileName, network, from })
+      await push({ packageFileName, network, txParams })
     });
 
     after(cleanupfn(networkFileName));
@@ -200,7 +204,7 @@ contract('push command', function([_, owner]) {
 
     beforeEach("pushing package-empty", async function () {
       cleanup(networkFileName)
-      await push({ packageFileName, network, from })
+      await push({ packageFileName, network, txParams })
     });
 
     after(cleanupfn(networkFileName));
@@ -216,7 +220,7 @@ contract('push command', function([_, owner]) {
 
     beforeEach("pushing package-with-contracts", async function () {
       cleanup(networkFileName)
-      await push({ packageFileName, network, from })
+      await push({ packageFileName, network, txParams })
     });
 
     after(cleanupfn(networkFileName));

@@ -10,6 +10,7 @@ const createProxy = require('../commands/create-proxy')
 const bumpVersion = require('../commands/bump-version')
 const upgradeProxy = require('../commands/upgrade-proxy')
 const linkStdlib = require('../commands/link-stdlib')
+const freeze = require('../commands/freeze')
 const status = require('../commands/status')
 
 program
@@ -28,6 +29,7 @@ createProxy(program)
 bumpVersion(program)
 upgradeProxy(program)
 linkStdlib(program)
+freeze(program)
 status(program)
 
 registerErrorHandler(program)
