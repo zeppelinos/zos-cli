@@ -1,9 +1,12 @@
 'use strict'
 require('../setup')
 
-import { FileSystem as fs, App, Package } from 'zos-lib'
 import push from "../../src/scripts/push.js";
+import freeze from "../../src/scripts/freeze";
+import addImplementation from "../../src/scripts/add-implementation";
+import { FileSystem as fs, App, Package } from 'zos-lib'
 import { cleanup, cleanupfn } from '../helpers/cleanup';
+import bumpVersion from "../../src/scripts/bump-version";
 
 const ImplV1 = artifacts.require('ImplV1');
 const PackageContract = artifacts.require('Package');
@@ -136,6 +139,24 @@ contract('push command', function([_, owner]) {
     });
   };
 
+  const shouldBumpVersionAndUnfreeze = function ({ newPackageFileName, networkFileName }) {
+    shouldBumpVersion({ newPackageFileName, networkFileName })
+
+    it('should set frozen back to false', async function() {
+      await bumpVersion({ version: '1.1.0', packageFileName: newPackageFileName });
+      await push({ packageFileName: newPackageFileName, networkFileName, network, txParams })
+      await freeze({ network, packageFileName: newPackageFileName, networkFileName, txParams })
+      const firstVersionData = fs.parseJson(networkFileName);
+      firstVersionData.frozen.should.be.true;
+
+      await bumpVersion({ version: '1.2.0', packageFileName: newPackageFileName });
+      await addImplementation({ contractsData: [{ name: 'ImplV1', alias: 'Impl' }], packageFileName: newPackageFileName });
+      await push({ packageFileName: newPackageFileName, networkFileName, network, txParams })
+      const secondVersionData = fs.parseJson(networkFileName);
+      secondVersionData.frozen.should.be.false;
+    });
+  }
+
   describe('an empty app', function() {
     const packageFileName = "test/mocks/packages/package-empty.zos.json";
     const networkFileName = "test/mocks/packages/package-empty.zos.test.json";
@@ -228,7 +249,7 @@ contract('push command', function([_, owner]) {
     shouldDeployLib(networkFileName);
     shouldDeployProvider(networkFileName);
     shouldDeployContracts({ packageFileName, networkFileName });
-    shouldBumpVersion({ networkFileName, newPackageFileName });
+    shouldBumpVersionAndUnfreeze({ networkFileName, packageFileName, newPackageFileName });
   });
   
 });

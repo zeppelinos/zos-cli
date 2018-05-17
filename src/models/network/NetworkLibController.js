@@ -30,6 +30,7 @@ export default class NetworkLibController extends NetworkBaseController {
   }
 
   newVersion(versionName) {
+    this.networkPackage.frozen = false
     return this.package.newVersion(versionName);
   }
 
