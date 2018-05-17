@@ -31,7 +31,6 @@ program
 const commands = [init, add, push, create, bump, upgrade, link, status, freeze]
 
 commands.forEach((c) => {
-  if (c.setup)
   c.setup(program)
 });
 

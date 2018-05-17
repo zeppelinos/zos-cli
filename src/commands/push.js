@@ -22,5 +22,5 @@ function action(options) {
   runWithTruffle(async () => await push({ network, deployStdlib, reupload, txParams }), network, ! skipCompile)
 }
 
-module.exports = registerPush
+module.exports.setup = registerPush
 module.exports.action = action

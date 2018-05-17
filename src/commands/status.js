@@ -3,7 +3,8 @@
 import status from '../scripts/status'
 import runWithTruffle from '../utils/runWithTruffle'
 
-module.exports = function(program) {
+module.exports = {
+  setup: function(program) {
   program
     .command('status', {noHelp: true})
     .description('Print status information on the deployment of your app in the chosen network')
@@ -13,4 +14,5 @@ module.exports = function(program) {
       const { network } = options
       runWithTruffle(async () => await status({ network }), network)
     })
+  }
 }
