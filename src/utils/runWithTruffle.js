@@ -1,13 +1,13 @@
-import { FileSystem as fs, Logger } from 'zos-lib'
-
+import { Logger } from 'zos-lib'
 const log = new Logger('RunWithTruffle')
 
 export default function runWithTruffle(script, network, compile = false) {
-  const TRUFFLE_JS_PATH = `${process.cwd()}/truffle.js`
-  const TRUFFLE_CONFIG_JS_PATH = `${process.cwd()}/truffle-config.js`
+  try {
+    require('truffle-config').detect({ logger: console })
+  } catch (error) {
+    throw Error('You have to provide a truffle.js file, please remember to initialize your project running "truffle init".')
+  }
 
-  const truffleFileMissing = !fs.exists(TRUFFLE_JS_PATH) && !fs.exists(TRUFFLE_CONFIG_JS_PATH);
-  if (truffleFileMissing) throw Error('You have to provide a truffle.js file, please remember to initialize your project running "truffle init".')
   if (compile) compileWithTruffle()
   initTruffle(network).then(script)
 }
