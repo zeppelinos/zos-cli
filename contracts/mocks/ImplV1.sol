@@ -18,3 +18,9 @@ contract AnotherImplV1 is ImplV1 {
     return "AnotherV1";
   }
 }
+
+contract UninitializableImplV1 {
+  function say() public pure returns (string) {
+    return "UninitializableImplV1";
+  }
+}

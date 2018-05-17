@@ -64,6 +64,7 @@ export default class NetworkAppController extends NetworkBaseController {
     await this.fetch();
     
     const contractClass = this.localController.getContractClass(contractAlias);
+    this.checkInitialization(contractClass, initMethod, initArgs);
     const proxyInstance = await this.app.createProxy(contractClass, contractAlias, initMethod, initArgs);
     const implementationAddress = await this.app.getImplementation(contractAlias);
 
@@ -77,6 +78,16 @@ export default class NetworkAppController extends NetworkBaseController {
     if (!proxies[contractAlias]) proxies[contractAlias] = [];
     proxies[contractAlias].push(proxyInfo);
     return proxyInstance;
+  }
+
+  checkInitialization(contractClass, calledInitMethod, calledInitArgs) {
+    // If there is an initializer called, assume it's ok
+    if (calledInitMethod) return;
+
+    // Otherwise, warn the user to invoke it
+    const initializeMethod = contractClass.abi.find(fn => fn.type === 'function' && fn.name === 'initialize');
+    if (!initializeMethod) return;
+    log.error(`Possible initialization method 'initialize' found in contract. Consider initializing the proxy after creating it.`);
   }
 
   async upgradeProxies(contractAlias, proxyAddress, initMethod, initArgs) {
