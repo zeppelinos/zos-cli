@@ -1,0 +1,19 @@
+{
+  "contracts": {},
+  "proxies": {},
+  "app": {
+    "address": "0x9efec315e368e8812025b85b399a69513cd0e716"
+  },
+  "version": "1.1.0",
+  "package": {
+    "address": "0xd95b1dbec167c6cf547d018ddecf41a4cb2e2f73"
+  },
+  "provider": {
+    "address": "0x2445bc665aefca58d2137baf26a62edb38cbc274"
+  },
+  "stdlib": {
+    "address": "0x0000000000000000000000000000000000000010",
+    "name": "mock-stdlib",
+    "version": "1.1"
+  }
+}

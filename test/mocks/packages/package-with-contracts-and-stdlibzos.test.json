@@ -1,0 +1,25 @@
+{
+  "contracts": {
+    "Impl": {
+      "address": "0x0a143bdf026eabaf95d3e88abb88169674db92f5",
+      "bytecodeHash": "57ae128c4860b5d0bab316d5b8e7e6201f17e7f914cb9ac7b3065027e8f6cee0"
+    }
+  },
+  "proxies": {},
+  "stdlib": {
+    "address": "0x752be1d25c638f5426966ffd9585680fb8550ed8",
+    "customDeploy": true,
+    "name": "mock-stdlib",
+    "version": "1.1"
+  },
+  "app": {
+    "address": "0x7105a11e8487bfaf8c02aa6a7cda5283f971107c"
+  },
+  "version": "1.0",
+  "package": {
+    "address": "0xc8c03647d39a96f02f6ce8999bc22493c290e734"
+  },
+  "provider": {
+    "address": "0x446e083592d2dfa6661e20097f6898990c3cace5"
+  }
+}

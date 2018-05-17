@@ -1,0 +1,11 @@
+{
+  "contracts": {},
+  "lib": true,
+  "package": {
+    "address": "0xaba7902442c5739c6f0c182691d48d63d06a212e"
+  },
+  "provider": {
+    "address": "0x8c7ef141e529c5263e2a45581d1c8a39f64dc5df"
+  },
+  "version": "1.1.0"
+}

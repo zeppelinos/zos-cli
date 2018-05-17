@@ -1,0 +1,20 @@
+{
+  "contracts": {
+    "Impl": {
+      "address": "0x51fc52fd0b30fa0319d97893defe0201fed39c4c",
+      "bytecodeHash": "57ae128c4860b5d0bab316d5b8e7e6201f17e7f914cb9ac7b3065027e8f6cee0"
+    },
+    "AnotherImpl": {
+      "address": "0x7153ccd1a20bbb2f6dc89c1024de368326ec6b4f",
+      "bytecodeHash": "08d316e62d996966175111a6277b67229d893e3ebb5cdd36ec97b6949e423f68"
+    }
+  },
+  "lib": true,
+  "package": {
+    "address": "0x2e335f247e91caa168c64b63104c4475b2af3942"
+  },
+  "provider": {
+    "address": "0xe4e47451aad6c89a6d9e4ad104a7b77ffe1d3b36"
+  },
+  "version": "1.1.0"
+}
