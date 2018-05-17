@@ -3,16 +3,18 @@
 import push from '../scripts/push'
 import runWithTruffle from '../utils/runWithTruffle'
 
+const signature = 'push'
+const description = 'deploys your project to the specified <network>'
 function registerPush(program) {
   program
-    .command('push', {noHelp: true})
-    .description('Pushes your project to the specified network')
+    .command(signature, {noHelp: true})
+    .description(description)
     .usage('--network <network> [options]')
-    .option('-f, --from <from>', 'Set the transaction sender address')
-    .option('-n, --network <network>', 'Provide a network to be used')
-    .option('--skip-compile', 'Skips contract compilation')
-    .option('--deploy-stdlib', 'Deploys a copy of the stdlib (if any) instead of using the one published to the network (useful in local development networks)')
-    .option('--reupload', 'Reuploads all contracts')
+    .option('-f, --from <from>', 'specify transaction sender address')
+    .option('-n, --network <network>', 'network to be used')
+    .option('-s, --skip-compile', 'skips contract compilation')
+    .option('-d, --deploy-stdlib', 'deploys a copy of the stdlib for development')
+    .option('-r, --reset', 'redeploys all contract implementations (not only the ones that changed)')
     .action(action)
 }
 
@@ -22,5 +24,4 @@ function action(options) {
   runWithTruffle(async () => await push({ network, deployStdlib, reupload, txParams }), network, ! skipCompile)
 }
 
-module.exports.setup = registerPush
-module.exports.action = action
+module.exports = { signature, description, setup: registerPush, action}
