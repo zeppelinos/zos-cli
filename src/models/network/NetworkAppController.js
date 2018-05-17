@@ -102,7 +102,8 @@ export default class NetworkAppController extends NetworkBaseController {
     
     await Promise.all(_.flatMap(proxyInfos, (contractProxyInfos, contractAlias) => {
       const contractClass = this.localController.getContractClass(contractAlias);
-      return _.map(contractProxyInfos, async (proxyInfo) => {        
+      this.checkUpgrade(contractClass, initMethod, initArgs);
+      return _.map(contractProxyInfos, async (proxyInfo) => {
         await this.app.upgradeProxy(proxyInfo.address, contractClass, contractAlias, initMethod, initArgs);
         const implementationAddress = await this.app.getImplementation(contractAlias);
         proxyInfo.version = newVersion;
@@ -130,6 +131,16 @@ export default class NetworkAppController extends NetworkBaseController {
         !proxyAddress || proxy.address === proxyAddress
       ))
     };
+  }
+
+  checkUpgrade(contractClass, calledMigrateMethod, calledMigrateArgs) {
+    // If there is a migration called, assume it's ok
+    if (calledMigrateMethod) return;
+
+    // Otherwise, warn the user to invoke it
+    const migrateMethod = contractClass.abi.find(fn => fn.type === 'function' && fn.name === 'migrate');
+    if (!migrateMethod) return;
+    log.error(`Possible migration method 'migrate' found in contract ${contractClass.contractName}. Consider migrating the proxy after creating it.`);
   }
 
   async linkStdlib() {
