@@ -3,16 +3,20 @@
 import status from '../scripts/status'
 import runWithTruffle from '../utils/runWithTruffle'
 
+const signature = 'status'
+const description = 'print information about the deployment of your app in a specific network'
+
 module.exports = {
+  signature, description,
   setup: function(program) {
-  program
-    .command('status', {noHelp: true})
-    .description('Print status information on the deployment of your app in the chosen network')
-    .usage('--network <network>')
-    .option('-n, --network <network>', 'Provide a network to be used')
-    .action(function (options) {
-      const { network } = options
-      runWithTruffle(async () => await status({ network }), network)
-    })
+    program
+      .command(signature, {noHelp: true})
+      .description(description)
+      .usage('--network <network>')
+      .option('-n, --network <network>', 'network to be used')
+      .action(function (options) {
+        const { network } = options
+        runWithTruffle(async () => await status({ network }), network)
+      })
   }
 }

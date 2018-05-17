@@ -25,8 +25,6 @@ program
   .option('-s, --silent', 'silent mode: no output sent to stderr.')
   .on('option:verbose', () => { Logger.verbose(true); } )
   .on('option:silent', () => { Logger.silent(true); } )
-  .option('-v, --verbose', 'switch verbose mode on')
-
 
 const commands = [init, add, push, create, bump, upgrade, link, status, freeze]
 

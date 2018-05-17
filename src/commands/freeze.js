@@ -10,7 +10,7 @@ module.exports = {
   signature, description,
   setup: function(program) {
     program
-      .command(signature)
+      .command(signature, {noHelp: true})
       .usage('--network <network> [options]')
       .description(description)
       .option('-f, --from <from>', 'specify transaction sender address')
