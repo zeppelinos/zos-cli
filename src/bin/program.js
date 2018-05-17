@@ -4,6 +4,7 @@ const program = require('commander')
 const { version } = require('../../package.json')
 const registerErrorHandler = require('./errors')
 const Logger = require('zos-lib').Logger;
+const chalk = require('chalk')
 
 const init = require('../commands/init')
 const add = require('../commands/add-implementation')
@@ -32,9 +33,11 @@ commands.forEach((c) => {
   c.setup(program)
 });
 
+const maxSig = Math.max(...commands.map(c => c.signature.length))
+console.log(maxSig)
 program.on('--help', function(){
   commands.forEach((c) => {
-    console.log('    '+c.signature+'\t'+c.description)
+    console.log('    '+chalk.bold(c.signature.padEnd(maxSig))+'\t'+c.description)
   });
   console.log('');
 });
