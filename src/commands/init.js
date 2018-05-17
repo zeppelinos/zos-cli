@@ -14,12 +14,12 @@ module.exports = {
       .command(signature, {noHelp: true})
       .usage('<project> [version]')
       .description(description)
-      .option('--lib', 'Create a standard library instead of a regular application')
+      .option('--lib', 'create a standard library instead of a regular application')
       .option('--force', 'Overwrite existing project if there is one')
-      .option('--link <stdlib>', 'Link to standard library')
-      .option('--no-install', 'Skip installing stdlib dependencies') 
-      .option('--push <network>', 'Push changes to the specified network')
-      .option('-f, --from <from>', 'Specify transaction sender address for --push')
+      .option('--link <stdlib>', 'link to standard library')
+      .option('--no-install', 'skip installing stdlib dependencies') 
+      .option('--push <network>', 'push changes to the specified network')
+      .option('-f, --from <from>', 'specify transaction sender address for --push')
       .action(async function (name, version, options) {
         if (options.lib) {
           if (options.stdlib)
