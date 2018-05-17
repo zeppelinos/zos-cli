@@ -1,10 +1,12 @@
+'use strict';
+
 import push from './push'
 import addImplementation from '../scripts/add-implementation'
 import addAllImplementations from '../scripts/add-all-implementations'
 
 module.exports = function(program) {
   program
-    .command('add [contractNames...]')
+    .command('add [contractNames...]', {noHelp: true})
     .usage('[contractName1[:contractAlias1] ... contractNameN[:contractAliasN]] [options]')
     .description(`Add contract implementations to your project.
       Provide a list of [contractNames...] to be registered.

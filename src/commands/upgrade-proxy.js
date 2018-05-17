@@ -1,10 +1,12 @@
+'use strict';
+
 import upgradeProxy from '../scripts/upgrade-proxy'
 import runWithTruffle from '../utils/runWithTruffle'
 import { parseArgs } from '../utils/input'
 
 module.exports = function(program) {
   program
-    .command('upgrade [alias] [address]')
+    .command('upgrade [alias] [address]', {noHelp: true})
     .usage('[alias] [address] --network <network> [options]')
     .description(`Upgrade a proxied contract to a new implementation.
       Provide the [alias] name you used to register your contract. Provide [address] to choose which proxy to upgrade, otherwise all will be upgraded.`)
@@ -24,6 +26,9 @@ module.exports = function(program) {
 
       const { from, network, all, force } = options
       const txParams = from ? { from } : {}
-      runWithTruffle(async () => await upgradeProxy({ contractAlias, proxyAddress, initMethod, initArgs, all, network, txParams, force }), network)
+      runWithTruffle(async () => await upgradeProxy({
+        contractAlias, proxyAddress, initMethod, initArgs,
+        all, network, txParams, force
+      }), network)
     })
 }
