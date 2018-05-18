@@ -14,7 +14,7 @@ module.exports = {
       .command(signature, {noHelp: true})
       .usage('<alias> --network <network> [options]')
       .description(description)
-      .option('--init [function]', `call function after creating contract. If no name is given, 'initialize' will be used`)
+      .option('--init [function]', `call function after creating contract. If none is given, 'initialize' will be used`)
       .option('--args <arg1, arg2, ...>', 'provide initialization arguments for your contract if required')
       .option('-f, --from <from>', 'specify transaction sender address')
       .option('-n, --network <network>', 'network to be used')
