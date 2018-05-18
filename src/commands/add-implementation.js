@@ -5,7 +5,7 @@ import addImplementation from '../scripts/add-implementation'
 import addAllImplementations from '../scripts/add-all-implementations'
 
 const signature = 'add [contractNames...]'
-const description = 'add contract implementations to your project. Provide a list of contract names'
+const description = 'add contract implementations to your project. Provide a list of whitespace-separated contract names'
 module.exports = {
   signature, description,
   register: function(program) {
