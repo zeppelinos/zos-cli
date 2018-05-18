@@ -56,6 +56,6 @@ export default class Stdlib {
     const packageVersion = this.getPackage().version;
     this.version = version || packageVersion
     this.nameAndVersion = nameAndVersion
-    if (this.version !== packageVersion) throw Error(`Requested version ${version} does not match stdlib package version ${packageVersion}`)
+    if (this.version !== packageVersion) throw Error(`Requested stdlib version ${version} does not match stdlib package version ${packageVersion}`)
   }
 }
