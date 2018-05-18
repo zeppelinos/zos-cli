@@ -9,7 +9,7 @@ const description = `initialize your ZeppelinOS project. Provide a <project> nam
 
 module.exports = {
   signature, description,
-  setup: function(program) {
+  register: function(program) {
     program
       .command(signature, {noHelp: true})
       .usage('<project> [version]')

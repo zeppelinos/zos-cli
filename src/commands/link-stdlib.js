@@ -7,7 +7,7 @@ const signature = 'link <stdlib>'
 const description = 'links project with a standard library located in the <stdlib> npm package'
 module.exports = {
   signature, description,
-  setup: function(program) {
+  register: function(program) {
     program
       .command(signature, {noHelp: true})
       .usage('<stdlib> [options]')

@@ -8,7 +8,7 @@ const description = 'print information about the deployment of your app in a spe
 
 module.exports = {
   signature, description,
-  setup: function(program) {
+  register: function(program) {
     program
       .command(signature, {noHelp: true})
       .description(description)

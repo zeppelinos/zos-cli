@@ -9,7 +9,7 @@ const description = 'deploys a new upgradeable contract instance. Provide the <a
 
 module.exports = {
   signature, description,
-  setup: function(program) {
+  register: function(program) {
     program
       .command(signature, {noHelp: true})
       .usage('<alias> --network <network> [options]')

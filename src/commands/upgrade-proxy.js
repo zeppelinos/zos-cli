@@ -9,7 +9,7 @@ const description = 'upgrade contract to a new implementation. Provide the <alia
 
 module.exports = {
   signature, description,
-  setup: function(program) {
+  register: function(program) {
     program
       .command(signature, {noHelp: true})
       .usage('[alias] [address] --network <network> [options]')

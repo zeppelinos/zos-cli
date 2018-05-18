@@ -7,7 +7,7 @@ const signature = 'bump <version>'
 const description = 'bump your project to a new <version>'
 module.exports = {
   signature, description,
-  setup: function(program) {
+  register: function(program) {
     program
       .command(signature, {noHelp: true})
       .usage('<version> [options]')

@@ -8,7 +8,7 @@ const description = 'freeze current release version of your stdlib project'
 
 module.exports = {
   signature, description,
-  setup: function(program) {
+  register: function(program) {
     program
       .command(signature, {noHelp: true})
       .usage('--network <network> [options]')

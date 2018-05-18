@@ -8,7 +8,7 @@ const signature = 'add [contractNames...]'
 const description = 'add contract implementations to your project. Provide a list of contract names'
 module.exports = {
   signature, description,
-  setup: function(program) {
+  register: function(program) {
     program
       .command(signature, {noHelp: true})
       .usage('[contractName1[:contractAlias1] ... contractNameN[:contractAliasN]] [options]')

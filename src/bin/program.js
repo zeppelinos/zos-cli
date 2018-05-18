@@ -29,9 +29,7 @@ program
 
 const commands = [init, add, push, create, bump, upgrade, link, status, freeze]
 
-commands.forEach((c) => {
-  c.setup(program)
-});
+commands.forEach((c) => c.register(program));
 
 const maxSig = Math.max(...commands.map(c => c.signature.length))
 program.on('--help', function(){
