@@ -37,7 +37,7 @@ export default class LocalBaseController {
     // which is fine, but as long as it is declared we will be picking it up
     const path = `${process.cwd()}/build/contracts/${contractName}.json`
     if (this.hasConstructor(path)) {
-      log.error(`Contract ${contractName} has an explicit constructor. Consider changing it into an initializer to use with ZeppelinOS.`)
+      log.error(`Contract ${contractName} has an explicit constructor. Move it to an initializer function to use it with ZeppelinOS.`)
     }
 
     this.packageData.contracts[contractAlias] = contractName;

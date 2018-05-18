@@ -87,7 +87,7 @@ export default class NetworkAppController extends NetworkBaseController {
     // Otherwise, warn the user to invoke it
     const initializeMethod = contractClass.abi.find(fn => fn.type === 'function' && fn.name === 'initialize');
     if (!initializeMethod) return;
-    log.error(`Possible initialization method 'initialize' found in contract. Consider initializing the proxy after creating it.`);
+    log.error(`Possible initialization method 'initialize' found in contract. Make sure you initialize your instance.`);
   }
 
   async upgradeProxies(contractAlias, proxyAddress, initMethod, initArgs) {
@@ -140,7 +140,7 @@ export default class NetworkAppController extends NetworkBaseController {
     // Otherwise, warn the user to invoke it
     const migrateMethod = contractClass.abi.find(fn => fn.type === 'function' && fn.name === 'migrate');
     if (!migrateMethod) return;
-    log.error(`Possible migration method 'migrate' found in contract ${contractClass.contractName}. Consider migrating the proxy after creating it.`);
+    log.error(`Possible migration method 'migrate' found in contract ${contractClass.contractName}. Remember running the migration after deploying it.`);
   }
 
   async linkStdlib() {
