@@ -12,9 +12,9 @@ function registerPush(program) {
     .usage('--network <network> [options]')
     .option('-f, --from <from>', 'specify transaction sender address')
     .option('-n, --network <network>', 'network to be used')
-    .option('-c, --skip-compile', 'skips contract compilation')
+    .option('--skip-compile', 'skips contract compilation')
     .option('-d, --deploy-stdlib', 'deploys a copy of the stdlib for development')
-    .option('-r, --reset', 'redeploys all contract implementations (not only the ones that changed)')
+    .option('--reset', 'redeploys all contract implementations (not only the ones that changed)')
     .action(action)
 }
 
