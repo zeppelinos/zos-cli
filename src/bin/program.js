@@ -34,7 +34,7 @@ commands.forEach((c) => c.register(program));
 const maxSig = Math.max(...commands.map(c => c.signature.length))
 program.on('--help', function(){
   commands.forEach((c) => {
-    console.log('    '+chalk.bold(c.signature.padEnd(maxSig))+'\t'+c.description)
+    console.log(`    ${chalk.bold(c.signature.padEnd(maxSig))}\t${c.description}`)
   });
   console.log('');
 });
