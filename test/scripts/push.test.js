@@ -10,8 +10,6 @@ import bumpVersion from "../../src/scripts/bump-version";
 
 const ImplV1 = artifacts.require('ImplV1');
 const PackageContract = artifacts.require('Package');
-const PackagedApp = artifacts.require('PackagedApp');
-const AppDirectory = artifacts.require('AppDirectory');
 const ImplementationDirectory = artifacts.require('ImplementationDirectory');
 
 contract('push command', function([_, owner]) {
@@ -53,8 +51,9 @@ contract('push command', function([_, owner]) {
     it('should deploy app at specified address', async function () {
       const address = fs.parseJson(networkFileName).app.address;
       address.should.be.nonzeroAddress;
-      const app = await PackagedApp.at(address);
-      (await app.version()).should.eq(defaultVersion);
+
+      const app = await App.fetch(address);
+      app.version.should.be.eq(defaultVersion);
     });
   };
 
@@ -208,10 +207,8 @@ contract('push command', function([_, owner]) {
 
       it('should set stdlib in deployed app', async function () {
         const address = fs.parseJson(networkFileName).app.address;
-        const app = await PackagedApp.at(address);
-        const appPackage = await PackageContract.at(await app.package());
-        const provider = await AppDirectory.at(await appPackage.getVersion(defaultVersion));
-        const stdlib = await provider.stdlib();
+        const app = await App.fetch(address);
+        const stdlib = await app.currentStdlib();
 
         stdlib.should.eq(stdlibAddress);
       });
