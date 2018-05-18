@@ -10,6 +10,7 @@ import createProxy from "../../src/scripts/create-proxy.js";
 import addImplementation from "../../src/scripts/add-implementation.js";
 import linkStdlib from "../../src/scripts/link-stdlib.js";
 import LocalAppController from '../../src/models/local/LocalAppController';
+import CaptureLogs from '../helpers/captureLogs';
 
 const ImplV1 = artifacts.require('ImplV1');
 
@@ -99,31 +100,33 @@ contract('create-proxy command', function([_, owner]) {
 
   describe('warnings', function () {
     beforeEach('capturing log output', function () {
-      const errors = [];
-      this.errors = errors;
-      Logger.prototype.error = (msg) => errors.push(msg);
+      this.logs = new CaptureLogs();
+    });
+
+    afterEach(function () {
+      this.logs.restore();
     });
 
     it('should warn when not initializing a contract with initialize method', async function() {
       await createProxy({ contractAlias, packageFileName, network, txParams });
-      this.errors.should.have.lengthOf(1);
-      this.errors[0].should.match(/consider initializing/i);
+      this.logs.errors.should.have.lengthOf(1);
+      this.logs.errors[0].should.match(/make sure you initialize/i);
     });
 
     it('should warn when not initializing a contract that inherits from one with an initialize method', async function() {
       await createProxy({ contractAlias: anotherContractAlias, packageFileName, network, txParams });
-      this.errors.should.have.lengthOf(1);
-      this.errors[0].should.match(/consider initializing/i);
+      this.logs.errors.should.have.lengthOf(1);
+      this.logs.errors[0].should.match(/make sure you initialize/i);
     });
 
     it('should not warn when initializing a contract', async function() {
       await createProxy({ contractAlias, packageFileName, network, txParams, initMethod: 'initialize', initArgs: [42] });
-      this.errors.should.have.lengthOf(0);
+      this.logs.errors.should.have.lengthOf(0);
     });
 
     it('should not warn when a contract has not initialize method', async function() {
       await createProxy({ contractAlias: uninitializableContractAlias, packageFileName, network, txParams });
-      this.errors.should.have.lengthOf(0);
+      this.logs.errors.should.have.lengthOf(0);
     });
   });
 

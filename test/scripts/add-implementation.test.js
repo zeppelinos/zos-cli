@@ -6,6 +6,7 @@ import addImplementation from "../../src/scripts/add-implementation.js";
 import { cleanup, cleanupfn } from "../helpers/cleanup.js";
 import { FileSystem as fs, Logger } from 'zos-lib';
 import { editJson } from '../helpers/json.js';
+import CaptureLogs from '../helpers/captureLogs';
 
 contract('add-implementation command', function() {
   const packageFileName = "test/tmp/zos.json";
@@ -83,20 +84,22 @@ contract('add-implementation command', function() {
 
   describe('warnings', function () {
     beforeEach('capturing log output', function () {
-      const errors = [];
-      this.errors = errors;
-      Logger.prototype.error = (msg) => errors.push(msg);
+      this.logs = new CaptureLogs();
+    });
+
+    afterEach(function () {
+      this.logs.restore();
     });
 
     it('should warn when adding a contract with a constructor', async function() {
       addImplementation({ contractsData: [{ name: "WithConstructor", alias: "WithConstructor" }], packageFileName});
-      this.errors.should.have.lengthOf(1);
-      this.errors[0].should.match(/constructor/i);
+      this.logs.errors.should.have.lengthOf(1);
+      this.logs.errors[0].should.match(/constructor/i);
     });
 
     it('should not warn when adding a contract without a constructor', async function() {
       addImplementation({ contractsData, packageFileName});
-      this.errors.should.have.lengthOf(0);
+      this.logs.errors.should.have.lengthOf(0);
     });
   });
 });

@@ -9,6 +9,7 @@ import createProxy from "../../src/scripts/create-proxy.js";
 import upgradeProxy from "../../src/scripts/upgrade-proxy.js";
 import { Contracts, FileSystem as fs, Logger } from "zos-lib";
 import { cleanupfn } from "../helpers/cleanup.js";
+import CaptureLogs from '../helpers/captureLogs';
 
 const ImplV1 = artifacts.require('ImplV1');
 const ImplV2 = artifacts.require('ImplV2');
@@ -169,26 +170,28 @@ contract('upgrade-proxy command', function([_, owner]) {
 
     describe('warnings', function () {
       beforeEach('capturing log output', function () {
-        const errors = [];
-        this.errors = errors;
-        Logger.prototype.error = (msg) => errors.push(msg);
+        this.logs = new CaptureLogs();
+      });
+  
+      afterEach(function () {
+        this.logs.restore();
       });
   
       it('should warn when not migrating a contract with migrate method', async function() {
         await upgradeProxy({ contractAlias: "Impl", packageFileName, network, txParams });
-        this.errors.should.have.lengthOf(1);
-        this.errors[0].should.match(/consider migrating/i);
+        this.logs.errors.should.have.lengthOf(1);
+        this.logs.errors[0].should.match(/remember running the migration/i);
       });
   
       it('should warn when not migrating a contract that inherits from one with a migrate method', async function() {
         await upgradeProxy({ contractAlias: "AnotherImpl", packageFileName, network, txParams });
-        this.errors.should.have.lengthOf(1);
-        this.errors[0].should.match(/consider migrating/i);
+        this.logs.errors.should.have.lengthOf(1);
+        this.logs.errors[0].should.match(/remember running the migration/i);
       });
   
       it('should not warn when migrating a contract', async function() {
         await upgradeProxy({ contractAlias: "Impl", packageFileName, network, txParams, initMethod: 'migrate', initArgs: [42] });
-        this.errors.should.have.lengthOf(0);
+        this.logs.errors.should.have.lengthOf(0);
       });
   
       it('should not warn when a contract has no migrate method', async function() {
@@ -196,7 +199,7 @@ contract('upgrade-proxy command', function([_, owner]) {
         await push({ packageFileName, network, txParams });
 
         await upgradeProxy({ contractAlias: "NoMigrate", packageFileName, network, txParams });
-        this.errors.should.have.lengthOf(0);
+        this.logs.errors.should.have.lengthOf(0);
       });
     });
   });
