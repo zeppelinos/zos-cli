@@ -15,7 +15,7 @@ module.exports = {
       .usage('<project> [version]')
       .description(description)
       .option('--lib', 'create a standard library instead of an application')
-      .option('--force', 'Overwrite existing project if there is one')
+      .option('--force', 'overwrite existing project if there is one')
       .option('--link <stdlib>', 'link to a standard library')
       .option('--no-install', 'skip installing stdlib dependencies locally')
       .option('--push <network>', 'push changes to the specified network')
