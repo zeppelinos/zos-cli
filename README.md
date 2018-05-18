@@ -75,7 +75,7 @@ zos init myproject 0.1
 
 ## Security
 
-If you find a security issue, please contact us at security@zeppelinos.org.
+If you find a security issue, please contact us at security@zeppelinos.org. We give rewards for reported issues, according to impact and severity.
 
 ## License
 
