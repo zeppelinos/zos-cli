@@ -30,5 +30,10 @@ contract('link-stdlib command', function() {
     editJson(packageFileName, p => { p.lib = true; });
     await linkStdlib({ stdlibNameVersion: 'mock-stdlib@1.1.0', packageFileName }).should.be.rejectedWith(/lib/);
   });
-  
+
+  it('should raise an error if requested version of stdlib does not match its package version', async function () {
+    editJson('test/mocks/mock-stdlib/zos.json', p => p.version = '1.2.0')
+    await linkStdlib({ stdlibNameVersion: 'mock-stdlib@1.1.0', packageFileName }).should.be.rejectedWith('Requested version 1.1.0 does not match stdlib package version 1.2.0')
+    editJson('test/mocks/mock-stdlib/zos.json', p => p.version = '1.1.0')
+  });
 });
