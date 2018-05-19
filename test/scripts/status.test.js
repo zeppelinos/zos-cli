@@ -223,17 +223,32 @@ contract('status command', function([_, owner]) {
     });
   };
 
+  // Regression for https://github.com/zeppelinos/zos-cli/issues/191
+  const shouldNotModifyPackage = function (init) {
+    it.skip('should not deploy a new package', async function () {
+      await init({ name: appName, version, packageFileName });
+      await push({ packageFileName, network, txParams });
+      const packageAddress = ControllerFor(packageFileName).onNetwork(network, txParams, networkFileName).packageAddress;
+
+      await status({ network, packageFileName, networkFileName });
+      this.logs.text.should.not.match(/deploying new package/i);
+      ControllerFor(packageFileName).onNetwork(network, txParams, networkFileName).packageAddress.should.eq(packageAddress);
+    });
+  }
+
   describe('on app project', function () {
     shouldDescribeApp(initApp);
     shouldDescribeVersion(initApp);
     shouldDescribeContracts(initApp);
     shouldDescribeStdlib(initApp);
     shouldDescribeProxies(initApp);
+    shouldNotModifyPackage(initApp);
   });
 
   describe('on lib project', function () {
     shouldDescribeLib(initLib);
     shouldDescribeVersion(initLib);
     shouldDescribeContracts(initLib);
+    shouldNotModifyPackage(initLib);
   });
 });
