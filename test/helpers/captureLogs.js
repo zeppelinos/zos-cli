@@ -10,6 +10,11 @@ export default class CaptureLogs {
     Logger.prototype.info = (msg) => { this.infos.push(msg); }
   }
 
+  clear() {
+    this.infos = [];
+    this.errors = [];
+  }
+
   restore() {
     Logger.prototype.error = this.origError;
     Logger.prototype.info = this.origInfo;
