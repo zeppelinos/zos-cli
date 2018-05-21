@@ -10,6 +10,7 @@ describe('input', function () {
     );
 
     it('should parse a number', testFn("42", "42"));
+    it('should parse a string', testFn("foo", 'foo'));
     it('should parse a number+string', testFn("42pepe", "42pepe"));
     it('should parse a quoted string', testFn('"foo"', 'foo'));
     it('should parse a quoted number+string', testFn('"42foo"', '42foo'));

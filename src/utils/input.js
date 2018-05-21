@@ -7,8 +7,8 @@ export function parseArgs(args) {
     const MATCH_HEX = /(^|([,[]\s*))(0[xX][0-9a-fA-F]+)/g
     args = args.replace(MATCH_HEX, '$2"$3"') // replace non quoted hex string by quoted hex string
 
-    const MATCH_NUMBERS = /(^|([,[]\s*))(\w+)/g
-    args = args.replace(MATCH_NUMBERS, '$2"$3"') // replace non quoted number by quoted number
+    const MATCH_WORDS = /(^|([,[]\s*))(\w+)/g
+    args = args.replace(MATCH_WORDS, '$2"$3"') // replace non quoted number by quoted number
 
     return JSON.parse('[' + args + ']')
   } catch (e) {
