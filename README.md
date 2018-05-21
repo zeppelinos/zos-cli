@@ -46,7 +46,7 @@ zos init <name> [version]
 ```
 Where <name> is your project's name, and [version] an optional initial version. For example:
 ```sh
-zos init myproject 0.1.0
+zos init my-project 0.1.0
 ```
 
 
