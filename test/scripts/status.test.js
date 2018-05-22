@@ -1,6 +1,7 @@
 'use strict'
 require('../setup')
 
+import { FileSystem as fs } from 'zos-lib';
 import initApp from '../../src/scripts/init.js';
 import initLib from '../../src/scripts/init-lib.js';
 import add from '../../src/scripts/add.js';
@@ -20,24 +21,22 @@ contract('status script', function([_, owner]) {
   const network = 'test';
   const contractName = 'ImplV1';
   const contractAlias = 'Impl';
-  const contractsData = [{ name: contractName, alias: contractAlias }]
+  const contractsData = [{ name: contractName, alias: contractAlias }];
   const anotherContractName = 'AnotherImplV1';
   const stdlibNameVersion = 'mock-stdlib@1.1.0';
-  const packageFileName = 'test/tmp/zos.json';
-  const networkFileName = `test/tmp/zos.${network}.json`;
-  
-  beforeEach('cleanup', async function() {
-    cleanup(packageFileName)
-    cleanup(networkFileName)
+  const tmpDir = 'test/tmp';
+  const packageFileName = `${tmpDir}/zos.json`;
+  const networkFileName = `${tmpDir}/zos.${network}.json`;
+
+  beforeEach('setup', async function() {
+    fs.createDir(tmpDir);
     this.logs = new CaptureLogs();
   });
 
-  afterEach(function () {
+  afterEach('cleanup', function () {
+    cleanup(tmpDir);
     this.logs.restore();
   });
-
-  after(cleanupfn(packageFileName));
-  after(cleanupfn(networkFileName));
 
   const shouldDescribeApp = function (init) {
     describe('root app', function () {
@@ -106,7 +105,7 @@ contract('status script', function([_, owner]) {
 
         this.logs.text.should.match(/Impl/i);
         this.logs.text.should.match(/implemented by ImplV1/i);
-      });  
+      });
 
       it('should not log contract name when matches alias', async function () {
         await init({ name: appName, version, packageFileName });
@@ -116,7 +115,7 @@ contract('status script', function([_, owner]) {
 
         this.logs.text.should.match(/AnotherImplV1/i);
         this.logs.text.should.not.match(/implemented by/i);
-      });  
+      });
 
       it('should log undeployed contract', async function () {
         await init({ name: appName, version, packageFileName });
@@ -144,7 +143,7 @@ contract('status script', function([_, owner]) {
         await status({ network, packageFileName, networkFileName });
 
         this.logs.text.should.match(/is deployed and up to date/i);
-      });    
+      });
     });
   };
 
@@ -217,7 +216,7 @@ contract('status script', function([_, owner]) {
         await push({ packageFileName, network, txParams });
         await createProxy({ contractAlias, network, txParams, packageFileName, networkFileName });
         await status({ network, packageFileName, networkFileName });
-        
+
         this.logs.text.should.match(/Impl at 0x[0-9a-fA-F]{40} version 0.1.0/i);
       });
     });

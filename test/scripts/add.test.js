@@ -9,19 +9,20 @@ import CaptureLogs from '../helpers/captureLogs';
 import add from '../../src/scripts/add.js';
 
 contract('add script', function() {
-  const packageFileName = 'test/tmp/zos.json';
+  const tmpDir = 'test/tmp';
+  const packageFileName = `${tmpDir}/zos.json`;
   const appName = 'MyApp';
   const contractName = 'ImplV1';
   const contractAlias = 'Impl';
   const defaultVersion = '0.1.0';
-  const contractsData = [{ name: contractName, alias: contractAlias }]
+  const contractsData = [{ name: contractName, alias: contractAlias }];
 
   beforeEach('setup', async function() {
-    cleanup(packageFileName);
+    fs.createDir(tmpDir);
     await init({ name: appName, version: defaultVersion, packageFileName });
   });
 
-  after(cleanupfn(packageFileName));
+  afterEach(cleanupfn(tmpDir));
 
   it('should add a logic contract an alias and a filename', function() {
     add({ contractsData, packageFileName});

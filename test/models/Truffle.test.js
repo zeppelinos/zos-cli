@@ -12,14 +12,12 @@ contract('Truffle', function () {
   const truffleConfigFile = `${tmpDir}/truffle-config.js`
   const truffleConfigPath = `${process.cwd()}/${truffleConfigFile}`
 
-  afterEach('cleanup files & folders', function () {
-    cleanup(`${contractsDir}/.gitkeep`)
-    cleanup(`${contractsDir}/Sample.sol`)
-    cleanup(contractsDir)
-    cleanup(`${migrationsDir}/01_sample.js`)
-    cleanup(`${migrationsDir}/.gitkeep`)
-    cleanup(migrationsDir)
-    cleanup(truffleConfigFile)
+  beforeEach('cleanup files & folders', function () {
+    fs.createDir(tmpDir)
+  })
+
+  afterEach('', function () {
+    cleanup(tmpDir)
   })
 
   it('should create an empty contracts folder if missing', async function () {

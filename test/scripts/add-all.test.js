@@ -8,14 +8,15 @@ import { FileSystem as fs } from 'zos-lib';
 contract('add-all script', function() {
   const appName = 'MyApp'
   const defaultVersion = '0.1.0'
-  const packageFileName = 'test/tmp/zos.json'
+  const tmpDir = 'test/tmp';
+  const packageFileName = `${tmpDir}/zos.json`;
 
   beforeEach('setup', async function() {
-    cleanup(packageFileName);
+    fs.createDir(tmpDir);
     await init({ name: appName, version: defaultVersion, packageFileName })
   })
 
-  after(cleanupfn(packageFileName))
+  afterEach(cleanupfn(tmpDir))
 
   it('should add all contracts in build contracts dir', function() {
     addAll({ packageFileName })
