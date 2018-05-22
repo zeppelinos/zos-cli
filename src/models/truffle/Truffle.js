@@ -1,8 +1,28 @@
 import path from 'path'
-import { FileSystem as fs } from 'zos-lib'
+import { Logger, FileSystem as fs } from 'zos-lib'
 
-const TruffleInitializer = {
-  call(root = process.cwd()) {
+const log = new Logger('Truffle')
+
+const Truffle = {
+  config() {
+    try {
+      const TruffleConfig = require('truffle-config')
+      return TruffleConfig.detect({ logger: console })
+    } catch (error) {
+      throw Error('You have to provide a truffle.js file, please remember to initialize your project running "zos init".')
+    }
+  },
+
+  compile(config = undefined) {
+    config = config || this.config()
+    log.info("Compiling contracts")
+    const TruffleCompile = require('truffle-workflow-compile')
+    TruffleCompile.compile(config, (err, abstractions, paths) => {
+      if (err) log.error(err)
+    })
+  },
+
+  init(root = process.cwd()) {
     this._initContractsDir(root)
     this._initMigrationsDir(root)
     this._initTruffleConfig(root)
@@ -35,4 +55,4 @@ const TruffleInitializer = {
   },
 }
 
-export default TruffleInitializer
+export default Truffle
