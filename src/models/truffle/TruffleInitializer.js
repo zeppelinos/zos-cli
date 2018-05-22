@@ -19,10 +19,11 @@ const TruffleInitializer = {
   },
 
   _initTruffleConfig(root) {
-    const truffleFile = `${root}/truffle-config.js`
-    if (!fs.exists(truffleFile)) {
+    const truffleFile = `${root}/truffle.js`
+    const truffleConfigFile = `${root}/truffle-config.js`
+    if (!fs.exists(truffleFile) && !fs.exists(truffleConfigFile)) {
       const blueprint = path.resolve(__dirname, './blueprint.truffle.js')
-      fs.copy(blueprint, truffleFile)
+      fs.copy(blueprint, truffleConfigFile)
     }
   },
 
