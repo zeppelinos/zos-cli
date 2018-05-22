@@ -24,18 +24,17 @@ contract('upgrade-proxy command', function([_, owner]) {
   const v1string = '0.1.0';
   const v2string = '0.2.0';
   const network = 'test';
-  const packageFileName = 'test/tmp/zos.json';
-  const networkFileName = `test/tmp/zos.${network}.json`;
+  const tmpDir = 'test/tmp';
+  const packageFileName = `${tmpDir}/zos.json`;
+  const networkFileName = `${tmpDir}/zos.${network}.json`;
 
-  beforeEach(cleanupfn(packageFileName));
-  beforeEach(cleanupfn(networkFileName));
-  after(cleanupfn(packageFileName));
-  after(cleanupfn(networkFileName));
+  beforeEach(() => fs.createDir(tmpDir))
+  afterEach(cleanupfn(tmpDir))
 
   const assertProxyInfo = async function(contractAlias, proxyIndex, { version, implementation, address, value }) {
     const data = fs.parseJson(networkFileName);
     const proxyInfo = data.proxies[contractAlias][proxyIndex];
-    
+
     if (address)  {
       proxyInfo.address.should.eq(address);
     } else {
@@ -52,7 +51,7 @@ contract('upgrade-proxy command', function([_, owner]) {
     if (version)  {
       proxyInfo.version.should.eq(version);
     }
-    
+
     if (value) {
       const proxy = ImplV1.at(proxyInfo.address);
       const actualValue = await proxy.value();
@@ -185,28 +184,28 @@ contract('upgrade-proxy command', function([_, owner]) {
       beforeEach('capturing log output', function () {
         this.logs = new CaptureLogs();
       });
-  
+
       afterEach(function () {
         this.logs.restore();
       });
-  
+
       it('should warn when not migrating a contract with migrate method', async function() {
         await upgradeProxy({ contractAlias: 'Impl', packageFileName, network, txParams });
         this.logs.errors.should.have.lengthOf(1);
         this.logs.errors[0].should.match(/remember running the migration/i);
       });
-  
+
       it('should warn when not migrating a contract that inherits from one with a migrate method', async function() {
         await upgradeProxy({ contractAlias: 'AnotherImpl', packageFileName, network, txParams });
         this.logs.errors.should.have.lengthOf(1);
         this.logs.errors[0].should.match(/remember running the migration/i);
       });
-  
+
       it('should not warn when migrating a contract', async function() {
         await upgradeProxy({ contractAlias: 'Impl', packageFileName, network, txParams, initMethod: 'migrate', initArgs: [42] });
         this.logs.errors.should.have.lengthOf(0);
       });
-  
+
       it('should not warn when a contract has no migrate method', async function() {
         await add({ contractsData: [{ name: 'AnotherImplV1', alias: 'NoMigrate' }], packageFileName });
         await push({ packageFileName, network, txParams });
