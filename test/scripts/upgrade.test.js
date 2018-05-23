@@ -146,7 +146,7 @@ contract('upgrade-proxy command', function([_, owner]) {
 
     it('should upgrade multiple proxies and migrate them', async function() {
       // add non-migratable implementation for AnotherImpl contract
-      await addImplementation({ contractsData: [{ name: 'UnmigratableImplV2', alias: 'AnotherImpl' }], packageFileName })
+      await add({ contractsData: [{ name: 'UnmigratableImplV2', alias: 'AnotherImpl' }], packageFileName })
       await push({ packageFileName, network, txParams });
 
       await upgradeProxy({ contractAlias: undefined, proxyAddress: undefined, all: true, initMethod: "migrate", initArgs: [42], network, packageFileName, txParams }).should.be.rejectedWith(/failed to upgrade/);

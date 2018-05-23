@@ -61,7 +61,7 @@ contract('Truffle', function () {
   it('should create a truffle config file if missing', async function () {
     Truffle.init(tmpDir)
 
-    fs.exists(truffleConfigFile).should.be.true
+    fs.exists(truffleConfigPath).should.be.true
   })
 
   it('should not create a truffle config file if present', async function () {
