@@ -3,7 +3,6 @@ import { FileSystem as fs } from 'zos-lib'
 
 import StdlibProvider from './StdlibProvider';
 import StdlibDeployer from './StdlibDeployer';
-import StdlibInstaller from './StdlibInstaller';
 
 export default class Stdlib {
   static fetch() {
@@ -37,10 +36,6 @@ export default class Stdlib {
   hasContract(alias) {
     if (!this.contracts()) return false;
     return !_.isEmpty(this.contract(alias));
-  }
-
-  async install() {
-    await StdlibInstaller.call(this.nameAndVersion)
   }
 
   getPackage() {

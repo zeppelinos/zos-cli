@@ -1,7 +1,7 @@
 import ControllerFor from "../models/local/ControllerFor";
 import stdout from '../utils/stdout';
 
-export default async function linkStdlib({ stdlibNameVersion, installDeps = false, packageFileName = undefined }) {
+export default async function linkStdlib({ stdlibNameVersion, installDeps = true, packageFileName = undefined }) {
   if (!stdlibNameVersion) {
     throw Error('The stdlib name and version to be linked must be provided.')
   }
