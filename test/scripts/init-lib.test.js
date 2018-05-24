@@ -8,10 +8,11 @@ import { cleanupfn } from "../helpers/cleanup.js";
 contract('init-lib command', function() {
   const appName = "MyLib";
   const appVersion = "0.3.0";
-  const packageFileName = "test/tmp/zos.json";
+  const tmpDir = "test/tmp";
+  const packageFileName = `${tmpDir}/zos.json`;
 
-  beforeEach(cleanupfn(packageFileName))
-  after(cleanupfn(packageFileName))
+  beforeEach(() => fs.createDir(tmpDir))
+  afterEach(cleanupfn(tmpDir))
 
   describe('created file', function() {
     it('should exist', async function() {

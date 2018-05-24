@@ -10,14 +10,15 @@ import linkStdlib from '../../src/scripts/link.js';
 contract('link command', function() {
   const appName = 'MyApp';
   const defaultVersion = '0.1.0';
-  const packageFileName = 'test/tmp/zos.json';
+  const tmpDir = 'test/tmp';
+  const packageFileName = `${tmpDir}/zos.json`;
 
   beforeEach('setup', async function() {
-    cleanup(packageFileName)
+    fs.createDir(tmpDir);
     await init({ name: appName, version: defaultVersion, packageFileName, stdlib: 'mock-stdlib@1.0.0' });
   });
 
-  after('cleanup', cleanupfn(packageFileName));
+  afterEach('cleanup', cleanupfn(tmpDir));
 
   it('should set stdlib', async function () {
     await linkStdlib({ stdlibNameVersion: 'mock-stdlib@1.1.0', packageFileName });
