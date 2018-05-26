@@ -2,4 +2,6 @@ node_modules
 zos*
 build
 lib
+.DS_Store
+.idea
 .node-xmlhttprequest-sync-*

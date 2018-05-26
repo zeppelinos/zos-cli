@@ -45,6 +45,7 @@ export default class LocalBaseController {
       log.error(`Contract ${contractName} has an explicit constructor. Move it to an initializer function to use it with ZeppelinOS.`)
     }
 
+    if (!this.packageData.contracts) this.packageData.contracts = {};
     this.packageData.contracts[contractAlias] = contractName;
   }
 
