@@ -108,5 +108,6 @@ export default class LocalBaseController {
   writePackage() {
     fs.writeJson(this.packageFileName, this.packageData);
     log.info(`Successfully written ${this.packageFileName}`)
+    process.exit(0)
   }
 }
