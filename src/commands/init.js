@@ -1,17 +1,18 @@
 'use strict';
 
-import push from './push'
-import init from '../scripts/init'
-import initLib from '../scripts/init-lib'
+import push from './push';
+import init from '../scripts/init';
+import initLib from '../scripts/init-lib';
 
-const signature = 'init <project> [version]'
-const description = `initialize your ZeppelinOS project. Provide a <project> name and optionally an initial [version] name`
+const signature = 'init <project> [version]';
+const description = 'initialize your ZeppelinOS project. Provide a <project> name and optionally an initial [version] name';
 
 module.exports = {
-  signature, description,
-  register: function(program) {
+  signature,
+  description,
+  register: function (program) {
     program
-      .command(signature, {noHelp: true})
+      .command(signature, { noHelp: true })
       .usage('<project> [version]')
       .description(description)
       .option('--lib', 'create a standard library instead of an application')
@@ -21,18 +22,18 @@ module.exports = {
       .option('--push <network>', 'push changes to the specified network')
       .option('-f, --from <from>', 'specify transaction sender address for --push')
       .action(async function (name, version, options) {
-        const { force } = options
+        const { force } = options;
         if (options.lib) {
-          if (options.stdlib) throw Error('Cannot set a stdlib in a library project')
-          await initLib({ name, version, force })
+          if (options.stdlib) throw Error('Cannot set a stdlib in a library project');
+          await initLib({ name, version, force });
         } else {
-          const { stdlib: stdlibNameVersion, install: installLib } = options
-          await init({ name, version, stdlibNameVersion, installLib, force })
+          const { stdlib: stdlibNameVersion, install: installLib } = options;
+          await init({ name, version, stdlibNameVersion, installLib, force });
         }
-        
+
         if (options.push) {
-          push.action({ network: options.push, from: options.from })
+          push.action({ network: options.push, from: options.from });
         }
-      })
-  }
-}
+      });
+  },
+};

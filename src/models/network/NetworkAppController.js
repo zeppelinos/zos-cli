@@ -1,28 +1,28 @@
 import _ from 'lodash';
 import Stdlib from '../stdlib/Stdlib';
-import { Logger, Contracts, FileSystem as fs, App } from "zos-lib";
+import { Logger, Contracts, FileSystem as fs, App } from 'zos-lib';
 import NetworkBaseController from './NetworkBaseController';
 
 const log = new Logger('NetworkAppController');
 
 export default class NetworkAppController extends NetworkBaseController {
-  constructor(appController, network, txParams, networkFileName) {
+  constructor (appController, network, txParams, networkFileName) {
     super(...arguments);
   }
 
-  get appAddress() {
+  get appAddress () {
     return this.networkPackage.app && this.networkPackage.app.address;
   }
 
-  get defaultNetworkPackage() {
+  get defaultNetworkPackage () {
     return { contracts: {}, proxies: {} };
   }
 
-  isDeployed() {
+  isDeployed () {
     return !!this.appAddress;
   }
 
-  async deploy() {
+  async deploy () {
     this.app = await App.deploy(this.packageData.version, this.txParams);
     this.networkPackage.app = { address: this.app.address() };
     this.networkPackage.version = this.packageData.version;
@@ -30,37 +30,37 @@ export default class NetworkAppController extends NetworkBaseController {
     this.networkPackage.provider = { address: this.app.currentDirectory().address };
   }
 
-  async fetch() {
+  async fetch () {
     const address = this.appAddress;
     if (!address) throw Error('Your application must be deployed to interact with it.');
     this.app = await App.fetch(address, this.txParams);
   }
 
-  async push(reupload = false) {
+  async push (reupload = false) {
     await super.push(reupload);
-    await this.linkStdlib()
+    await this.linkStdlib();
   }
 
-  async deployStdlib() {
+  async deployStdlib () {
     if (!this.localController.hasStdlib()) {
       delete this.networkPackage['stdlib'];
       return;
     }
     const stdlibAddress = await Stdlib.deploy(this.packageData.stdlib.name, this.txParams);
-    this.networkPackage.stdlib = { address: stdlibAddress, customDeploy: true, ... this.packageData.stdlib };
+    this.networkPackage.stdlib = { address: stdlibAddress, customDeploy: true, ...this.packageData.stdlib };
   }
 
-  async newVersion(versionName) {
+  async newVersion (versionName) {
     // REFACTOR: App should return the newly created directory upon newVersion
     await this.app.newVersion(versionName);
     return this.app.currentDirectory();
   }
 
-  setImplementation(contractClass, contractAlias) {
+  setImplementation (contractClass, contractAlias) {
     return this.app.setImplementation(contractClass, contractAlias);
   }
 
-  async createProxy(contractAlias, initMethod, initArgs) {
+  async createProxy (contractAlias, initMethod, initArgs) {
     await this.fetch();
 
     const contractClass = this.localController.getContractClass(contractAlias);
@@ -71,7 +71,7 @@ export default class NetworkAppController extends NetworkBaseController {
     const proxyInfo = {
       address: proxyInstance.address,
       version: this.app.version,
-      implementation: implementationAddress
+      implementation: implementationAddress,
     };
 
     const proxies = this.networkPackage.proxies;
@@ -80,51 +80,50 @@ export default class NetworkAppController extends NetworkBaseController {
     return proxyInstance;
   }
 
-  checkInitialization(contractClass, calledInitMethod, calledInitArgs) {
+  checkInitialization (contractClass, calledInitMethod, calledInitArgs) {
     // If there is an initializer called, assume it's ok
     if (calledInitMethod) return;
 
     // Otherwise, warn the user to invoke it
     const initializeMethod = contractClass.abi.find(fn => fn.type === 'function' && fn.name === 'initialize');
     if (!initializeMethod) return;
-    log.error(`Possible initialization method 'initialize' found in contract. Make sure you initialize your instance.`);
+    log.error('Possible initialization method `initialize` found in contract. Make sure you initialize your instance.');
   }
 
-  async upgradeProxies(contractAlias, proxyAddress, initMethod, initArgs) {
+  async upgradeProxies (contractAlias, proxyAddress, initMethod, initArgs) {
     const proxyInfos = this.getProxies(contractAlias, proxyAddress);
     if (_.isEmpty(proxyInfos) || (contractAlias && _.isEmpty(proxyInfos[contractAlias]))) {
-      log.info("No proxies to upgrade were found");
+      log.info('No proxies to upgrade were found');
       return;
     }
 
     await this.fetch();
     const newVersion = this.app.version;
-    const failures = []
+    const failures = [];
     await Promise.all(_.flatMap(proxyInfos, (contractProxyInfos, contractAlias) => {
       const contractClass = this.localController.getContractClass(contractAlias);
       this.checkUpgrade(contractClass, initMethod, initArgs);
       return _.map(contractProxyInfos, async (proxyInfo) => {
         try {
-          const currentImplementation = await this.app.getProxyImplementation(proxyInfo.address)
-          const contractImplementation = await this.app.getImplementation(contractAlias)
-          if(currentImplementation !== contractImplementation) {
+          const currentImplementation = await this.app.getProxyImplementation(proxyInfo.address);
+          const contractImplementation = await this.app.getImplementation(contractAlias);
+          if (currentImplementation !== contractImplementation) {
             await this.app.upgradeProxy(proxyInfo.address, contractClass, contractAlias, initMethod, initArgs);
             proxyInfo.implementation = await this.app.getImplementation(contractAlias);
-          }
-          else {
-            log.info(`Contract ${contractAlias} at ${proxyInfo.address} is up to date.`)
-            proxyInfo.implementation = currentImplementation
+          } else {
+            log.info(`Contract ${contractAlias} at ${proxyInfo.address} is up to date.`);
+            proxyInfo.implementation = currentImplementation;
           }
           proxyInfo.version = newVersion;
-        } catch(error) {
-          failures.push({ proxyInfo, contractAlias, error })
+        } catch (error) {
+          failures.push({ proxyInfo, contractAlias, error });
         }
       });
     }));
 
-    if(!_.isEmpty(failures)) {
-      const message = failures.map(failure => `Proxy ${failure.contractAlias} at ${failure.proxyInfo.address} failed to upgrade with ${failure.error.message}`).join('\n')
-      throw Error(message)
+    if (!_.isEmpty(failures)) {
+      const message = failures.map(failure => `Proxy ${failure.contractAlias} at ${failure.proxyInfo.address} failed to upgrade with ${failure.error.message}`).join('\n');
+      throw Error(message);
     }
 
     return proxyInfos;
@@ -132,24 +131,24 @@ export default class NetworkAppController extends NetworkBaseController {
 
   /**
    * Returns all proxies, optionally filtered by a contract alias and a proxy address
-   * @param {*} contractAlias 
-   * @param {*} proxyAddress 
+   * @param {*} contractAlias
+   * @param {*} proxyAddress
    * @returns an object with contract aliases as keys, and arrays of Proxy (address, version) as values
    */
-  getProxies(contractAlias, proxyAddress) {
+  getProxies (contractAlias, proxyAddress) {
     if (!contractAlias) {
       if (proxyAddress) throw Error('Must set contract alias if filtering by proxy address.');
       return this.networkPackage.proxies;
     }
 
-    return { 
+    return {
       [contractAlias]: _.filter(this.networkPackage.proxies[contractAlias], proxy => (
         !proxyAddress || proxy.address === proxyAddress
-      ))
+      )),
     };
   }
 
-  checkUpgrade(contractClass, calledMigrateMethod, calledMigrateArgs) {
+  checkUpgrade (contractClass, calledMigrateMethod, calledMigrateArgs) {
     // If there is a migration called, assume it's ok
     if (calledMigrateMethod) return;
 
@@ -159,7 +158,7 @@ export default class NetworkAppController extends NetworkBaseController {
     log.error(`Possible migration method 'migrate' found in contract ${contractClass.contractName}. Remember running the migration after deploying it.`);
   }
 
-  async linkStdlib() {
+  async linkStdlib () {
     if (!this.localController.hasStdlib()) {
       await this.app.setStdlib();
       delete this.networkPackage['stdlib'];
@@ -180,26 +179,24 @@ export default class NetworkAppController extends NetworkBaseController {
     const stdlibName = this.packageData.stdlib.name;
     log.info(`Connecting to public deployment of ${stdlibName} in ${this.network}`);
     const stdlibAddress = Stdlib.fetch(stdlibName, this.packageData.stdlib.version, this.network);
-    const currentStdlibAddress = await this.app.currentStdlib()
-    if(stdlibAddress !== currentStdlibAddress) {
+    const currentStdlibAddress = await this.app.currentStdlib();
+    if (stdlibAddress !== currentStdlibAddress) {
       await this.app.setStdlib(stdlibAddress);
-      this.networkPackage.stdlib = { address: stdlibAddress, ... this.packageData.stdlib };
-    }
-    else log.info(`Current application is already linked to stdlib ${stdlibName} at ${stdlibAddress} in ${this.network}`);
+      this.networkPackage.stdlib = { address: stdlibAddress, ...this.packageData.stdlib };
+    } else log.info(`Current application is already linked to stdlib ${stdlibName} at ${stdlibAddress} in ${this.network}`);
   }
 
-  areSameStdlib(aStdlib, anotherStdlib) {
-    return aStdlib.name === anotherStdlib.name && aStdlib.version === anotherStdlib.version
+  areSameStdlib (aStdlib, anotherStdlib) {
+    return aStdlib.name === anotherStdlib.name && aStdlib.version === anotherStdlib.version;
   }
 
-  isStdlibContract(contractAlias) {
+  isStdlibContract (contractAlias) {
     if (!this.localController.hasStdlib()) return false;
     const stdlib = new Stdlib(this.packageData.stdlib.name);
     return stdlib.hasContract(contractAlias);
   }
 
-  isContractDefined(contractAlias) {
+  isContractDefined (contractAlias) {
     return super.isContractDefined(contractAlias) || this.isStdlibContract(contractAlias);
   }
-
 }

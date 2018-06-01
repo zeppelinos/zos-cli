@@ -6,7 +6,9 @@
   "scripts": {
     "prepack": "truffle compile && rm -rf lib && babel src --out-dir lib",
     "test": "NODE_ENV=test ./node_modules/.bin/truffle test",
-    "gen-docs": "babel-node docs/bin/docs.js"
+    "gen-docs": "babel-node docs/bin/docs.js",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix"
   },
   "bin": {
     "zos": "./lib/bin/zos-cli.js"
@@ -54,6 +56,12 @@
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
     "chai-bignumber": "^2.0.2",
+    "eslint": "^4.19.1",
+    "eslint-config-standard": "^11.0.0",
+    "eslint-plugin-import": "^2.12.0",
+    "eslint-plugin-node": "^6.0.1",
+    "eslint-plugin-promise": "^3.8.0",
+    "eslint-plugin-standard": "^3.1.0",
     "mock-stdlib": "file:./test/mocks/mock-stdlib",
     "mock-stdlib-2": "file:./test/mocks/mock-stdlib-2",
     "mock-stdlib-invalid": "file:./test/mocks/mock-stdlib-invalid",
