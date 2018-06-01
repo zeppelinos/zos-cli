@@ -1,15 +1,16 @@
 'use strict';
 
-import push from './push'
-import bump from '../scripts/bump'
+import push from './push';
+import bump from '../scripts/bump';
 
-const signature = 'bump <version>'
-const description = 'bump your project to a new <version>'
+const signature = 'bump <version>';
+const description = 'bump your project to a new <version>';
 module.exports = {
-  signature, description,
-  register: function(program) {
+  signature,
+  description,
+  register: function (program) {
     program
-      .command(signature, {noHelp: true})
+      .command(signature, { noHelp: true })
       .usage('<version> [options]')
       .description(description)
       .option('--link <stdlib>', 'link to new standard library version')
@@ -17,9 +18,9 @@ module.exports = {
       .option('--push <network>', 'push changes to the specified network after bumping version')
       .option('-f, --from <from>', 'specify transaction sender address for --push')
       .action(async function (version, options) {
-        const { link: stdlibNameVersion, install: installLib } = options
-        await bump({ version, stdlibNameVersion, installLib })
-        if(options.push) push.action({ network: options.push, from: options.from })
-      })
-  }
-}
+        const { link: stdlibNameVersion, install: installLib } = options;
+        await bump({ version, stdlibNameVersion, installLib });
+        if (options.push) push.action({ network: options.push, from: options.from });
+      });
+  },
+};

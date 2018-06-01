@@ -1,19 +1,28 @@
-import ControllerFor from  '../models/local/ControllerFor'
+import ControllerFor from '../models/local/ControllerFor';
 import stdout from '../utils/stdout';
 
-export default async function bumpVersion({ version, stdlibNameVersion = undefined, installLib = false, packageFileName = undefined }) {
-  if (version === undefined || version === '') throw Error('A version name must be provided to initialize a new version.')
+export default async function bumpVersion (
+  {
+    version,
+    stdlibNameVersion = undefined,
+    installLib = false,
+    packageFileName = undefined,
+  }
+) {
+  if (version === undefined || version === '') {
+    throw Error('A version name must be provided to initialize a new version.');
+  }
 
-  const appController = ControllerFor(packageFileName)
+  const appController = ControllerFor(packageFileName);
   if (stdlibNameVersion && appController.isLib()) {
-    throw Error("Cannot link a stdlib for a lib project");
+    throw Error('Cannot link a stdlib for a lib project');
   }
 
-  appController.bumpVersion(version)
+  appController.bumpVersion(version);
   if (!appController.isLib()) {
-    await appController.linkStdlib(stdlibNameVersion, installLib)
+    await appController.linkStdlib(stdlibNameVersion, installLib);
   }
 
-  appController.writePackage()
-  stdout(version)
+  appController.writePackage();
+  stdout(version);
 }

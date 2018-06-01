@@ -5,55 +5,55 @@ import { Contracts, Logger, FileSystem as fs, App } from 'zos-lib';
 const log = new Logger('NetworkController');
 
 export default class NetworkBaseController {
-  constructor(localController, network, txParams, networkFileName) {
+  constructor (localController, network, txParams, networkFileName) {
     this.localController = localController;
     this.txParams = txParams;
     this.network = network;
     this.networkFileName = networkFileName || localController.packageFileName.replace(/\.json\s*$/, `.${network}.json`);
     if (this.networkFileName === localController.packageFileName) {
-      throw Error(`Cannot create network file name from ${localController.packageFileName}`)
+      throw Error(`Cannot create network file name from ${localController.packageFileName}`);
     }
   }
 
-  get isDeployed() {
-    throw Error("Unimplemented function isDeployed()");
+  get isDeployed () {
+    throw Error('Unimplemented function isDeployed()');
   }
 
-  get packageAddress() {
+  get packageAddress () {
     return this.networkPackage.package && this.networkPackage.package.address;
   }
 
-  get packageData() {
+  get packageData () {
     return this.localController.packageData;
   }
 
-  get networkPackage() {
+  get networkPackage () {
     if (!this._networkPackage) {
       this._networkPackage = fs.parseJsonIfExists(this.networkFileName) || _.cloneDeep(this.defaultNetworkPackage);
     }
     return this._networkPackage;
   }
 
-  get defaultNetworkPackage() {
+  get defaultNetworkPackage () {
     return { contracts: {} };
   }
 
-  writeNetworkPackage() {
+  writeNetworkPackage () {
     fs.writeJson(this.networkFileName, this.networkPackage);
-    log.info(`Successfully written ${this.networkFileName}`)
+    log.info(`Successfully written ${this.networkFileName}`);
   }
 
-  async init() {
+  async init () {
     return await (this.isDeployed() ? this.fetch() : this.deploy());
   }
 
-  async push(reupload = false) {
-    await this.init()
-    await this.pushVersion()
-    await this.uploadContracts(reupload)
+  async push (reupload = false) {
+    await this.init();
+    await this.pushVersion();
+    await this.uploadContracts(reupload);
   }
 
-  async pushVersion() {
+  async pushVersion () {
     const requestedVersion = this.packageData.version;
     const currentVersion = this.networkPackage.version;
     if (requestedVersion !== currentVersion) {
@@ -65,8 +65,8 @@ export default class NetworkBaseController {
     this.networkPackage.version = requestedVersion;
   }
 
-  async uploadContracts(reupload) {
-    const failures = []
+  async uploadContracts (reupload) {
+    const failures = [];
     await Promise.all(
       _(this.packageData.contracts)
         .toPairs()
@@ -76,26 +76,27 @@ export default class NetworkBaseController {
             .catch(error => failures.push({ contractAlias, error }))
         )
     );
-    if(!_.isEmpty(failures)) {
-      const message = failures.map(failure => `${failure.contractAlias} deployment failed with ${failure.error.message}`).join('\n')
-      throw Error(message)
+    if (!_.isEmpty(failures)) {
+      const message = failures.map(
+        failure => `${failure.contractAlias} deployment failed with ${failure.error.message}`).join('\n');
+      throw Error(message);
     }
   }
 
-  async uploadContract(contractAlias, contractName) {
+  async uploadContract (contractAlias, contractName) {
     const contractClass = Contracts.getFromLocal(contractName);
     log.info(`Uploading ${contractName} contract as ${contractAlias}`);
     const contractInstance = await this.setImplementation(contractClass, contractAlias);
     this.networkPackage.contracts[contractAlias] = {
       address: contractInstance.address,
-      bytecodeHash: bytecodeDigest(contractClass.bytecode)
+      bytecodeHash: bytecodeDigest(contractClass.bytecode),
     };
   }
 
-  checkLocalContractsDeployed(throwIfFail = false) {
+  checkLocalContractsDeployed (throwIfFail = false) {
     const contracts = _.keys(this.packageData.contracts);
     let msg;
-    
+
     const [contractsDeployed, contractsMissing] = _.partition(contracts, (alias) => this.isContractDeployed(alias));
     const contractsChanged = _.filter(contractsDeployed, (alias) => this.hasContractChanged(alias));
 
@@ -106,10 +107,10 @@ export default class NetworkBaseController {
     }
 
     if (msg && throwIfFail) throw Error(msg);
-    else if (msg) log.info(msg);    
+    else if (msg) log.info(msg);
   }
 
-  checkLocalContractDeployed(contractAlias, throwIfFail = false) {
+  checkLocalContractDeployed (contractAlias, throwIfFail = false) {
     let msg;
     if (!this.isContractDefined(contractAlias)) {
       msg = `Contract ${contractAlias} not found in application or stdlib`;
@@ -123,7 +124,7 @@ export default class NetworkBaseController {
     else if (msg) log.info(msg);
   }
 
-  hasContractChanged(contractAlias) {
+  hasContractChanged (contractAlias) {
     const contractName = this.packageData.contracts[contractAlias];
     if (!this.isApplicationContract(contractAlias)) return false;
     if (!this.isContractDeployed(contractAlias)) return true;
@@ -133,19 +134,19 @@ export default class NetworkBaseController {
     return currentBytecode !== deployedBytecode;
   }
 
-  isApplicationContract(contractAlias) {
+  isApplicationContract (contractAlias) {
     return !!this.packageData.contracts[contractAlias];
   }
 
-  isContractDefined(contractAlias) {
+  isContractDefined (contractAlias) {
     return this.isApplicationContract(contractAlias);
   }
 
-  isContractDeployed(contractAlias) {
+  isContractDeployed (contractAlias) {
     return !this.isApplicationContract(contractAlias) || !_.isEmpty(this.networkPackage.contracts[contractAlias]);
   }
 
-  isLib() {
+  isLib () {
     return this.localController.isLib();
   }
 }

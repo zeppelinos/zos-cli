@@ -1,13 +1,14 @@
 'use strict';
 
-import push from './push'
-import linkStdlib from '../scripts/link'
+import push from './push';
+import linkStdlib from '../scripts/link';
 
-const signature = 'link <stdlib>'
-const description = 'links project with a standard library located in the <stdlib> npm package'
+const signature = 'link <stdlib>';
+const description = 'links project with a standard library located in the <stdlib> npm package';
 module.exports = {
-  signature, description,
-  register: function(program) {
+  signature,
+  description,
+  register: function (program) {
     program
       .command(signature, { noHelp: true })
       .usage('<stdlib> [options]')
@@ -16,9 +17,9 @@ module.exports = {
       .option('--push <network>', 'push changes to the specified network')
       .option('-f, --from <from>', 'specify transaction sender address for --push')
       .action(async function (stdlibNameVersion, options) {
-        const installLib = options.install
-        await linkStdlib({ stdlibNameVersion, installLib })
-        if(options.push) push.action({ network: options.push, from: options.from })
-      })
-  }
-}
+        const installLib = options.install;
+        await linkStdlib({ stdlibNameVersion, installLib });
+        if (options.push) push.action({ network: options.push, from: options.from });
+      });
+  },
+};

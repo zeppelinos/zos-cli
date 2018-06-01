@@ -5,35 +5,35 @@ import StdlibInstaller from '../stdlib/StdlibInstaller';
 import NetworkAppController from '../network/NetworkAppController';
 
 export default class LocalAppController extends LocalBaseController {
-  constructor(packageFileName, allowLib = false) {
+  constructor (packageFileName, allowLib = false) {
     super(packageFileName);
     if (this.packageData.lib && !allowLib) {
-      throw Error("Cannot create an application controller for a library");
+      throw Error('Cannot create an application controller for a library');
     }
   }
 
-  onNetwork(network, txParams, networkFileName) {
+  onNetwork (network, txParams, networkFileName) {
     return new NetworkAppController(this, network, txParams, networkFileName);
   }
 
-  async linkStdlib(stdlibNameVersion, installLib = false) {
-    if(stdlibNameVersion) {
+  async linkStdlib (stdlibNameVersion, installLib = false) {
+    if (stdlibNameVersion) {
       const stdlib = installLib
         ? await StdlibInstaller.call(stdlibNameVersion)
-        : new Stdlib(stdlibNameVersion)
+        : new Stdlib(stdlibNameVersion);
 
       this.packageData.stdlib = {
         name: stdlib.getName(),
-        version: stdlib.getVersion()
-      }
+        version: stdlib.getVersion(),
+      };
     }
   }
 
-  hasStdlib() {
+  hasStdlib () {
     return !_.isEmpty(this.packageData.stdlib);
   }
 
-  isLib() {
+  isLib () {
     return false;
   }
 }
