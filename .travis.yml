@@ -7,16 +7,10 @@ node_js:
 cache:
   directories:
   - node_modules
+  - build
 env:
-  - TEST_FILES="./test/scripts/create.test.js"
-  - TEST_FILES="./test/scripts/push.test.js"
-  - TEST_FILES="./test/scripts/push-with-stdlib.test.js"
-  - TEST_FILES="./test/scripts/status.test.js"
-  - TEST_FILES="./test/scripts/upgrade.test.js"
-  - TEST_FILES=$(echo ./test/scripts/{add-all,add,bump,freeze,init*,link}.test.js)
-  - TEST_FILES=$(echo ./test/{models,utils}/)
+  - CONCURRENCY=4
 matrix:
   fast_finish: true
 script:
-  - npx truffle compile
-  - npm test -- $TEST_FILES
+  - ./.travis.test.sh
