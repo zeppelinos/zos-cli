@@ -1,8 +1,8 @@
 'use strict';
 
-import init from '../../src/scripts/init.js'
-import addAll from '../../src/scripts/add-all'
-import { cleanup, cleanupfn } from '../helpers/cleanup.js';
+import init from '../src/scripts/init.js'
+import addAll from '../src/scripts/add-all'
+import { cleanup, cleanupfn } from './helpers/cleanup.js';
 import { FileSystem as fs } from 'zos-lib';
 
 contract('add-all script', function() {

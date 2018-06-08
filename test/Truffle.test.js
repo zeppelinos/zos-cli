@@ -1,9 +1,9 @@
 'use strict'
-require('../setup')
+require('./setup')
 
 import { FileSystem as fs } from 'zos-lib'
-import { cleanup } from '../helpers/cleanup.js'
-import Truffle from '../../src/models/truffle/Truffle.js'
+import { cleanup } from './helpers/cleanup.js'
+import Truffle from '../src/models/truffle/Truffle.js'
 
 contract('Truffle', function () {
   const tmpDir = "test/tmp";

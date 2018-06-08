@@ -1,15 +1,15 @@
 'use strict'
-require('../setup')
+require('./setup')
 
-import CaptureLogs from '../helpers/captureLogs';
-import { cleanup, cleanupfn } from '../helpers/cleanup.js';
+import CaptureLogs from './helpers/captureLogs';
+import { cleanup, cleanupfn } from './helpers/cleanup.js';
 import { Contracts, Logger, FileSystem as fs } from 'zos-lib';
 
-import add from '../../src/scripts/add.js';
-import init from '../../src/scripts/init.js';
-import push from '../../src/scripts/push.js';
-import createProxy from '../../src/scripts/create.js';
-import linkStdlib from '../../src/scripts/link.js';
+import add from '../src/scripts/add.js';
+import init from '../src/scripts/init.js';
+import push from '../src/scripts/push.js';
+import createProxy from '../src/scripts/create.js';
+import linkStdlib from '../src/scripts/link.js';
 
 const ImplV1 = Contracts.getFromLocal('ImplV1');
 
@@ -165,5 +165,5 @@ contract('create script', function([_, owner]) {
       await assertProxy(data.proxies[contractAlias][0], { version: defaultVersion, say: 'V1' });
     });
   });
-  
+
 });

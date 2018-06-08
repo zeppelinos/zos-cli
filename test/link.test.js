@@ -1,11 +1,11 @@
 'use strict'
-require('../setup')
+require('./setup')
 
 import { FileSystem as fs } from 'zos-lib';
-import { cleanup, cleanupfn } from '../helpers/cleanup.js';
+import { cleanup, cleanupfn } from './helpers/cleanup.js';
 
-import init from '../../src/scripts/init.js';
-import linkStdlib from '../../src/scripts/link.js';
+import init from '../src/scripts/init.js';
+import linkStdlib from '../src/scripts/link.js';
 
 contract('link script', function() {
   const appName = 'MyApp';

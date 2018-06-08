@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "scripts": {
     "prepack": "truffle compile && rm -rf lib && babel src --out-dir lib",
-    "test": "NODE_ENV=test ./node_modules/.bin/truffle test",
+    "test": "./node_modules/.bin/espresso ./test",
     "gen-docs": "babel-node docs/bin/docs.js"
   },
   "bin": {
@@ -33,8 +33,8 @@
     "chalk": "^2.4.1",
     "colors": "^1.2.1",
     "commander": "^2.15.1",
+    "espresso-tests": "^1.0.5",
     "ethereumjs-abi": "^0.6.5",
-    "file": "^0.2.2",
     "lodash": "^4.17.5",
     "npm-programmatic": "0.0.10",
     "shelljs": "^0.8.1",
@@ -55,8 +55,6 @@
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
     "chai-bignumber": "^2.0.2",
-    "mocha": "^5.2.0",
-    "mocha-parallel-tests": "^2.0.2",
     "mock-stdlib": "file:./test/mocks/mock-stdlib",
     "mock-stdlib-2": "file:./test/mocks/mock-stdlib-2",
     "mock-stdlib-invalid": "file:./test/mocks/mock-stdlib-invalid",

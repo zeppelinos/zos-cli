@@ -1,13 +1,13 @@
 'use strict'
-require('../setup')
+require('./setup')
 
-import { cleanup, cleanupfn } from '../helpers/cleanup'
+import { cleanup, cleanupfn } from './helpers/cleanup'
 import { Contracts, FileSystem as fs, App, Package } from 'zos-lib'
 
-import push from '../../src/scripts/push.js';
-import freeze from '../../src/scripts/freeze';
-import add from '../../src/scripts/add';
-import bumpVersion from '../../src/scripts/bump';
+import push from '../src/scripts/push.js';
+import freeze from '../src/scripts/freeze';
+import add from '../src/scripts/add';
+import bumpVersion from '../src/scripts/bump';
 
 const ImplV1 = Contracts.getFromLocal('ImplV1');
 const PackageContract = Contracts.getFromNodeModules('zos-lib', 'Package');

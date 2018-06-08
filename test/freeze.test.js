@@ -1,11 +1,11 @@
 'use strict'
-require('../setup')
+require('./setup')
 
 import { FileSystem as fs, Package } from 'zos-lib'
 
-import push from '../../src/scripts/push.js'
-import freeze from '../../src/scripts/freeze.js'
-import { cleanup, cleanupfn } from '../helpers/cleanup'
+import push from '../src/scripts/push.js'
+import freeze from '../src/scripts/freeze.js'
+import { cleanup, cleanupfn } from './helpers/cleanup'
 
 contract('freeze script', function([_, owner]) {
   const network = "test"

@@ -1,8 +1,8 @@
 'use strict'
-require('../setup')
+require('./setup')
 
 import { Contracts } from 'zos-lib'
-import testApp from '../../src/models/TestApp';
+import testApp from '../src/models/TestApp';
 
 const ImplV1 = Contracts.getFromLocal('ImplV1');
 const ImplV2 = Contracts.getFromLocal('ImplV2');
@@ -38,7 +38,7 @@ contract('TestApp', function ([_, owner]) {
   it('returns the current directory', async function () {
     this.app.currentDirectory().address.should.be.not.null;
   });
-    
+
   it('deploys stdlib', async function () {
     (await this.directory.stdlib()).should.be.not.null;
   })

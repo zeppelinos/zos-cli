@@ -1,7 +1,7 @@
 'use strict'
-require('../setup');
+require('./setup');
 
-import { parseArgs, parseInit } from '../../src/utils/input';
+import { parseArgs, parseInit } from '../src/utils/input';
 
 describe('input', function () {
   describe('parseArgs', function () {

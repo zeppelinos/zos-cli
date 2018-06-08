@@ -1,16 +1,16 @@
 'use strict'
-require('../setup')
+require('./setup')
 
-import CaptureLogs from '../helpers/captureLogs';
-import { cleanupfn } from "../helpers/cleanup.js";
+import CaptureLogs from './helpers/captureLogs';
+import { cleanupfn } from "./helpers/cleanup.js";
 import { Contracts, FileSystem as fs, Logger } from "zos-lib";
 
-import init from '../../src/scripts/init.js';
-import add from '../../src/scripts/add.js';
-import push from '../../src/scripts/push.js';
-import bumpVersion from '../../src/scripts/bump.js';
-import createProxy from '../../src/scripts/create.js';
-import upgradeProxy from '../../src/scripts/upgrade.js';
+import init from '../src/scripts/init.js';
+import add from '../src/scripts/add.js';
+import push from '../src/scripts/push.js';
+import bumpVersion from '../src/scripts/bump.js';
+import createProxy from '../src/scripts/create.js';
+import upgradeProxy from '../src/scripts/upgrade.js';
 
 const ImplV1 = Contracts.getFromLocal('ImplV1')
 const ImplV2 = Contracts.getFromLocal('ImplV2')
@@ -35,7 +35,7 @@ contract('upgrade-proxy script', function([_, owner]) {
   const assertProxyInfo = async function(contractAlias, proxyIndex, { version, implementation, address, value }) {
     const data = fs.parseJson(networkFileName);
     const proxyInfo = data.proxies[contractAlias][proxyIndex];
-    
+
     if (address)  {
       proxyInfo.address.should.eq(address);
     } else {
@@ -52,7 +52,7 @@ contract('upgrade-proxy script', function([_, owner]) {
     if (version)  {
       proxyInfo.version.should.eq(version);
     }
-    
+
     if (value) {
       const proxy = ImplV1.at(proxyInfo.address);
       const actualValue = await proxy.value();
@@ -185,28 +185,28 @@ contract('upgrade-proxy script', function([_, owner]) {
       beforeEach('capturing log output', function () {
         this.logs = new CaptureLogs();
       });
-  
+
       afterEach(function () {
         this.logs.restore();
       });
-  
+
       it('should warn when not migrating a contract with migrate method', async function() {
         await upgradeProxy({ contractAlias: 'Impl', packageFileName, network, txParams });
         this.logs.errors.should.have.lengthOf(1);
         this.logs.errors[0].should.match(/remember running the migration/i);
       });
-  
+
       it('should warn when not migrating a contract that inherits from one with a migrate method', async function() {
         await upgradeProxy({ contractAlias: 'AnotherImpl', packageFileName, network, txParams });
         this.logs.errors.should.have.lengthOf(1);
         this.logs.errors[0].should.match(/remember running the migration/i);
       });
-  
+
       it('should not warn when migrating a contract', async function() {
         await upgradeProxy({ contractAlias: 'Impl', packageFileName, network, txParams, initMethod: 'migrate', initArgs: [42] });
         this.logs.errors.should.have.lengthOf(0);
       });
-  
+
       it('should not warn when a contract has no migrate method', async function() {
         await add({ contractsData: [{ name: 'AnotherImplV1', alias: 'NoMigrate' }], packageFileName });
         await push({ packageFileName, network, txParams });
