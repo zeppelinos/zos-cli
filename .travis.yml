@@ -8,9 +8,8 @@ cache:
   directories:
   - node_modules
   - build
-env:
-  - CONCURRENCY=4
 matrix:
   fast_finish: true
 script:
-  - ./.travis.test.sh
+  - npx truffle compile
+  - node mocha.js
