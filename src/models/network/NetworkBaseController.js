@@ -41,6 +41,7 @@ export default class NetworkBaseController {
   writeNetworkPackage() {
     fs.writeJson(this.networkFileName, this.networkPackage);
     log.info(`Successfully written ${this.networkFileName}`)
+    process.exit(0)
   }
 
   async init() {
