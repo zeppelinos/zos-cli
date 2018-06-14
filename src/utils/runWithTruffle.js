@@ -1,14 +1,11 @@
 import Truffle from '../models/truffle/Truffle';
-import { FileSystem as fs } from 'zos-lib';
+import { getNetwork as getSessionNetworkOrUndefined } from '../scripts/session';
 
 export default async function runWithTruffle(script, network, compile = false) {
   const config = Truffle.config()
 
   if (!network) {
-    try {
-      network = fs.read('/tmp/.zos_session').toString()
-    } catch(e) {
-    }
+    network = getSessionNetworkOrUndefined();
   }
 
   if(!network) throw Error('A network name must be provided to execute the requested action.')

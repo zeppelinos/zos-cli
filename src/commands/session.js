@@ -1,24 +1,21 @@
 'use strict';
 
-import { FileSystem as fs } from 'zos-lib'
-import { Logger } from 'zos-lib'
+import { setNetwork as setNetwork } from '../scripts/session';
 
-const signature = 'session <network>'
-const description = 'by providing <network>, commands like create, ' +
+const signature = 'session';
+const description = 'by providing --network <network>, commands like create, ' +
                     'freeze, push, status and upgrade will use <network> ' +
-                    'unless overriden.'
+                    'unless overriden. Use --remove to undo.';
 
 module.exports = {
   signature, description,
   register: function(program) {
     program
-      .command(signature, {noHelp: true})
-      .usage('<network>')
+      .command(signature, {noHelp: false})
+      .usage('Either --network <network> or --remove')
+      .option('--network <network>')
+      .option('--remove')
       .description(description)
-      .action(async function (networkName, options) {
-        fs.write('/tmp/.zos_session', networkName)
-        let log = new Logger('commands/session')
-        log.info('Using "' + networkName + '" as default network unless overriden.')
-      })
+      .action(setNetwork);
   }
 }
