@@ -1,13 +1,12 @@
-import _ from 'lodash';
 import Stdlib from '../stdlib/Stdlib';
-import LocalBaseController from './LocalBaseController';
 import StdlibInstaller from '../stdlib/StdlibInstaller';
+import LocalBaseController from './LocalBaseController';
 import NetworkAppController from '../network/NetworkAppController';
 
 export default class LocalAppController extends LocalBaseController {
   constructor(packageFileName, allowLib = false) {
     super(packageFileName);
-    if (this.packageData.lib && !allowLib) {
+    if (this.packageFile.isLib() && !allowLib) {
       throw Error("Cannot create an application controller for a library");
     }
   }
@@ -22,18 +21,8 @@ export default class LocalAppController extends LocalBaseController {
         ? await StdlibInstaller.call(stdlibNameVersion)
         : new Stdlib(stdlibNameVersion)
 
-      this.packageData.stdlib = {
-        name: stdlib.getName(),
-        version: stdlib.getVersion()
-      }
+      const { name, version } = stdlib
+      this.packageFile.stdlib = { name, version }
     }
-  }
-
-  hasStdlib() {
-    return !_.isEmpty(this.packageData.stdlib);
-  }
-
-  isLib() {
-    return false;
   }
 }
