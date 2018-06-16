@@ -8,8 +8,8 @@ const log = new Logger('LocalController');
 const DEFAULT_VERSION = '0.1.0';
 
 export default class LocalBaseController {
-  constructor(packageFileName = 'zos.json') {
-    this.packageFile = new ZosPackageFile(packageFileName);
+  constructor(packageFile) {
+    this.packageFile = packageFile
   }
 
   isLib() {

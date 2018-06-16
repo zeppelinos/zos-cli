@@ -100,8 +100,8 @@ export default class ZosPackageFile {
     this.data.contracts[alias] = name
   }
 
-  networkFile(network, networkFileName = undefined) {
-    if(!networkFileName) networkFileName = this.fileName.replace(/\.json\s*$/, `.${network}.json`)
+  networkFile(network) {
+    const networkFileName = this.fileName.replace(/\.json\s*$/, `.${network}.json`)
     if(networkFileName === this.fileName) throw Error(`Cannot create network file name from ${this.fileName}`)
     return new ZosNetworkFile(this, network, networkFileName)
   }

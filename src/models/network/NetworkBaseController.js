@@ -4,11 +4,11 @@ import { Contracts, Logger, App } from 'zos-lib';
 const log = new Logger('NetworkController');
 
 export default class NetworkBaseController {
-  constructor(localController, network, txParams, networkFileName) {
+  constructor(localController, network, txParams, networkFile = undefined) {
     this.localController = localController;
     this.txParams = txParams;
     this.network = network;
-    this.networkFile = localController.packageFile.networkFile(network, networkFileName)
+    this.networkFile = networkFile || localController.packageFile.networkFile(network)
   }
 
   get packageFile() {
