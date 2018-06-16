@@ -1,14 +1,14 @@
 import _ from 'lodash';
 import { Logger } from 'zos-lib';
-import ControllerFor from '../models/local/ControllerFor'
+import ControllerFor from "../models/network/ControllerFor";
 
 const log = new Logger('scripts/status');
 
-export default async function status({ network, txParams = {}, packageFileName = undefined, networkFileName = undefined, logger = undefined }) {
+export default async function status({ network, txParams = {}, networkFile = undefined, logger = undefined }) {
   // TODO: Remove this line once new version of Logger is released
   log.warn = function (msg) { this.log(msg, 'yellow') }
 
-  const controller = ControllerFor(packageFileName).onNetwork(network, txParams, networkFileName);
+  const controller = ControllerFor(network, txParams, networkFile)
   log.info(`Project status for network ${network}`);
 
   if (!(await rootInfo(controller))) return;
