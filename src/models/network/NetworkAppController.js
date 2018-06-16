@@ -6,22 +6,18 @@ import NetworkBaseController from './NetworkBaseController';
 const log = new Logger('NetworkAppController');
 
 export default class NetworkAppController extends NetworkBaseController {
-  constructor(localController, network, txParams, networkFileName) {
-    super(...arguments);
+  get isDeployed() {
+    return !!this.appAddress;
   }
 
   get appAddress() {
     return this.networkFile.appAddress
   }
 
-  get isDeployed() {
-    return !!this.appAddress;
-  }
-
   async deploy() {
     this.app = await App.deploy(this.packageFile.version, this.txParams);
     this.networkFile.app = { address: this.app.address() };
-    this.networkFile.version = this.packageFile.version;
+    this.networkFile.version = this.app.version;
     this.networkFile.package = { address: this.app.package.address };
     this.networkFile.provider = { address: this.app.currentDirectory().address };
   }

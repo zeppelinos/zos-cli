@@ -4,10 +4,6 @@ import { Logger, Contracts, Package } from 'zos-lib';
 import NetworkBaseController from './NetworkBaseController';
 
 export default class NetworkLibController extends NetworkBaseController {
-  constructor(localController, network, txParams, networkFileName) {
-    super(...arguments);
-  }
-
   get isDeployed() {
     return !!this.packageAddress;
   }
