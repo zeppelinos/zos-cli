@@ -8,9 +8,4 @@ module.exports = function registerErrorHandler(program) {
     console.error(`Invalid command: ${program.args.join(' ')}\nSee --help for a list of available commands.`)
     process.exit(1)
   })
-
-  program.parse(process.argv)
-  if (program.args.length === 0) {
-    program.emit('--help')
-  }
 }
