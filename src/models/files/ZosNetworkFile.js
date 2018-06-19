@@ -1,6 +1,6 @@
 import _ from 'lodash'
-import { bytecodeDigest } from '../../utils/digest'
 import { Logger, FileSystem as fs } from 'zos-lib'
+import { bytecodeDigest, extractConstructorCode } from '../../utils/contracts'
 
 const log = new Logger('ZosNetworkFile')
 
@@ -52,15 +52,15 @@ export default class ZosNetworkFile {
   }
 
   get stdlibName() {
-    return this.stdlib.name
+    return this.stdlib && this.stdlib.name
   }
 
   get stdlibVersion() {
-    return this.stdlib.version
+    return this.stdlib && this.stdlib.version
   }
 
   get stdlibAddress() {
-    return this.stdlib.address
+    return this.stdlib && this.stdlib.address
   }
 
   get proxies() {
@@ -69,6 +69,14 @@ export default class ZosNetworkFile {
 
   get contracts() {
     return this.data.contracts
+  }
+
+  get contractAliases() {
+    return Object.keys(this.contracts)
+  }
+
+  get proxyAliases() {
+    return Object.keys(this.proxies)
   }
 
   proxy(alias) {
@@ -93,6 +101,10 @@ export default class ZosNetworkFile {
 
   hasContract(alias) {
     return !_.isEmpty(this.contract(alias))
+  }
+
+  hasProxy(alias) {
+    return !_.isEmpty(this.proxy(alias))
   }
 
   hasMatchingVersion() {
@@ -153,7 +165,8 @@ export default class ZosNetworkFile {
   setContract(alias, instance) {
     this.data.contracts[alias] = {
       address: instance.address,
-      bytecodeHash: bytecodeDigest(instance.constructor.bytecode)
+      bytecodeHash: bytecodeDigest(instance.constructor.bytecode),
+      constructorCode: extractConstructorCode(instance.constructor.bytecode),
     }
   }
 
