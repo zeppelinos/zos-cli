@@ -6,7 +6,7 @@ import { getNetwork, setNetwork } from '../../src/scripts/session';
 
 describe('session', function () {
   describe('getNetwork/setNetwork', function () {
-    it('setNetwork should not throw', () => setNetwork({remove : true}));
+    it('setNetwork should not throw', () => setNetwork({close : true}));
 
     it('getNetwork should return undefined',
       () => (getNetwork() || 'undefined').should.deep.eq('undefined'));
@@ -23,21 +23,21 @@ describe('session', function () {
         error = e;
       }
       error.toString().should.deep.eq(
-        'Error: Please provide either --network <network> or --remove.');
+        'Please provide either --network <network> or --close.');
     });
 
     it('setNetwork should throw', function() {
       let error = '';
       try {
-        setNetwork({ network: 'foo', remove: true });
+        setNetwork({ network: 'foo', close: true });
       } catch(e) {
         error = e;
       }
       error.toString().should.deep.eq(
-        'Error: Please provide either --network <network> or --remove.');
+        'Please provide either --network <network> or --close.');
     });
 
     // to remove .zos.session
-    it('setNetwork should not throw', () => setNetwork({remove : true}));
+    it('setNetwork should not throw', () => setNetwork({close : true}));
   });
 });

@@ -15,14 +15,14 @@ export function getNetwork() {
   return networkName;
 }
 
-export function setNetwork({ network = undefined, remove = false }) {
-  if ((!network && !remove) || (network && remove)) {
-    throw Error('Please provide either --network <network> or --remove.')
+export function setNetwork({ network = undefined, close = false }) {
+  if ((!network && !close) || (network && close)) {
+    throw Error('Please provide either --network <network> or --close.')
   }
 
   let log = new Logger('scripts/session');
 
-  if (remove) {
+  if (close) {
     if (fs.existsSync(ZOS_SESSION_PATH)) {
       fs.unlinkSync(ZOS_SESSION_PATH);
     }
