@@ -14,20 +14,21 @@ const bump = require('../commands/bump')
 const upgrade = require('../commands/upgrade')
 const link = require('../commands/link')
 const status = require('../commands/status')
+const compare = require('../commands/compare')
 const freeze = require('../commands/freeze')
 
 program
   .name('zos')
   .usage('<command> [options]')
   .description('where <command> is one of:\n' +
-          '\t add, bump, create, init, link, push, status, upgrade.')
+          '\t add, bump, create, init, link, push, status, compare, upgrade.')
   .version(version, '--version')
   .option('-v, --verbose', 'verbose mode on: output errors stacktrace and detailed log.')
   .option('-s, --silent', 'silent mode: no output sent to stderr.')
   .on('option:verbose', () => { Logger.verbose(true); } )
   .on('option:silent', () => { Logger.silent(true); } )
 
-const commands = [init, add, push, create, bump, upgrade, link, status, freeze]
+const commands = [init, add, push, create, bump, upgrade, link, status, compare, freeze]
 
 commands.forEach((c) => c.register(program));
 

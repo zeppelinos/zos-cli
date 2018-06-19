@@ -1,8 +1,9 @@
-import { App } from 'zos-lib'
+import { Logger, App } from 'zos-lib'
 import StatusReport from './StatusReport'
 import EventsFilter from './EventsFilter'
 import { bytecodeDigest } from '../../utils/contracts'
 
+const log = new Logger('StatusComparator')
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 
 export default class StatusComparator {
@@ -13,12 +14,14 @@ export default class StatusComparator {
   }
 
   async call() {
+    log.info(`Comparing status of App ${(await this.app()).address()}...\n`)
     await this.checkVersion()
     await this.checkProvider()
     await this.checkStdlib()
     await this.checkImplementations()
     await this.checkProxies()
-    return this.reports
+    this.reports.forEach(report => report.log(log))
+    if(this.reports.length === 0) log.info('Your app is up to date.')
   }
 
   async checkVersion() {
@@ -140,7 +143,11 @@ export default class StatusComparator {
   }
 
   async app() {
-    if(!this._app) this._app = await App.fetch(this.networkFile.appAddress, this.txParams)
-    return this._app
+    try {
+      if(!this._app) this._app = await App.fetch(this.networkFile.appAddress, this.txParams)
+      return this._app
+    } catch(error) {
+      throw Error(`Cannot fetch App contract from address ${this.networkFile.appAddress}.`, error)
+    }
   }
 }
