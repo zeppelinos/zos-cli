@@ -12,15 +12,16 @@ import add from '../../src/scripts/add.js';
 contract('new-version script', function() {
   const appName = 'MyApp';
   const defaultVersion = '0.1.0';
-  const packageFileName = 'test/tmp/zos.json';
+  const tmpDir = 'test/tmp';
+  const packageFileName = `${tmpDir}/zos.json`;
 
   describe('on app', function () {
     beforeEach('setup', async function() {
-      cleanup(packageFileName)
+      fs.createDir(tmpDir);
       await init({ name: appName, version: defaultVersion, packageFileName });
     });
 
-    after('cleanup', cleanupfn(packageFileName));
+    afterEach('cleanup', cleanupfn(tmpDir));
 
     it('should update the app version in the main package file', async function() {
       const version = '0.2.0';
@@ -65,11 +66,11 @@ contract('new-version script', function() {
 
   describe('on lib', function () {
     beforeEach('setup', async function() {
-      cleanup(packageFileName)
+      fs.createDir(tmpDir);
       await initLib({ name: appName, version: defaultVersion, packageFileName });
     });
 
-    after('cleanup', cleanupfn(packageFileName));
+    afterEach('cleanup', cleanupfn(tmpDir));
 
     it('should update the lib version in the main package file', async function() {
       const version = '0.2.0';

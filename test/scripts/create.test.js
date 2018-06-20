@@ -30,19 +30,18 @@ contract('create script', function([_, owner]) {
   const appName = 'MyApp';
   const defaultVersion = '0.1.0';
   const network = 'test';
-  const packageFileName = 'test/tmp/zos.json';
-  const networkFileName = `test/tmp/zos.${network}.json`;
+  const tmpDir = 'test/tmp';
+  const packageFileName = `${tmpDir}/zos.json`;
+  const networkFileName = `${tmpDir}/zos.${network}.json`;
 
   beforeEach('setup', async function() {
-    cleanup(packageFileName)
-    cleanup(networkFileName)
+    fs.createDir(tmpDir);
     await init({ name: appName, version: defaultVersion, packageFileName });
     await add({ contractsData, packageFileName });
     await push({ packageFileName, network, txParams });
   });
 
-  after(cleanupfn(packageFileName))
-  after(cleanupfn(networkFileName))
+  afterEach(cleanupfn(tmpDir))
 
   const assertProxy = async function(proxyInfo, { version, say, implementation }) {
     proxyInfo.address.should.be.nonzeroAddress;
@@ -165,5 +164,5 @@ contract('create script', function([_, owner]) {
       await assertProxy(data.proxies[contractAlias][0], { version: defaultVersion, say: 'V1' });
     });
   });
-  
+
 });
