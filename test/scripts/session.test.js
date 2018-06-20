@@ -23,7 +23,7 @@ describe('session', function () {
         error = e;
       }
       error.toString().should.deep.eq(
-        'Please provide either --network <network> or --close.');
+        'Error: Please provide either --network <network> or --close.');
     });
 
     it('setNetwork should throw', function() {
@@ -34,7 +34,7 @@ describe('session', function () {
         error = e;
       }
       error.toString().should.deep.eq(
-        'Please provide either --network <network> or --close.');
+        'Error: Please provide either --network <network> or --close.');
     });
 
     // to remove .zos.session
