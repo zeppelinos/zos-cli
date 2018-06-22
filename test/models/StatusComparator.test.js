@@ -357,42 +357,42 @@ contract('StatusComparator', function([_, owner, anotherAddress]) {
 
       describe('when the app has one proxy registered', function () {
         beforeEach('registering new implementation in AppDirectory', async function () {
-          await this.app.createProxy(ImplV1, 'Impl', 'initialize', [42])
+          this.proxy = await this.app.createProxy(ImplV1, 'Impl', 'initialize', [42])
         })
 
         it('reports that diff', async function () {
           await this.checker.checkProxies()
 
           this.checker.reports.should.have.lengthOf(1)
-          this.checker.reports[0].expected.should.be.equal('none')
-          this.checker.reports[0].observed.should.be.equal('Impl')
-          this.checker.reports[0].description.should.be.equal('Proxy does not match')
+          this.checker.reports[0].expected.should.be.equal(0)
+          this.checker.reports[0].observed.should.be.equal(1)
+          this.checker.reports[0].description.should.be.equal(`Proxy of Impl at ${this.proxy.address} pointing to ${this.impl.address} does not match`)
         })
       })
 
       describe('when the app has many proxies registered', function () {
         beforeEach('registering new implementation in AppDirectory', async function () {
-          await this.app.createProxy(ImplV1, 'Impl', 'initialize', [42])
-          await this.app.createProxy(AnotherImplV1, 'AnotherImpl', 'initialize', [1])
+          this.implProxy = await this.app.createProxy(ImplV1, 'Impl', 'initialize', [42])
+          this.anotherImplProxy = await this.app.createProxy(AnotherImplV1, 'AnotherImpl', 'initialize', [1])
         })
 
         it('reports that diff', async function () {
           await this.checker.checkProxies()
 
           this.checker.reports.should.have.lengthOf(2)
-          this.checker.reports[0].expected.should.be.equal('none')
-          this.checker.reports[0].observed.should.be.equal('Impl')
-          this.checker.reports[0].description.should.be.equal('Proxy does not match')
-          this.checker.reports[1].expected.should.be.equal('none')
-          this.checker.reports[1].observed.should.be.equal('AnotherImpl')
-          this.checker.reports[1].description.should.be.equal('Proxy does not match')
+          this.checker.reports[0].expected.should.be.equal(0)
+          this.checker.reports[0].observed.should.be.equal(1)
+          this.checker.reports[0].description.should.be.equal(`Proxy of Impl at ${this.implProxy.address} pointing to ${this.impl.address} does not match`)
+          this.checker.reports[1].expected.should.be.equal(0)
+          this.checker.reports[1].observed.should.be.equal(1)
+          this.checker.reports[1].description.should.be.equal(`Proxy of AnotherImpl at ${this.anotherImplProxy.address} pointing to ${this.anotherImpl.address} does not match`)
         })
       })
     })
 
     describe('when the network file has two proxies', function () {
       beforeEach('adding a proxy', async function () {
-        this.networkFile.setProxy('Impl', [
+        this.networkFile.setProxies('Impl', [
           { implementation: this.impl.address, address: '0x1', version: '1.0' },
           { implementation: this.impl.address, address: '0x2', version: '1.0' }
         ])
@@ -413,10 +413,13 @@ contract('StatusComparator', function([_, owner, anotherAddress]) {
       })
 
       describe('when the app has one proxy registered', function () {
+        beforeEach('creating a proxy', async function () {
+          this.proxy = await this.app.createProxy(ImplV1, 'Impl', 'initialize', [42])
+        })
+
         describe('when it matches one proxy address', function () {
-          beforeEach('creating a proxy', async function () {
-            this.proxy = await this.app.createProxy(ImplV1, 'Impl', 'initialize', [42])
-            this.networkFile.setProxy('Impl', [
+          beforeEach('changing network file', async function () {
+            this.networkFile.setProxies('Impl', [
               { implementation: this.impl.address, address: '0x1', version: '1.0' },
               { implementation: this.impl.address, address: this.proxy.address, version: '1.0' },
             ])
@@ -426,27 +429,27 @@ contract('StatusComparator', function([_, owner, anotherAddress]) {
             await this.checker.checkProxies()
 
             this.checker.reports.should.have.lengthOf(1)
-            this.checker.reports[0].expected.should.be.equal('0x1')
-            this.checker.reports[0].observed.should.be.equal(this.proxy.address)
+            this.checker.reports[0].expected.should.be.equal(1)
+            this.checker.reports[0].observed.should.be.equal(0)
             this.checker.reports[0].description.should.be.equal(`Proxy of Impl at 0x1 pointing to ${this.impl.address} does not match`)
           })
         })
 
         describe('when it does not match any proxy address', function () {
-          beforeEach('creating a proxy', async function () {
-            this.proxy = await this.app.createProxy(ImplV1, 'Impl', 'initialize', [42])
-          })
 
           it('reports those diffs', async function () {
             await this.checker.checkProxies()
 
-            this.checker.reports.should.have.lengthOf(2)
-            this.checker.reports[0].expected.should.be.equal('0x1')
-            this.checker.reports[0].observed.should.be.equal(this.proxy.address)
-            this.checker.reports[0].description.should.be.equal(`Proxy of Impl at 0x1 pointing to ${this.impl.address} does not match`)
-            this.checker.reports[1].expected.should.be.equal('0x2')
-            this.checker.reports[1].observed.should.be.equal(this.proxy.address)
-            this.checker.reports[1].description.should.be.equal(`Proxy of Impl at 0x2 pointing to ${this.impl.address} does not match`)
+            this.checker.reports.should.have.lengthOf(3)
+            this.checker.reports[0].expected.should.be.equal(0)
+            this.checker.reports[0].observed.should.be.equal(1)
+            this.checker.reports[0].description.should.be.equal(`Proxy of Impl at ${this.proxy.address} pointing to ${this.impl.address} does not match`)
+            this.checker.reports[1].expected.should.be.equal(1)
+            this.checker.reports[1].observed.should.be.equal(0)
+            this.checker.reports[1].description.should.be.equal(`Proxy of Impl at 0x1 pointing to ${this.impl.address} does not match`)
+            this.checker.reports[2].expected.should.be.equal(1)
+            this.checker.reports[2].observed.should.be.equal(0)
+            this.checker.reports[2].description.should.be.equal(`Proxy of Impl at 0x2 pointing to ${this.impl.address} does not match`)
           })
         })
       })

@@ -79,8 +79,12 @@ export default class ZosNetworkFile {
     return Object.keys(this.proxies)
   }
 
-  proxy(alias) {
-    return this.proxies[alias]
+  proxy(alias, index) {
+    return this.proxiesOf(alias)[index]
+  }
+
+  proxiesOf(alias) {
+    return this.proxies[alias] || []
   }
 
   contract(alias) {
@@ -95,16 +99,12 @@ export default class ZosNetworkFile {
     return this.version === version
   }
 
-  hasProxies() {
-    return !_.isEmpty(this.proxies)
-  }
-
   hasContract(alias) {
     return !_.isEmpty(this.contract(alias))
   }
 
-  hasProxy(alias) {
-    return !_.isEmpty(this.proxy(alias))
+  hasProxies(alias = undefined) {
+    return alias ? !_.isEmpty(this.proxiesOf(alias)) : !_.isEmpty(this.proxies)
   }
 
   hasMatchingVersion() {
@@ -170,12 +170,12 @@ export default class ZosNetworkFile {
     }
   }
 
-  setProxy(alias, value) {
+  setProxies(alias, value) {
     this.data.proxies[alias] = value
   }
 
   addProxy(alias, info) {
-    if (!this.proxy(alias)) this.setProxy(alias, [])
+    if (!this.hasProxies(alias)) this.setProxies(alias, [])
     this.data.proxies[alias].push(info)
   }
 

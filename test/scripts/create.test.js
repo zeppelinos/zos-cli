@@ -41,7 +41,7 @@ contract('create script', function([_, owner]) {
   });
 
   const assertProxy = async function(networkFile, alias, { version, say, implementation }) {
-    const proxyInfo = networkFile.proxy(alias)[0]
+    const proxyInfo = networkFile.proxy(alias, 0)
     proxyInfo.address.should.be.nonzeroAddress;
     proxyInfo.version.should.eq(version);
 
@@ -87,7 +87,7 @@ contract('create script', function([_, owner]) {
     await createProxy({ contractAlias, network, txParams, networkFile: this.networkFile });
     await createProxy({ contractAlias, network, txParams, networkFile: this.networkFile });
 
-    this.networkFile.proxy(contractAlias).should.have.lengthOf(3);
+    this.networkFile.proxiesOf(contractAlias).should.have.lengthOf(3);
   });
 
   it('should be able to handle proxies for more than one contract', async function() {

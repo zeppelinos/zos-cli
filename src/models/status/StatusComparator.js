@@ -63,31 +63,8 @@ export default class StatusComparator {
 
   async checkProxies() {
     const proxiesInfo = await this._fetchOnChainProxiesInfo()
-    proxiesInfo.forEach(info => this.checkProxy(info))
-    const foundAliases = proxiesInfo.map(info => info.alias)
-    this.networkFile.proxyAliases
-      .filter(alias => !foundAliases.includes(alias))
-      .forEach(alias => {
-        const proxies = this.networkFile.proxy(alias)
-        proxies.forEach(proxy => this._addReport(1, 0, `Proxy of ${alias} at ${proxy.address} pointing to ${proxy.implementation} does not match`))
-      })
-  }
-
-  checkProxy({ alias, address, implementation}) {
-    if (this.networkFile.hasProxy(alias)) {
-      let matchingFound = false
-      const proxies = this.networkFile.proxy(alias)
-      proxies.forEach(proxy => {
-        const expectedAddress = proxy.address
-        if (expectedAddress !== address && !matchingFound) this._addReport(expectedAddress, address, `Proxy of ${alias} at ${expectedAddress} pointing to ${proxy.implementation} does not match`)
-        else {
-          const expectedImplementation = proxy.implementation
-          if (expectedImplementation === implementation) matchingFound = true
-          else this._addReport(expectedImplementation, implementation, `Proxy of ${alias} at ${expectedAddress} does not pointing to ${implementation} does not match`)
-        }
-      })
-    }
-    else this._addReport('none', alias, 'Proxy does not match')
+    proxiesInfo.forEach(info => this._checkRemoteProxy(info))
+    this.networkFile.proxyAliases.forEach(alias => this._checkLocalProxies(alias, proxiesInfo))
   }
 
   _checkImplementationAddress(alias, address) {
@@ -113,6 +90,18 @@ export default class StatusComparator {
       .filter((event, index) => contractsAlias.lastIndexOf(event.args.contractName) === index)
       .filter(event => event.args.implementation !== ZERO_ADDRESS)
       .map(event => ({ alias: event.args.contractName, implementation: event.args.implementation }))
+  }
+
+  _checkRemoteProxy({ alias, address, implementation}) {
+    const matchingProxy = this.networkFile.proxiesOf(alias).find(proxy => proxy.address === address && proxy.implementation === implementation)
+    if (!matchingProxy) this._addReport(0, 1, `Proxy of ${alias} at ${address} pointing to ${implementation} does not match`)
+  }
+
+  _checkLocalProxies(alias, proxiesInfo) {
+    this.networkFile.proxiesOf(alias).forEach(proxy => {
+      const matchingProxy = proxiesInfo.find(info => info.alias === alias && info.address === proxy.address && info.implementation === proxy.implementation)
+      if (!matchingProxy) this._addReport(1, 0, `Proxy of ${alias} at ${proxy.address} pointing to ${proxy.implementation} does not match`)
+    })
   }
 
   async _fetchOnChainProxiesInfo() {
