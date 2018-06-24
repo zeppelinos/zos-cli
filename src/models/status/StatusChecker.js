@@ -1,5 +1,6 @@
 import { Logger, App } from 'zos-lib'
 import EventsFilter from './EventsFilter'
+import StatusFetcher from './StatusFetcher'
 import StatusComparator from './StatusComparator'
 import { bytecodeDigest } from '../../utils/contracts'
 
@@ -7,6 +8,12 @@ const log = new Logger('StatusChecker')
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 
 export default class StatusChecker {
+
+  static fetch(networkFile, txParams = {}) {
+    const fetcher = new StatusFetcher(networkFile)
+    return new StatusChecker(fetcher, networkFile, txParams)
+  }
+
   static compare(networkFile, txParams = {}) {
     const comparator = new StatusComparator()
     return new StatusChecker(comparator, networkFile, txParams)
