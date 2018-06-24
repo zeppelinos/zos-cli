@@ -17,6 +17,10 @@ export default class StatusComparator {
     this._addReport(expected, observed, 'App version does not match')
   }
 
+  onMismatchingPackage(expected, observed) {
+    this._addReport(expected, observed, 'Package address does not match')
+  }
+
   onMismatchingProvider(expected, observed) {
     this._addReport(expected, observed, 'Provider address does not match')
   }

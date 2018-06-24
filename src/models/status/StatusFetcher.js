@@ -17,6 +17,11 @@ export default class StatusFetcher {
     this.networkFile.version = observed
   }
 
+  onMismatchingPackage(expected, observed) {
+    log.info(`Updating package from ${expected} to ${observed}`)
+    this.networkFile.package = { address: observed }
+  }
+
   onMismatchingProvider(expected, observed) {
     log.info(`Updating provider from ${expected} to ${observed}`)
     this.networkFile.provider = { address: observed }

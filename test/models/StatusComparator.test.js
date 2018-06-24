@@ -56,6 +56,31 @@ contract('StatusComparator', function([_, owner, anotherAddress]) {
     })
   })
 
+  describe('package', function () {
+    describe('when the network file shows a different package address than the one set in the App contract', function () {
+      beforeEach(async function () {
+        this.networkFile.package = { address: '0x10' }
+      })
+
+      it('reports that diff', async function () {
+        await this.checker.checkPackage()
+
+        this.comparator.reports.should.have.lengthOf(1)
+        this.comparator.reports[0].expected.should.be.equal(this.networkFile.packageAddress)
+        this.comparator.reports[0].observed.should.be.equal(this.app.package.address)
+        this.comparator.reports[0].description.should.be.equal('Package address does not match')
+      })
+    })
+
+    describe('when the network file package matches with the one in the App contract', function () {
+      it('does not report any diff', async function () {
+        await this.checker.checkPackage()
+
+        this.comparator.reports.should.be.empty
+      })
+    })
+  })
+
   describe('provider', function () {
     describe('when the network file shows a different provider address than the one set in the App contract', function () {
       beforeEach(async function () {
@@ -72,7 +97,7 @@ contract('StatusComparator', function([_, owner, anotherAddress]) {
       })
     })
 
-    describe('when the network file version matches with the one in the App contract', function () {
+    describe('when the network file provider matches with the one in the App contract', function () {
       it('does not report any diff', async function () {
         await this.checker.checkProvider()
 

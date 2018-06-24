@@ -37,6 +37,7 @@ export default class StatusChecker {
   async call() {
     log.info(`Comparing status of App ${(await this.app()).address()}...\n`)
     await this.checkVersion()
+    await this.checkPackage()
     await this.checkProvider()
     await this.checkStdlib()
     await this.checkImplementations()
@@ -48,6 +49,12 @@ export default class StatusChecker {
     const observed = (await this.app()).version
     const expected = this.networkFile.version
     if(observed !== expected) this.visitor.onMismatchingVersion(expected, observed)
+  }
+
+  async checkPackage() {
+    const observed = (await this.app()).package.address
+    const expected = this.networkFile.packageAddress
+    if(observed !== expected) this.visitor.onMismatchingPackage(expected, observed)
   }
 
   async checkProvider() {
