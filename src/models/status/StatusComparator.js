@@ -107,12 +107,12 @@ export default class StatusComparator {
 
   _checkProxyAlias(proxy, alias, address, implementation) {
     const expected = proxy.alias
-    if (alias !== expected) this._addReport(expected, alias, `Alias of ${alias} proxy at ${address} pointing to ${implementation} does not match`)
+    if (alias !== expected) this._addReport(expected, alias, `Alias of proxy at ${address} pointing to ${implementation} does not match`)
   }
 
   _checkProxyImplementation(proxy, alias, address, implementation) {
     const expected = proxy.implementation
-    if (implementation !== expected) this._addReport(expected, implementation, `Implementation of ${alias} proxy at ${address} pointing to ${implementation} does not match`)
+    if (implementation !== expected) this._addReport(expected, implementation, `Pointed implementation of ${alias} proxy at ${address} does not match`)
   }
 
   _checkUnregisteredLocalProxies(proxiesInfo) {

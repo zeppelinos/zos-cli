@@ -421,20 +421,84 @@ contract('StatusComparator', function([_, owner, anotherAddress]) {
         })
 
         describe('when it matches one proxy address', function () {
-          beforeEach('changing network file', async function () {
-            this.networkFile.setProxies('Impl', [
-              { implementation: this.impl.address, address: '0x1', version: '1.0' },
-              { implementation: this.impl.address, address: this.proxy.address, version: '1.0' },
-            ])
+          describe('when it matches the alias and the implementation address', function () {
+            beforeEach('changing network file', async function () {
+              this.networkFile.setProxies('Impl', [
+                { implementation: this.impl.address, address: '0x1', version: '1.0' },
+                { implementation: this.impl.address, address: this.proxy.address, version: '1.0' },
+              ])
+            })
+
+            it('reports that diff', async function () {
+              await this.checker.checkProxies()
+
+              this.checker.reports.should.have.lengthOf(1)
+              this.checker.reports[0].expected.should.be.equal('one')
+              this.checker.reports[0].observed.should.be.equal('none')
+              this.checker.reports[0].description.should.be.equal(`A proxy of Impl at 0x1 pointing to ${this.impl.address} is not registered`)
+            })
           })
 
-          it('reports that diff', async function () {
-            await this.checker.checkProxies()
+          describe('when it matches the alias but not the implementation address', function () {
+            beforeEach('changing network file', async function () {
+              this.networkFile.setProxies('Impl', [
+                { implementation: this.impl.address, address: '0x1', version: '1.0' },
+                { implementation: this.anotherImpl.address, address: this.proxy.address, version: '1.0' },
+              ])
+            })
 
-            this.checker.reports.should.have.lengthOf(1)
-            this.checker.reports[0].expected.should.be.equal('one')
-            this.checker.reports[0].observed.should.be.equal('none')
-            this.checker.reports[0].description.should.be.equal(`A proxy of Impl at 0x1 pointing to ${this.impl.address} is not registered`)
+            it('reports that diff', async function () {
+              await this.checker.checkProxies()
+
+              this.checker.reports.should.have.lengthOf(2)
+              this.checker.reports[0].expected.should.be.equal(this.anotherImpl.address)
+              this.checker.reports[0].observed.should.be.equal(this.impl.address)
+              this.checker.reports[0].description.should.be.equal(`Pointed implementation of Impl proxy at ${this.proxy.address} does not match`)
+              this.checker.reports[1].expected.should.be.equal('one')
+              this.checker.reports[1].observed.should.be.equal('none')
+              this.checker.reports[1].description.should.be.equal(`A proxy of Impl at 0x1 pointing to ${this.impl.address} is not registered`)
+            })
+          })
+
+          describe('when it matches the implementation address but not the alias', function () {
+            beforeEach('changing network file', async function () {
+              this.networkFile.setProxies('Impl', [{ implementation: this.impl.address, address: '0x1', version: '1.0' }])
+              this.networkFile.setProxies('AnotherImpl', [{ implementation: this.impl.address, address: this.proxy.address, version: '1.0' }])
+            })
+
+            it('reports that diff', async function () {
+              await this.checker.checkProxies()
+
+              this.checker.reports.should.have.lengthOf(2)
+              this.checker.reports[0].expected.should.be.equal('AnotherImpl')
+              this.checker.reports[0].observed.should.be.equal('Impl')
+              this.checker.reports[0].description.should.be.equal(`Alias of proxy at ${this.proxy.address} pointing to ${this.impl.address} does not match`)
+              this.checker.reports[1].expected.should.be.equal('one')
+              this.checker.reports[1].observed.should.be.equal('none')
+              this.checker.reports[1].description.should.be.equal(`A proxy of Impl at 0x1 pointing to ${this.impl.address} is not registered`)
+            })
+          })
+
+          describe('when it does not match the alias and the implementation address', function () {
+            beforeEach('changing network file', async function () {
+              this.networkFile.setProxies('Impl', [{ implementation: this.impl.address, address: '0x1', version: '1.0' }])
+              this.networkFile.setProxies('AnotherImpl', [{ implementation: this.anotherImpl.address, address: this.proxy.address, version: '1.0' }])
+            })
+
+            it('reports that diff', async function () {
+              await this.checker.checkProxies()
+
+              this.checker.reports.should.have.lengthOf(3)
+              this.checker.reports[0].expected.should.be.equal('AnotherImpl')
+              this.checker.reports[0].observed.should.be.equal('Impl')
+              this.checker.reports[0].description.should.be.equal(`Alias of proxy at ${this.proxy.address} pointing to ${this.impl.address} does not match`)
+              this.checker.reports[1].expected.should.be.equal(this.anotherImpl.address)
+              this.checker.reports[1].observed.should.be.equal(this.impl.address)
+              this.checker.reports[1].description.should.be.equal(`Pointed implementation of Impl proxy at ${this.proxy.address} does not match`)
+              this.checker.reports[2].expected.should.be.equal('one')
+              this.checker.reports[2].observed.should.be.equal('none')
+              this.checker.reports[2].description.should.be.equal(`A proxy of Impl at 0x1 pointing to ${this.impl.address} is not registered`)
+            })
           })
         })
 
