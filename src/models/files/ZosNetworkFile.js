@@ -79,6 +79,13 @@ export default class ZosNetworkFile {
     return Object.keys(this.proxies)
   }
 
+  proxiesList() {
+    return this.proxyAliases.flatMap(alias => this.proxiesOf(alias).map(info => {
+      info['alias'] = alias
+      return info
+    }))
+  }
+
   proxy(alias, index) {
     return this.proxiesOf(alias)[index]
   }

@@ -169,7 +169,7 @@ contract('StatusComparator', function([_, owner, anotherAddress]) {
 
       describe('when the directory of the current version has one contract', function () {
         beforeEach('registering new implementation in AppDirectory', async function () {
-          await this.app.setImplementation(ImplV1, 'Impl')
+          this.impl = await this.app.setImplementation(ImplV1, 'Impl')
         })
 
         it('reports that diff', async function () {
@@ -177,15 +177,15 @@ contract('StatusComparator', function([_, owner, anotherAddress]) {
 
           this.checker.reports.should.have.lengthOf(1)
           this.checker.reports[0].expected.should.be.equal('none')
-          this.checker.reports[0].observed.should.be.equal('Impl')
-          this.checker.reports[0].description.should.be.equal('Contract does not match')
+          this.checker.reports[0].observed.should.be.equal('one')
+          this.checker.reports[0].description.should.be.equal(`Missing registered contract Impl at ${this.impl.address}`)
         })
       })
 
       describe('when the directory of the current version has many contracts', function () {
         beforeEach('registering two new implementations in AppDirectory', async function () {
-          await this.app.setImplementation(ImplV1, 'Impl')
-          await this.app.setImplementation(AnotherImplV1, 'AnotherImpl')
+          this.impl = await this.app.setImplementation(ImplV1, 'Impl')
+          this.anotherImpl = await this.app.setImplementation(AnotherImplV1, 'AnotherImpl')
         })
 
         it('reports one diff per contract', async function () {
@@ -193,11 +193,11 @@ contract('StatusComparator', function([_, owner, anotherAddress]) {
 
           this.checker.reports.should.have.lengthOf(2)
           this.checker.reports[0].expected.should.be.equal('none')
-          this.checker.reports[0].observed.should.be.equal('Impl')
-          this.checker.reports[0].description.should.be.equal('Contract does not match')
+          this.checker.reports[0].observed.should.be.equal('one')
+          this.checker.reports[0].description.should.be.equal(`Missing registered contract Impl at ${this.impl.address}`)
           this.checker.reports[1].expected.should.be.equal('none')
-          this.checker.reports[1].observed.should.be.equal('AnotherImpl')
-          this.checker.reports[1].description.should.be.equal('Contract does not match')
+          this.checker.reports[1].observed.should.be.equal('one')
+          this.checker.reports[1].description.should.be.equal(`Missing registered contract AnotherImpl at ${this.anotherImpl.address}`)
         })
       })
 
@@ -206,7 +206,7 @@ contract('StatusComparator', function([_, owner, anotherAddress]) {
           await this.app.setImplementation(ImplV1, 'Impl')
           // TODO: provide unset impl method from lib
           await this.app.currentDirectory().unsetImplementation('Impl', txParams)
-          await this.app.setImplementation(AnotherImplV1, 'AnotherImpl')
+          this.anotherImpl = await this.app.setImplementation(AnotherImplV1, 'AnotherImpl')
         })
 
         it('reports one diff per contract', async function () {
@@ -214,8 +214,8 @@ contract('StatusComparator', function([_, owner, anotherAddress]) {
 
           this.checker.reports.should.have.lengthOf(1)
           this.checker.reports[0].expected.should.be.equal('none')
-          this.checker.reports[0].observed.should.be.equal('AnotherImpl')
-          this.checker.reports[0].description.should.be.equal('Contract does not match')
+          this.checker.reports[0].observed.should.be.equal('one')
+          this.checker.reports[0].description.should.be.equal(`Missing registered contract AnotherImpl at ${this.anotherImpl.address}`)
         })
       })
     })
@@ -234,12 +234,12 @@ contract('StatusComparator', function([_, owner, anotherAddress]) {
           await this.checker.checkImplementations()
 
           this.checker.reports.should.have.lengthOf(2)
-          this.checker.reports[0].expected.should.be.equal('Impl')
+          this.checker.reports[0].expected.should.be.equal('one')
           this.checker.reports[0].observed.should.be.equal('none')
-          this.checker.reports[0].description.should.be.equal('Contract does not match')
-          this.checker.reports[1].expected.should.be.equal('AnotherImpl')
+          this.checker.reports[0].description.should.be.equal(`A contract Impl at ${this.impl.address} is not registered`)
+          this.checker.reports[1].expected.should.be.equal('one')
           this.checker.reports[1].observed.should.be.equal('none')
-          this.checker.reports[1].description.should.be.equal('Contract does not match')
+          this.checker.reports[1].description.should.be.equal(`A contract AnotherImpl at ${this.anotherImpl.address} is not registered`)
         })
       })
 
@@ -253,9 +253,9 @@ contract('StatusComparator', function([_, owner, anotherAddress]) {
             await this.checker.checkImplementations()
 
             this.checker.reports.should.have.lengthOf(1)
-            this.checker.reports[0].expected.should.be.equal('AnotherImpl')
+            this.checker.reports[0].expected.should.be.equal('one')
             this.checker.reports[0].observed.should.be.equal('none')
-            this.checker.reports[0].description.should.be.equal('Contract does not match')
+            this.checker.reports[0].description.should.be.equal(`A contract AnotherImpl at ${this.anotherImpl.address} is not registered`)
           })
         })
 
@@ -264,16 +264,19 @@ contract('StatusComparator', function([_, owner, anotherAddress]) {
             await this.app.currentDirectory().setImplementation('Impl', this.anotherImpl.address, txParams)
           })
 
-          it('reports both diffs', async function () {
+          it('reports those diffs', async function () {
             await this.checker.checkImplementations()
 
-            this.checker.reports.should.have.lengthOf(2)
+            this.checker.reports.should.have.lengthOf(3)
             this.checker.reports[0].expected.should.be.equal(this.impl.address)
             this.checker.reports[0].observed.should.be.equal(this.anotherImpl.address)
             this.checker.reports[0].description.should.be.equal('Address for contract Impl does not match')
-            this.checker.reports[1].expected.should.be.equal('AnotherImpl')
-            this.checker.reports[1].observed.should.be.equal('none')
-            this.checker.reports[1].description.should.be.equal('Contract does not match')
+            this.checker.reports[1].expected.should.be.equal(bytecodeDigest(ImplV1.bytecode))
+            this.checker.reports[1].observed.should.be.equal(bytecodeDigest(AnotherImplV1.bytecode))
+            this.checker.reports[1].description.should.be.equal(`Bytecode at ${this.anotherImpl.address} for contract Impl does not match`)
+            this.checker.reports[2].expected.should.be.equal('one')
+            this.checker.reports[2].observed.should.be.equal('none')
+            this.checker.reports[2].description.should.be.equal(`A contract AnotherImpl at ${this.anotherImpl.address} is not registered`)
           })
         })
 
@@ -292,9 +295,9 @@ contract('StatusComparator', function([_, owner, anotherAddress]) {
             this.checker.reports[0].expected.should.be.equal('0x0')
             this.checker.reports[0].observed.should.be.equal(bytecodeDigest(ImplV1.bytecode))
             this.checker.reports[0].description.should.be.equal(`Bytecode at ${this.impl.address} for contract Impl does not match`)
-            this.checker.reports[1].expected.should.be.equal('AnotherImpl')
+            this.checker.reports[1].expected.should.be.equal('one')
             this.checker.reports[1].observed.should.be.equal('none')
-            this.checker.reports[1].description.should.be.equal('Contract does not match')
+            this.checker.reports[1].description.should.be.equal(`A contract AnotherImpl at ${this.anotherImpl.address} is not registered`)
           })
         })
       })
@@ -324,9 +327,9 @@ contract('StatusComparator', function([_, owner, anotherAddress]) {
           await this.checker.checkImplementations()
 
           this.checker.reports.should.have.lengthOf(1)
-          this.checker.reports[0].expected.should.be.equal('Impl')
+          this.checker.reports[0].expected.should.be.equal('one')
           this.checker.reports[0].observed.should.be.equal('none')
-          this.checker.reports[0].description.should.be.equal('Contract does not match')
+          this.checker.reports[0].description.should.be.equal(`A contract Impl at ${this.impl.address} is not registered`)
         })
       })
     })
@@ -364,9 +367,9 @@ contract('StatusComparator', function([_, owner, anotherAddress]) {
           await this.checker.checkProxies()
 
           this.checker.reports.should.have.lengthOf(1)
-          this.checker.reports[0].expected.should.be.equal(0)
-          this.checker.reports[0].observed.should.be.equal(1)
-          this.checker.reports[0].description.should.be.equal(`Proxy of Impl at ${this.proxy.address} pointing to ${this.impl.address} does not match`)
+          this.checker.reports[0].expected.should.be.equal('none')
+          this.checker.reports[0].observed.should.be.equal('one')
+          this.checker.reports[0].description.should.be.equal(`Missing registered proxy of Impl at ${this.proxy.address} pointing to ${this.impl.address}`)
         })
       })
 
@@ -380,12 +383,12 @@ contract('StatusComparator', function([_, owner, anotherAddress]) {
           await this.checker.checkProxies()
 
           this.checker.reports.should.have.lengthOf(2)
-          this.checker.reports[0].expected.should.be.equal(0)
-          this.checker.reports[0].observed.should.be.equal(1)
-          this.checker.reports[0].description.should.be.equal(`Proxy of Impl at ${this.implProxy.address} pointing to ${this.impl.address} does not match`)
-          this.checker.reports[1].expected.should.be.equal(0)
-          this.checker.reports[1].observed.should.be.equal(1)
-          this.checker.reports[1].description.should.be.equal(`Proxy of AnotherImpl at ${this.anotherImplProxy.address} pointing to ${this.anotherImpl.address} does not match`)
+          this.checker.reports[0].expected.should.be.equal('none')
+          this.checker.reports[0].observed.should.be.equal('one')
+          this.checker.reports[0].description.should.be.equal(`Missing registered proxy of Impl at ${this.implProxy.address} pointing to ${this.impl.address}`)
+          this.checker.reports[1].expected.should.be.equal('none')
+          this.checker.reports[1].observed.should.be.equal('one')
+          this.checker.reports[1].description.should.be.equal(`Missing registered proxy of AnotherImpl at ${this.anotherImplProxy.address} pointing to ${this.anotherImpl.address}`)
         })
       })
     })
@@ -403,12 +406,12 @@ contract('StatusComparator', function([_, owner, anotherAddress]) {
           await this.checker.checkProxies()
 
           this.checker.reports.should.be.have.lengthOf(2)
-          this.checker.reports[0].expected.should.be.equal(1)
-          this.checker.reports[0].observed.should.be.equal(0)
-          this.checker.reports[0].description.should.be.equal(`Proxy of Impl at 0x1 pointing to ${this.impl.address} does not match`)
-          this.checker.reports[1].expected.should.be.equal(1)
-          this.checker.reports[1].observed.should.be.equal(0)
-          this.checker.reports[1].description.should.be.equal(`Proxy of Impl at 0x2 pointing to ${this.impl.address} does not match`)
+          this.checker.reports[0].expected.should.be.equal('one')
+          this.checker.reports[0].observed.should.be.equal('none')
+          this.checker.reports[0].description.should.be.equal(`A proxy of Impl at 0x1 pointing to ${this.impl.address} is not registered`)
+          this.checker.reports[1].expected.should.be.equal('one')
+          this.checker.reports[1].observed.should.be.equal('none')
+          this.checker.reports[1].description.should.be.equal(`A proxy of Impl at 0x2 pointing to ${this.impl.address} is not registered`)
         })
       })
 
@@ -429,9 +432,9 @@ contract('StatusComparator', function([_, owner, anotherAddress]) {
             await this.checker.checkProxies()
 
             this.checker.reports.should.have.lengthOf(1)
-            this.checker.reports[0].expected.should.be.equal(1)
-            this.checker.reports[0].observed.should.be.equal(0)
-            this.checker.reports[0].description.should.be.equal(`Proxy of Impl at 0x1 pointing to ${this.impl.address} does not match`)
+            this.checker.reports[0].expected.should.be.equal('one')
+            this.checker.reports[0].observed.should.be.equal('none')
+            this.checker.reports[0].description.should.be.equal(`A proxy of Impl at 0x1 pointing to ${this.impl.address} is not registered`)
           })
         })
 
@@ -441,15 +444,15 @@ contract('StatusComparator', function([_, owner, anotherAddress]) {
             await this.checker.checkProxies()
 
             this.checker.reports.should.have.lengthOf(3)
-            this.checker.reports[0].expected.should.be.equal(0)
-            this.checker.reports[0].observed.should.be.equal(1)
-            this.checker.reports[0].description.should.be.equal(`Proxy of Impl at ${this.proxy.address} pointing to ${this.impl.address} does not match`)
-            this.checker.reports[1].expected.should.be.equal(1)
-            this.checker.reports[1].observed.should.be.equal(0)
-            this.checker.reports[1].description.should.be.equal(`Proxy of Impl at 0x1 pointing to ${this.impl.address} does not match`)
-            this.checker.reports[2].expected.should.be.equal(1)
-            this.checker.reports[2].observed.should.be.equal(0)
-            this.checker.reports[2].description.should.be.equal(`Proxy of Impl at 0x2 pointing to ${this.impl.address} does not match`)
+            this.checker.reports[0].expected.should.be.equal('none')
+            this.checker.reports[0].observed.should.be.equal('one')
+            this.checker.reports[0].description.should.be.equal(`Missing registered proxy of Impl at ${this.proxy.address} pointing to ${this.impl.address}`)
+            this.checker.reports[1].expected.should.be.equal('one')
+            this.checker.reports[1].observed.should.be.equal('none')
+            this.checker.reports[1].description.should.be.equal(`A proxy of Impl at 0x1 pointing to ${this.impl.address} is not registered`)
+            this.checker.reports[2].expected.should.be.equal('one')
+            this.checker.reports[2].observed.should.be.equal('none')
+            this.checker.reports[2].description.should.be.equal(`A proxy of Impl at 0x2 pointing to ${this.impl.address} is not registered`)
           })
         })
       })

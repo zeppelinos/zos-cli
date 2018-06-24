@@ -13,6 +13,15 @@ export default class StatusComparator {
     this.networkFile = networkFile
   }
 
+  async app() {
+    try {
+      if(!this._app) this._app = await App.fetch(this.networkFile.appAddress, this.txParams)
+      return this._app
+    } catch(error) {
+      throw Error(`Cannot fetch App contract from address ${this.networkFile.appAddress}.`, error)
+    }
+  }
+
   async call() {
     log.info(`Comparing status of App ${(await this.app()).address()}...\n`)
     await this.checkVersion()
@@ -46,25 +55,22 @@ export default class StatusComparator {
 
   async checkImplementations() {
     const implementationsInfo = await this._fetchOnChainImplementations()
-    implementationsInfo.forEach(info => this.checkImplementation(info))
-    const foundAliases = implementationsInfo.map(info => info.alias)
-    this.networkFile.contractAliases
-      .filter(alias => !foundAliases.includes(alias))
-      .forEach(alias => this._addReport(alias, 'none', 'Contract does not match'))
-  }
-
-  checkImplementation({ alias, implementation }) {
-    if (this.networkFile.hasContract(alias)) {
-      this._checkImplementationAddress(alias, implementation)
-      this._checkImplementationBytecode(alias, implementation)
-    }
-    else this._addReport('none', alias, 'Contract does not match')
+    implementationsInfo.forEach(info => this._checkRemoteImplementation(info))
+    this._checkUnregisteredLocalImplementations(implementationsInfo)
   }
 
   async checkProxies() {
-    const proxiesInfo = await this._fetchOnChainProxiesInfo()
+    const proxiesInfo = await this._fetchOnChainProxies()
     proxiesInfo.forEach(info => this._checkRemoteProxy(info))
-    this.networkFile.proxyAliases.forEach(alias => this._checkLocalProxies(alias, proxiesInfo))
+    this._checkUnregisteredLocalProxies(proxiesInfo)
+  }
+
+  _checkRemoteImplementation({ alias, address }) {
+    if (this.networkFile.hasContract(alias)) {
+      this._checkImplementationAddress(alias, address)
+      this._checkImplementationBytecode(alias, address)
+    }
+    else this._addReport('none', 'one', `Missing registered contract ${alias} at ${address}`)
   }
 
   _checkImplementationAddress(alias, address) {
@@ -73,12 +79,50 @@ export default class StatusComparator {
   }
 
   _checkImplementationBytecode(alias, address) {
-    if(this.networkFile.contract(alias).address !== address) return;
     const constructorCode = this.networkFile.contract(alias).constructorCode
     const expected = this.networkFile.contract(alias).bytecodeHash
     const bodyBytecode = web3.eth.getCode(address).replace(/^0x/, '');
     const observed = bytecodeDigest(constructorCode + bodyBytecode)
     if (observed !== expected) this._addReport(expected, observed, `Bytecode at ${address} for contract ${alias} does not match`)
+  }
+
+  _checkUnregisteredLocalImplementations(implementationsInfo) {
+    const foundAliases = implementationsInfo.map(info => info.alias)
+    this.networkFile.contractAliases
+      .filter(alias => !foundAliases.includes(alias))
+      .forEach(alias => {
+        const { address } = this.networkFile.contract(alias)
+        this._addReport('one', 'none', `A contract ${alias} at ${address} is not registered`)
+      })
+  }
+
+  _checkRemoteProxy({ alias, address, implementation}) {
+    const matchingProxy = this.networkFile.proxiesList().find(proxy => proxy.address === address)
+    if (matchingProxy) {
+      this._checkProxyAlias(matchingProxy, alias, address, implementation)
+      this._checkProxyImplementation(matchingProxy, alias, address, implementation)
+    }
+    else this._addReport('none', 'one', `Missing registered proxy of ${alias} at ${address} pointing to ${implementation}`)
+  }
+
+  _checkProxyAlias(proxy, alias, address, implementation) {
+    const expected = proxy.alias
+    if (alias !== expected) this._addReport(expected, alias, `Alias of ${alias} proxy at ${address} pointing to ${implementation} does not match`)
+  }
+
+  _checkProxyImplementation(proxy, alias, address, implementation) {
+    const expected = proxy.implementation
+    if (implementation !== expected) this._addReport(expected, implementation, `Implementation of ${alias} proxy at ${address} pointing to ${implementation} does not match`)
+  }
+
+  _checkUnregisteredLocalProxies(proxiesInfo) {
+    const foundAddresses = proxiesInfo.map(info => info.address)
+    this.networkFile.proxiesList()
+      .filter(proxy => !foundAddresses.includes(proxy.address))
+      .forEach(proxy => {
+        const { alias, address, implementation } = proxy
+        this._addReport('one', 'none', `A proxy of ${alias} at ${address} pointing to ${implementation} is not registered`)
+      })
   }
 
   async _fetchOnChainImplementations() {
@@ -89,38 +133,26 @@ export default class StatusComparator {
     return allEvents
       .filter((event, index) => contractsAlias.lastIndexOf(event.args.contractName) === index)
       .filter(event => event.args.implementation !== ZERO_ADDRESS)
-      .map(event => ({ alias: event.args.contractName, implementation: event.args.implementation }))
+      .map(event => ({ alias: event.args.contractName, address: event.args.implementation }))
   }
 
-  _checkRemoteProxy({ alias, address, implementation}) {
-    const matchingProxy = this.networkFile.proxiesOf(alias).find(proxy => proxy.address === address && proxy.implementation === implementation)
-    if (!matchingProxy) this._addReport(0, 1, `Proxy of ${alias} at ${address} pointing to ${implementation} does not match`)
-  }
-
-  _checkLocalProxies(alias, proxiesInfo) {
-    this.networkFile.proxiesOf(alias).forEach(proxy => {
-      const matchingProxy = proxiesInfo.find(info => info.alias === alias && info.address === proxy.address && info.implementation === proxy.implementation)
-      if (!matchingProxy) this._addReport(1, 0, `Proxy of ${alias} at ${proxy.address} pointing to ${proxy.implementation} does not match`)
-    })
-  }
-
-  async _fetchOnChainProxiesInfo() {
+  async _fetchOnChainProxies() {
     const implementationsInfo = await this._fetchOnChainImplementations()
     const app = await this.app();
     const filter = new EventsFilter()
     const proxyEvents = await filter.call(app.factory, 'ProxyCreated')
     const proxiesInfo = []
     await Promise.all(proxyEvents.map(async event => {
-      const proxyAddress = event.args.proxy
-      const implementation = await app.getProxyImplementation(proxyAddress)
-      const matchingImplementations = implementationsInfo.filter(info => info.implementation === implementation)
+      const address = event.args.proxy
+      const implementation = await app.getProxyImplementation(address)
+      const matchingImplementations = implementationsInfo.filter(info => info.address === implementation)
       if (matchingImplementations.length > 1) {
-        this._addReport(1, matchingImplementations.length, `The same implementation address ${implementation} was registered under many aliases`)
+        this._addReport('one', matchingImplementations.length, `The same implementation address ${implementation} was registered under many aliases`)
       } else if (matchingImplementations.length === 0) {
-        this._addReport(1, 0, `Proxy at ${proxyAddress} is pointing to ${implementation} but given implementation is not registered in app`)
+        this._addReport('one', 'none', `Proxy at ${address} is pointing to ${implementation} but given implementation is not registered in app`)
       } else {
         const alias = matchingImplementations[0].alias
-        proxiesInfo.push({ alias, implementation, address: proxyAddress })
+        proxiesInfo.push({ alias, implementation, address })
       }
     }))
     return proxiesInfo;
@@ -129,14 +161,5 @@ export default class StatusComparator {
   _addReport(expected, observed, description) {
     const report = new StatusReport(expected, observed, description);
     this.reports.push(report)
-  }
-
-  async app() {
-    try {
-      if(!this._app) this._app = await App.fetch(this.networkFile.appAddress, this.txParams)
-      return this._app
-    } catch(error) {
-      throw Error(`Cannot fetch App contract from address ${this.networkFile.appAddress}.`, error)
-    }
   }
 }
