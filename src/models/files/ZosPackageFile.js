@@ -92,7 +92,7 @@ export default class ZosPackageFile {
     this.data.contracts = contracts
   }
 
-  setContract(alias, name) {
+  addContract(alias, name) {
     this.data.contracts[alias] = name
   }
 

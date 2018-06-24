@@ -169,13 +169,17 @@ export default class ZosNetworkFile {
     delete this.data['stdlib']
   }
 
-  setContract(alias, instance) {
-    this.data.contracts[alias] = {
+  addContract(alias, instance) {
+    this.setContract(alias, {
       address: instance.address,
       constructorCode: constructorCode(instance),
       bodyBytecodeHash: bytecodeDigest(bodyCode(instance)),
       bytecodeHash: bytecodeDigest(instance.constructor.bytecode),
-    }
+    })
+  }
+
+  setContract(alias, value) {
+    this.data.contracts[alias] = value
   }
 
   setProxies(alias, value) {

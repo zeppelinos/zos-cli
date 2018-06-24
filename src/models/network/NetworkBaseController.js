@@ -81,7 +81,7 @@ export default class NetworkBaseController {
     const contractClass = Contracts.getFromLocal(contractName);
     log.info(`Uploading ${contractName} contract as ${contractAlias}`);
     const contractInstance = await this.setImplementation(contractClass, contractAlias);
-    this.networkFile.setContract(contractAlias, contractInstance)
+    this.networkFile.addContract(contractAlias, contractInstance)
   }
 
   checkLocalContractsDeployed(throwIfFail = false) {
