@@ -1,12 +1,12 @@
 'use strict'
-require('../setup')
+require('./setup')
 
 import { Logger, FileSystem as fs } from 'zos-lib';
-import { cleanup, cleanupfn } from '../helpers/cleanup.js';
+import { cleanup, cleanupfn } from './helpers/cleanup.js';
 
-import init from '../../src/scripts/init.js';
-import CaptureLogs from '../helpers/captureLogs';
-import add from '../../src/scripts/add.js';
+import init from '../src/scripts/init.js';
+import CaptureLogs from './helpers/captureLogs';
+import add from '../src/scripts/add.js';
 
 contract('add script', function() {
   const packageFileName = 'test/tmp/zos.json';

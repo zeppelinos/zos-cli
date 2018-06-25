@@ -1,9 +1,9 @@
 'use strict'
-require('../setup')
+require('./setup')
 
-import push from '../../src/scripts/push.js';
+import push from '../src/scripts/push.js';
 import { App, FileSystem as fs } from 'zos-lib'
-import { cleanup, cleanupfn } from '../helpers/cleanup';
+import { cleanup, cleanupfn } from './helpers/cleanup';
 
 contract('push-with-stdlib script', function([_, owner]) {
   const txParams = { from: owner };
@@ -65,11 +65,11 @@ contract('push-with-stdlib script', function([_, owner]) {
 
     describe('followed by push', function () {
       const stdlibPackageAddress = '0x0000000000000000000000000000000000000010';
-      
+
       beforeEach('running push', async function () {
         this.stdlibAddress = fs.parseJson(networkFileName).stdlib.address;
         await push({ packageFileName, network, txParams })
-      });    
+      });
 
       it('should preserve stdlib address in JSON file', async function () {
         const stdlibAddress = fs.parseJson(networkFileName).stdlib.address;

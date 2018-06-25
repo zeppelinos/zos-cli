@@ -1,7 +1,7 @@
 'use strict'
-require('../setup')
+require('./setup')
 
-import Stdlib from '../../src/models/stdlib/Stdlib'
+import Stdlib from '../src/models/stdlib/Stdlib'
 
 contract('Stdlib', function () {
   const greeterName = 'Greeter'
@@ -14,7 +14,7 @@ contract('Stdlib', function () {
   it('should set a name', async function () {
     this.stdlib.getName().should.eq(packageName)
   })
-  
+
   it('should set a version', async function () {
     this.stdlib.getVersion().should.eq('1.1.0')
   })

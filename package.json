@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "scripts": {
     "prepack": "truffle compile && rm -rf lib && babel src --out-dir lib",
-    "test": "NODE_ENV=test ./node_modules/.bin/truffle test",
+    "test": "./node_modules/.bin/espresso ./test",
     "gen-docs": "babel-node docs/bin/docs.js"
   },
   "bin": {
@@ -33,6 +33,7 @@
     "chalk": "^2.4.1",
     "colors": "^1.2.1",
     "commander": "^2.15.1",
+    "espresso-tests": "^1.0.5",
     "ethereumjs-abi": "^0.6.5",
     "lodash": "^4.17.5",
     "npm-programmatic": "0.0.10",

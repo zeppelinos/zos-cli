@@ -1,17 +1,17 @@
 'use strict'
-require('../setup')
+require('./setup')
 
-import initApp from '../../src/scripts/init.js';
-import initLib from '../../src/scripts/init-lib.js';
-import add from '../../src/scripts/add.js';
-import push from '../../src/scripts/push.js';
-import bumpVersion from '../../src/scripts/bump.js';
-import createProxy from '../../src/scripts/create.js';
-import status from '../../src/scripts/status.js';
-import linkStdlib from '../../src/scripts/link';
-import { cleanup, cleanupfn } from '../helpers/cleanup.js';
-import ControllerFor from '../../src/models/local/ControllerFor';
-import CaptureLogs from '../helpers/captureLogs';
+import initApp from '../src/scripts/init.js';
+import initLib from '../src/scripts/init-lib.js';
+import add from '../src/scripts/add.js';
+import push from '../src/scripts/push.js';
+import bumpVersion from '../src/scripts/bump.js';
+import createProxy from '../src/scripts/create.js';
+import status from '../src/scripts/status.js';
+import linkStdlib from '../src/scripts/link';
+import { cleanup, cleanupfn } from './helpers/cleanup.js';
+import ControllerFor from '../src/models/local/ControllerFor';
+import CaptureLogs from './helpers/captureLogs';
 
 contract('status script', function([_, owner]) {
   const txParams = { from: owner };
@@ -25,7 +25,7 @@ contract('status script', function([_, owner]) {
   const stdlibNameVersion = 'mock-stdlib@1.1.0';
   const packageFileName = 'test/tmp/zos.json';
   const networkFileName = `test/tmp/zos.${network}.json`;
-  
+
   beforeEach('cleanup', async function() {
     cleanup(packageFileName)
     cleanup(networkFileName)
@@ -106,7 +106,7 @@ contract('status script', function([_, owner]) {
 
         this.logs.text.should.match(/Impl/i);
         this.logs.text.should.match(/implemented by ImplV1/i);
-      });  
+      });
 
       it('should not log contract name when matches alias', async function () {
         await init({ name: appName, version, packageFileName });
@@ -116,7 +116,7 @@ contract('status script', function([_, owner]) {
 
         this.logs.text.should.match(/AnotherImplV1/i);
         this.logs.text.should.not.match(/implemented by/i);
-      });  
+      });
 
       it('should log undeployed contract', async function () {
         await init({ name: appName, version, packageFileName });
@@ -144,7 +144,7 @@ contract('status script', function([_, owner]) {
         await status({ network, packageFileName, networkFileName });
 
         this.logs.text.should.match(/is deployed and up to date/i);
-      });    
+      });
     });
   };
 
@@ -217,7 +217,7 @@ contract('status script', function([_, owner]) {
         await push({ packageFileName, network, txParams });
         await createProxy({ contractAlias, network, txParams, packageFileName, networkFileName });
         await status({ network, packageFileName, networkFileName });
-        
+
         this.logs.text.should.match(/Impl at 0x[0-9a-fA-F]{40} version 0.1.0/i);
       });
     });

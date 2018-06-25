@@ -3,3 +3,4 @@ zos*
 build
 lib
 .node-xmlhttprequest-sync-*
+.test/
