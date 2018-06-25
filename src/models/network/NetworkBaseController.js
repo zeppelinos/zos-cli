@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { bytecodeDigest } from '../../utils/digest';
+import contractBuildDirectory from '../../utils/contractBuildDirectory'
 import { Contracts, Logger, FileSystem as fs, App } from 'zos-lib';
 
 const log = new Logger('NetworkController');
@@ -83,7 +84,7 @@ export default class NetworkBaseController {
   }
 
   async uploadContract(contractAlias, contractName) {
-    const contractClass = Contracts.getFromLocal(contractName);
+    const contractClass = Contracts._getFromBuildDir(contractBuildDirectory(), contractName);
     log.info(`Uploading ${contractName} contract as ${contractAlias}`);
     const contractInstance = await this.setImplementation(contractClass, contractAlias);
     this.networkPackage.contracts[contractAlias] = {
@@ -127,7 +128,7 @@ export default class NetworkBaseController {
     const contractName = this.packageData.contracts[contractAlias];
     if (!this.isApplicationContract(contractAlias)) return false;
     if (!this.isContractDeployed(contractAlias)) return true;
-    const contractClass = Contracts.getFromLocal(contractName);
+    const contractClass = Contracts._getFromBuildDir(contractBuildDirectory(), contractName);
     const currentBytecode = bytecodeDigest(contractClass.bytecode);
     const deployedBytecode = this.networkPackage.contracts[contractAlias].bytecodeHash;
     return currentBytecode !== deployedBytecode;

@@ -1,5 +1,6 @@
 import Stdlib from '../stdlib/Stdlib'
 import Truffle from '../truffle/Truffle'
+import contractBuildDirectory from '../../utils/contractBuildDirectory'
 import { Contracts, Logger, FileSystem as fs } from 'zos-lib'
 
 const log = new Logger('LocalController');
@@ -40,7 +41,7 @@ export default class LocalBaseController {
   add(contractAlias, contractName) {
     // We are logging an error instead of throwing because a contract may have an empty constructor, 
     // which is fine, but as long as it is declared we will be picking it up
-    const path = `${process.cwd()}/build/contracts/${contractName}.json`
+    const path = `${contractBuildDirectory()}/${contractName}.json`
     if (this.hasConstructor(path)) {
       log.error(`Contract ${contractName} has an explicit constructor. Move it to an initializer function to use it with ZeppelinOS.`)
     }
@@ -49,7 +50,7 @@ export default class LocalBaseController {
   }
 
   addAll() {
-    const folder = `${process.cwd()}/build/contracts`
+    const folder = contractBuildDirectory()
     fs.readDir(folder).forEach(file => {
       const path = `${folder}/${file}`
       if(this.hasBytecode(path)) {
@@ -63,7 +64,7 @@ export default class LocalBaseController {
   validateImplementation(contractName) {
     // We are manually checking the build file instead of delegating to Contracts,
     // as Contracts requires initializing the entire truffle stack.
-    const folder = `${process.cwd()}/build/contracts`
+    const folder = contractBuildDirectory()
     const path = `${folder}/${contractName}.json`
     if (!fs.exists(path)) {
       throw Error(`Contract ${contractName} not found in folder ${folder}`)
@@ -95,7 +96,7 @@ export default class LocalBaseController {
   getContractClass(contractAlias) {
     const contractName = this.packageData.contracts[contractAlias];
     if (contractName) {
-      return Contracts.getFromLocal(contractName);
+      return Contracts._getFromBuildDir(contractBuildDirectory(), contractName);
     } else if (this.hasStdlib()) {
       const stdlibName = this.packageData.stdlib.name;
       const contractName = new Stdlib(stdlibName).contract(contractAlias)
