@@ -96,7 +96,7 @@ export default class LocalBaseController {
   getContractClass(contractAlias) {
     const contractName = this.packageData.contracts[contractAlias];
     if (contractName) {
-      return Contracts.getFromLocal(contractName);
+      return Contracts._getFromBuildDir(contractBuildDirectory(), contractName);
     } else if (this.hasStdlib()) {
       const stdlibName = this.packageData.stdlib.name;
       const contractName = new Stdlib(stdlibName).contract(contractAlias)
