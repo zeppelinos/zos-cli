@@ -1,5 +1,6 @@
 import Stdlib from '../stdlib/Stdlib'
 import Truffle from '../truffle/Truffle'
+import contractBuildDirectory from '../../utils/contractBuildDirectory'
 import { Contracts, Logger, FileSystem as fs } from 'zos-lib'
 
 const log = new Logger('LocalController');
@@ -37,18 +38,10 @@ export default class LocalBaseController {
     return false;
   }
 
-  buildDirectory() {
-    const truffleConfig = require(`${process.cwd()}/truffle.js`)
-    if (truffleConfig.contracts_build_directory) {
-      return truffleConfig.contracts_build_directory
-    }
-    return `${process.cwd()}/build/contracts`
-  }
-
   add(contractAlias, contractName) {
     // We are logging an error instead of throwing because a contract may have an empty constructor, 
     // which is fine, but as long as it is declared we will be picking it up
-    const path = `${this.buildDirectory()}/${contractName}.json`
+    const path = `${contractBuildDirectory()}/${contractName}.json`
     if (this.hasConstructor(path)) {
       log.error(`Contract ${contractName} has an explicit constructor. Move it to an initializer function to use it with ZeppelinOS.`)
     }
@@ -57,7 +50,7 @@ export default class LocalBaseController {
   }
 
   addAll() {
-    const folder = this.buildDirectory()
+    const folder = contractBuildDirectory()
     fs.readDir(folder).forEach(file => {
       const path = `${folder}/${file}`
       if(this.hasBytecode(path)) {
@@ -71,7 +64,7 @@ export default class LocalBaseController {
   validateImplementation(contractName) {
     // We are manually checking the build file instead of delegating to Contracts,
     // as Contracts requires initializing the entire truffle stack.
-    const folder = this.buildDirectory()
+    const folder = contractBuildDirectory()
     const path = `${folder}/${contractName}.json`
     if (!fs.exists(path)) {
       throw Error(`Contract ${contractName} not found in folder ${folder}`)
