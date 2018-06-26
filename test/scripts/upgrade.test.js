@@ -4,7 +4,6 @@ require('../setup')
 import { Contracts } from "zos-lib";
 import CaptureLogs from '../helpers/captureLogs';
 
-import init from '../../src/scripts/init.js';
 import add from '../../src/scripts/add.js';
 import push from '../../src/scripts/push.js';
 import bumpVersion from '../../src/scripts/bump.js';
@@ -20,9 +19,8 @@ const Greeter_V2 = Contracts.getFromNodeModules('mock-stdlib-2', 'GreeterImpl')
 
 contract('upgrade-proxy script', function([_, owner]) {
   const network = 'test';
-  const appName = 'MyApp';
-  const version_1 = '0.1.0';
-  const version_2 = '0.2.0';
+  const version_1 = '1.1.0';
+  const version_2 = '1.2.0';
   const txParams = { from: owner };
 
   const assertProxyInfo = async function(networkFile, contractAlias, proxyIndex, { version, implementation, address, value }) {
@@ -52,10 +50,9 @@ contract('upgrade-proxy script', function([_, owner]) {
   describe('on application contract', function () {
 
     beforeEach('setup', async function() {
-      this.packageFile = new ZosPackageFile('test/tmp/zos.json')
+      this.packageFile = new ZosPackageFile('test/mocks/packages/package-empty.zos.json')
       this.networkFile = this.packageFile.networkFile(network)
 
-      await init({ name: appName, version: version_1, packageFile: this.packageFile });
       const contractsData = [{ name: 'ImplV1', alias: 'Impl' }, { name: 'AnotherImplV1', alias: 'AnotherImpl' }]
       await add({ contractsData, packageFile: this.packageFile });
       await push({ network, txParams, networkFile: this.networkFile });
@@ -213,12 +210,10 @@ contract('upgrade-proxy script', function([_, owner]) {
   describe('on stdlib contract', function () {
 
     beforeEach('setup', async function() {
-      this.packageFile = new ZosPackageFile('test/tmp/zos.json')
+      this.packageFile = new ZosPackageFile('test/mocks/packages/package-with-stdlib.zos.json')
       this.networkFile = this.packageFile.networkFile(network)
 
-      await init({ name: appName, version: version_1, stdlibNameVersion: 'mock-stdlib@1.1.0', packageFile: this.packageFile });
       await push({ network, txParams, deployStdlib: true, networkFile: this.networkFile });
-
       await createProxy({ contractAlias: 'Greeter', network, txParams, networkFile: this.networkFile });
       await createProxy({ contractAlias: 'Greeter', network, txParams, networkFile: this.networkFile });
 

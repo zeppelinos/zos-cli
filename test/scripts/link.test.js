@@ -1,17 +1,13 @@
 'use strict'
 require('../setup')
 
-import init from '../../src/scripts/init.js';
 import linkStdlib from '../../src/scripts/link.js';
 import ZosPackageFile from "../../src/models/files/ZosPackageFile";
 
 contract('link script', function() {
-  const name = 'MyApp';
-  const version = '0.1.0';
 
   beforeEach('setup', async function() {
-    this.packageFile = new ZosPackageFile('test/tmp/zos.json')
-    await init({ name, version, stdlibNameVersion: 'mock-stdlib@1.1.0', packageFile: this.packageFile });
+    this.packageFile = new ZosPackageFile('test/mocks/packages/package-with-stdlib.zos.json')
   });
 
   it('should set stdlib', async function () {

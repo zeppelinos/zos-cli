@@ -14,7 +14,6 @@ require('chai')
 function useTestZosPackageFile() {
   ZosPackageFile.prototype.write = () => {}
   ZosNetworkFile.prototype.write = () => {}
-  ZosPackageFile.prototype.ifMissingThrow = () => {}
 }
 
 function doNotInstallStdlib() {

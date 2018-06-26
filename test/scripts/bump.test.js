@@ -1,26 +1,18 @@
 'use strict'
 require('../setup')
 
-import init from '../../src/scripts/init.js';
-import initLib from '../../src/scripts/init-lib.js';
 import add from '../../src/scripts/add.js';
 import bumpVersion from '../../src/scripts/bump.js';
 import linkStdlib from '../../src/scripts/link.js';
 import ZosPackageFile from "../../src/models/files/ZosPackageFile";
 
-contract('new-version script', function() {
-  const appName = 'MyApp';
-  const initialVersion = '0.1.0';
+contract('bum[ script', function() {
   const newVersion = '0.2.0';
-  
-  beforeEach(function () {
-    this.packageFile = new ZosPackageFile('test/tmp/zos.json')
-  })
 
   describe('on app', function () {
-    beforeEach('setup', async function() {
-      await init({ name: appName, version: initialVersion, packageFile: this.packageFile });
-    });
+    beforeEach(function () {
+      this.packageFile = new ZosPackageFile('test/mocks/packages/package-empty.zos.json')
+    })
 
     it('should update the app version in the main package file', async function() {
       await bumpVersion({ version: newVersion, packageFile: this.packageFile });
@@ -60,9 +52,9 @@ contract('new-version script', function() {
   });
 
   describe('on lib', function () {
-    beforeEach('setup', async function() {
-      await initLib({ name: appName, version: initialVersion, packageFile: this.packageFile });
-    });
+    beforeEach(function () {
+      this.packageFile = new ZosPackageFile('test/mocks/packages/package-empty-lib.zos.json')
+    })
 
     it('should update the lib version in the main package file', async function() {
       await bumpVersion({ version: newVersion, packageFile: this.packageFile });

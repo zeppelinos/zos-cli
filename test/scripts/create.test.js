@@ -5,7 +5,6 @@ import CaptureLogs from '../helpers/captureLogs';
 import { Contracts, Logger } from 'zos-lib';
 
 import add from '../../src/scripts/add.js';
-import init from '../../src/scripts/init.js';
 import push from '../../src/scripts/push.js';
 import createProxy from '../../src/scripts/create.js';
 import linkStdlib from '../../src/scripts/link.js';
@@ -27,15 +26,13 @@ contract('create script', function([_, owner]) {
   ];
 
   const network = 'test';
-  const appName = 'MyApp';
-  const defaultVersion = '0.1.0';
+  const version = '1.1.0';
   const txParams = { from: owner };
 
   beforeEach('setup', async function() {
-    this.packageFile = new ZosPackageFile('test/tmp/zos.json')
+    this.packageFile = new ZosPackageFile('test/mocks/packages/package-empty.zos.json')
     this.networkFile = this.packageFile.networkFile(network)
 
-    await init({ name: appName, version: defaultVersion, packageFile: this.packageFile });
     await add({ contractsData, packageFile: this.packageFile });
     await push({ network, txParams, networkFile: this.networkFile });
   });
@@ -60,7 +57,7 @@ contract('create script', function([_, owner]) {
     await createProxy({ contractAlias, network, txParams, networkFile: this.networkFile });
 
     const implementation = this.networkFile.contract(contractAlias).address;
-    await assertProxy(this.networkFile, contractAlias, { version: defaultVersion, say: 'V1', implementation });
+    await assertProxy(this.networkFile, contractAlias, { version, say: 'V1', implementation });
   });
 
   it('should refuse to create a proxy for an undefined contract', async function() {
@@ -94,8 +91,8 @@ contract('create script', function([_, owner]) {
     await createProxy({ contractAlias, network, txParams, networkFile: this.networkFile });
     await createProxy({ contractAlias: anotherContractAlias, network, txParams, networkFile: this.networkFile });
 
-    await assertProxy(this.networkFile, contractAlias, { version: defaultVersion, say: 'V1' });
-    await assertProxy(this.networkFile, anotherContractAlias, { version: defaultVersion, say: 'AnotherV1' });
+    await assertProxy(this.networkFile, contractAlias, { version, say: 'V1' });
+    await assertProxy(this.networkFile, anotherContractAlias, { version, say: 'AnotherV1' });
   });
 
   describe('warnings', function () {
@@ -143,7 +140,7 @@ contract('create script', function([_, owner]) {
     it('should create a proxy for a stdlib contract', async function () {
       await createProxy({ contractAlias: 'Greeter', network, txParams, networkFile: this.networkFile });
 
-      await assertProxy(this.networkFile, 'Greeter', { version: defaultVersion });
+      await assertProxy(this.networkFile, 'Greeter', { version });
     });
   });
 
@@ -162,13 +159,13 @@ contract('create script', function([_, owner]) {
     it('should create a proxy for an unmodified contract', async function () {
       await createProxy({ contractAlias: anotherContractAlias, network, txParams, networkFile: this.networkFile });
 
-      await assertProxy(this.networkFile, anotherContractAlias, { version: defaultVersion, say: 'AnotherV1' });
+      await assertProxy(this.networkFile, anotherContractAlias, { version, say: 'AnotherV1' });
     });
 
     it('should create a proxy for a modified contract if force is set', async function () {
       await createProxy({ contractAlias, network, txParams, force: true, networkFile: this.networkFile });
 
-      await assertProxy(this.networkFile, contractAlias, { version: defaultVersion, say: 'V1' });
+      await assertProxy(this.networkFile, contractAlias, { version, say: 'V1' });
     });
   });
 });

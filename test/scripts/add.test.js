@@ -4,20 +4,16 @@ require('../setup')
 import { Logger } from 'zos-lib';
 import CaptureLogs from '../helpers/captureLogs';
 
-import init from '../../src/scripts/init.js';
 import add from '../../src/scripts/add.js';
 import ZosPackageFile from "../../src/models/files/ZosPackageFile";
 
 contract('add script', function() {
-  const appName = 'MyApp';
   const contractName = 'ImplV1';
   const contractAlias = 'Impl';
-  const defaultVersion = '0.1.0';
   const contractsData = [{ name: contractName, alias: contractAlias }]
 
   beforeEach('setup', async function() {
-    this.packageFile = new ZosPackageFile('/test/tmp/.zos.json')
-    await init({ name: appName, version: defaultVersion, packageFile: this.packageFile });
+    this.packageFile = new ZosPackageFile('test/mocks/packages/package-empty.zos.json')
   });
 
   it('should add a logic contract an alias and a filename', function() {
