@@ -12,8 +12,8 @@ export default class LocalBaseController {
     this.packageFile = packageFile
   }
 
-  isLib() {
-    return this.packageFile.isLib()
+  get isLib() {
+    return this.packageFile.isLib
   }
 
   init(name, version, force = false) {

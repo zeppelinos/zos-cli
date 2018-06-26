@@ -5,7 +5,7 @@ export default async function linkStdlib({ stdlibNameVersion, installLib = false
   if (!stdlibNameVersion) throw Error('The stdlib name and version to be linked must be provided.')
 
   const appController = ControllerFor(packageFile)
-  if (appController.isLib()) throw Error("Libraries cannot use a stdlib");
+  if (appController.isLib) throw Error("Libraries cannot use a stdlib");
 
   await appController.linkStdlib(stdlibNameVersion, installLib)
   appController.writePackage()

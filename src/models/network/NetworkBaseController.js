@@ -23,8 +23,8 @@ export default class NetworkBaseController {
     throw Error("Unimplemented function isDeployed()");
   }
 
-  isLib() {
-    return this.packageFile.isLib();
+  get isLib() {
+    return this.packageFile.isLib;
   }
 
   async init() {
@@ -112,7 +112,7 @@ export default class NetworkBaseController {
     if (!this.isContractDeployed(contractAlias)) return true;
     const contractName = this.packageFile.contract(contractAlias);
     const contractClass = Contracts.getFromLocal(contractName);
-    return this.networkFile.hasSameBytecode(contractAlias, contractClass)
+    return !this.networkFile.hasSameBytecode(contractAlias, contractClass)
   }
 
   isContractDefined(contractAlias) {
