@@ -20,7 +20,7 @@ contract('push script', function([_, owner]) {
 
   const shouldDeployPackage = function () {
     it('should create a network file with version info', async function() {
-      this.networkFile.hasVersion(defaultVersion).should.be.true;
+      this.networkFile.isCurrentVersion(defaultVersion).should.be.true;
     });
 
     it('should include deployment addresses', async function () {

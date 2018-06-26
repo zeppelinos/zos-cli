@@ -2,10 +2,12 @@ import _ from 'lodash';
 import { Logger } from 'zos-lib';
 import ControllerFor from "../models/network/ControllerFor";
 
-let log = new Logger('scripts/status');
+const log = new Logger('scripts/status');
 
-export default async function status({ network, txParams = {}, networkFile = undefined, logger = undefined }) {
-  if (logger) log = logger;
+export default async function status({ network, txParams = {}, networkFile = undefined }) {
+  // TODO: Remove this line once new version of Logger is released
+  log.warn = function (msg) { this.log(msg, 'yellow') }
+
   const controller = ControllerFor(network, txParams, networkFile)
   log.info(`Project status for network ${network}`);
 
@@ -17,12 +19,12 @@ export default async function status({ network, txParams = {}, networkFile = und
 }
 
 function rootInfo(controller) {
-  return controller.isLib() ? libInfo(controller) : appInfo(controller);
+  return controller.isLib ? libInfo(controller) : appInfo(controller);
 }
 
 async function appInfo(controller) {
   if (!controller.appAddress) {
-    log.info(`Application is not yet deployed`);
+    log.warn(`Application is not yet deployed`);
     return false;
   }
 
@@ -35,7 +37,7 @@ async function appInfo(controller) {
 
 async function libInfo(controller) {
   if (!controller.packageAddress) {
-    log.info(`Library is not yet deployed`);
+    log.warn(`Library is not yet deployed`);
     return false;
   }
 
@@ -46,7 +48,7 @@ async function libInfo(controller) {
 
 async function versionInfo(networkFile) {
   if (networkFile.hasMatchingVersion()) {
-    log.info(`- Deployed version ${networkFile.version} matches the latest one defined`)
+    log.error(`- Deployed version ${networkFile.version} matches the latest one defined`)
     return true;
   } else {
     log.info(`- Deployed version ${networkFile.version} is out of date (latest is ${networkFile.packageFile.version})`)
@@ -66,9 +68,9 @@ async function contractsInfo(controller) {
     const hasChanged = controller.hasContractChanged(contractAlias);
     const fullName = contractName === contractAlias ? contractAlias : `${contractAlias} (implemented by ${contractName})`;
     if (!isDeployed) {
-      log.info(`- ${fullName} is not deployed`);
+      log.warn(`- ${fullName} is not deployed`);
     } else if (hasChanged) {
-      log.info(`- ${fullName} is out of date with respect to the local version`);
+      log.error(`- ${fullName} is out of date with respect to the local version`);
     } else {
       log.info(`- ${fullName} is deployed and up to date`);
     }
@@ -76,7 +78,7 @@ async function contractsInfo(controller) {
 }
 
 async function stdlibInfo(networkFile) {
-  if (networkFile.isLib()) return;
+  if (networkFile.isLib) return;
   const packageFile = networkFile.packageFile
   log.info('Standard library:');
 
@@ -97,13 +99,13 @@ async function stdlibInfo(networkFile) {
   } else if (packageFile.hasStdlib(networkFile.stdlib)) {
     log.info(`- Deployed application is correctly connected to stdlib`);
   } else {
-    log.info(`- Deployed application is connected to different stdlib ${networkFile.stdlibName}@${networkFile.stdlibVersion}`);
+    log.warn(`- Deployed application is connected to different stdlib ${networkFile.stdlibName}@${networkFile.stdlibVersion}`);
   }
 }
 
 async function proxiesInfo(networkFile) {
-  if (networkFile.isLib()) return;
-  log.info("Deployed proxies:");
+  if (networkFile.isLib) return;
+  log.info('Deployed proxies:');
 
   if (!networkFile.hasProxies()) {
     log.info('- No proxies created');

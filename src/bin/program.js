@@ -16,19 +16,20 @@ const link = require('../commands/link')
 const status = require('../commands/status')
 const compare = require('../commands/compare')
 const freeze = require('../commands/freeze')
+const session = require('../commands/session')
 
 program
   .name('zos')
   .usage('<command> [options]')
   .description('where <command> is one of:\n' +
-          '\t add, bump, create, init, link, push, status, compare, upgrade.')
+          '\t add, bump, create, init, link, push, status, compare, upgrade, session.')
   .version(version, '--version')
   .option('-v, --verbose', 'verbose mode on: output errors stacktrace and detailed log.')
   .option('-s, --silent', 'silent mode: no output sent to stderr.')
   .on('option:verbose', () => { Logger.verbose(true); } )
   .on('option:silent', () => { Logger.silent(true); } )
 
-const commands = [init, add, push, create, bump, upgrade, link, status, compare, freeze]
+const commands = [init, add, push, create, bump, upgrade, link, status, compare, freeze, session]
 
 commands.forEach((c) => c.register(program));
 

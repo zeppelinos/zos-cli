@@ -1,7 +1,7 @@
 import Stdlib from '../stdlib/Stdlib'
 import Truffle from '../truffle/Truffle'
+import ZosPackageFile from '../files/ZosPackageFile'
 import { Contracts, Logger, FileSystem as fs } from 'zos-lib'
-import ZosPackageFile from "../files/ZosPackageFile";
 
 const log = new Logger('LocalController');
 
@@ -12,8 +12,8 @@ export default class LocalBaseController {
     this.packageFile = packageFile
   }
 
-  isLib() {
-    return this.packageFile.isLib()
+  get isLib() {
+    return this.packageFile.isLib
   }
 
   init(name, version, force = false) {
