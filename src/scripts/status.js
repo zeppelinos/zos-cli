@@ -19,7 +19,7 @@ export default async function status({ network, txParams = {}, networkFile = und
 }
 
 function rootInfo(controller) {
-  return controller.isLib() ? libInfo(controller) : appInfo(controller);
+  return controller.isLib ? libInfo(controller) : appInfo(controller);
 }
 
 async function appInfo(controller) {
@@ -78,7 +78,7 @@ async function contractsInfo(controller) {
 }
 
 async function stdlibInfo(networkFile) {
-  if (networkFile.isLib()) return;
+  if (networkFile.isLib) return;
   const packageFile = networkFile.packageFile
   log.info('Standard library:');
 
@@ -104,7 +104,7 @@ async function stdlibInfo(networkFile) {
 }
 
 async function proxiesInfo(networkFile) {
-  if (networkFile.isLib()) return;
+  if (networkFile.isLib) return;
   log.info('Deployed proxies:');
 
   if (!networkFile.hasProxies()) {

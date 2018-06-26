@@ -11,7 +11,7 @@ export default class ZosNetworkFile {
     this.network = network
     this.fileName = fileName
 
-    const defaults = this.packageFile.isLib() ? { contracts: {}, lib: true, frozen: false } : { contracts: {}, proxies: {} }
+    const defaults = this.packageFile.isLib ? { contracts: {}, lib: true, frozen: false } : { contracts: {}, proxies: {} }
     this.data = fs.parseJsonIfExists(this.fileName) || defaults
   }
 
@@ -71,6 +71,10 @@ export default class ZosNetworkFile {
     return this.data.contracts
   }
 
+  get isLib() {
+    return this.packageFile.isLib
+  }
+
   proxy(alias) {
     return this.proxies[alias]
   }
@@ -79,11 +83,7 @@ export default class ZosNetworkFile {
     return this.contracts[alias]
   }
 
-  isLib() {
-    return this.packageFile.isLib()
-  }
-
-  hasVersion(version) {
+  isCurrentVersion(version) {
     return this.version === version
   }
 
@@ -96,7 +96,7 @@ export default class ZosNetworkFile {
   }
 
   hasMatchingVersion() {
-    return this.packageFile.hasVersion(this.version)
+    return this.packageFile.isCurrentVersion(this.version)
   }
 
   hasCustomDeploy() {
@@ -115,7 +115,7 @@ export default class ZosNetworkFile {
   hasSameBytecode(alias, klass) {
     const deployedBytecode = this.contract(alias).bytecodeHash
     const currentBytecode = bytecodeDigest(klass.bytecode)
-    return currentBytecode !== deployedBytecode
+    return currentBytecode === deployedBytecode
   }
 
   set version(version) {
@@ -157,12 +157,8 @@ export default class ZosNetworkFile {
     }
   }
 
-  setProxy(alias, value) {
-    this.data.proxies[alias] = value
-  }
-
   addProxy(alias, info) {
-    if (!this.proxy(alias)) this.setProxy(alias, [])
+    if (!this.proxy(alias)) this.data.proxies[alias] = []
     this.data.proxies[alias].push(info)
   }
 

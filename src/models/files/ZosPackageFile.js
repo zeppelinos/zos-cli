@@ -15,10 +15,6 @@ export default class ZosPackageFile {
     return fs.exists(this.fileName)
   }
 
-  ifMissingThrow(msg) {
-    if(!this.exists()) throw Error(msg)
-  }
-
   get lib() {
     return this.data.lib
   }
@@ -51,12 +47,12 @@ export default class ZosPackageFile {
     return Object.keys(this.contracts)
   }
 
-  contract(alias) {
-    return this.contracts[alias]
+  get isLib() {
+    return !!this.lib
   }
 
-  isLib() {
-    return !!this.lib
+  contract(alias) {
+    return this.contracts[alias]
   }
 
   hasName(name) {
@@ -68,7 +64,7 @@ export default class ZosPackageFile {
     return this.stdlib.name === stdlib.name && this.stdlib.version === stdlib.version
   }
 
-  hasVersion(version) {
+  isCurrentVersion(version) {
     return this.version === version
   }
 

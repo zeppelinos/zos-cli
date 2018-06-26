@@ -19,7 +19,7 @@ contract('init-lib script', function() {
     it('should be marked as lib', async function () {
       await initLib({ name, version, packageFile: this.packageFile })
 
-      this.packageFile.isLib().should.be.true;
+      this.packageFile.isLib.should.be.true;
     });
 
     it('should have the appropriate app name', async function() {
@@ -31,13 +31,13 @@ contract('init-lib script', function() {
     it('should have a default version if not specified', async function() {
       await initLib({ name, packageFile: this.packageFile })
 
-      this.packageFile.hasVersion('0.1.0').should.be.true
+      this.packageFile.isCurrentVersion('0.1.0').should.be.true
     });
 
     it('should have the appropriate version', async function() {
       await initLib({ name, version, packageFile: this.packageFile })
 
-      this.packageFile.hasVersion(version).should.be.true
+      this.packageFile.isCurrentVersion(version).should.be.true
     });
 
     it('should have an empty contracts object', async function() {
@@ -60,7 +60,7 @@ contract('init-lib script', function() {
       await initLib({ name, version, force: true, packageFile: this.packageFile })
 
       this.packageFile.hasName(name).should.be.true
-      this.packageFile.hasVersion(version).should.be.true
+      this.packageFile.isCurrentVersion(version).should.be.true
 
       cleanup(this.packageFile.fileName)
     });
