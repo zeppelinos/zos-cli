@@ -11,6 +11,7 @@ const Session = {
     const session = fs.parseJsonIfExists(ZOS_SESSION_PATH) || {}
     const expires = new Date(session.expires)
     if (!session || expires <= new Date()) return undefined
+    log.info(`Using session network '${session.network}'`)
     return session.network
   },
 
