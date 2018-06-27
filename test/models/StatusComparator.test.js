@@ -271,8 +271,8 @@ contract('StatusComparator', function([_, owner, anotherAddress]) {
             this.checker.reports[0].expected.should.be.equal(this.impl.address)
             this.checker.reports[0].observed.should.be.equal(this.anotherImpl.address)
             this.checker.reports[0].description.should.be.equal('Address for contract Impl does not match')
-            this.checker.reports[1].expected.should.be.equal(bytecodeDigest(ImplV1.bytecode))
-            this.checker.reports[1].observed.should.be.equal(bytecodeDigest(AnotherImplV1.bytecode))
+            this.checker.reports[1].expected.should.be.equal(bytecodeDigest(ImplV1.deployedBytecode))
+            this.checker.reports[1].observed.should.be.equal(bytecodeDigest(AnotherImplV1.deployedBytecode))
             this.checker.reports[1].description.should.be.equal(`Bytecode at ${this.anotherImpl.address} for contract Impl does not match`)
             this.checker.reports[2].expected.should.be.equal('one')
             this.checker.reports[2].observed.should.be.equal('none')
@@ -283,7 +283,7 @@ contract('StatusComparator', function([_, owner, anotherAddress]) {
         describe('when the bytecode for that contract is different', function () {
           beforeEach('registering new implementation in AppDirectory', async function () {
             const contracts = this.networkFile.contracts
-            contracts.Impl.bytecodeHash = '0x0'
+            contracts.Impl.bodyBytecodeHash = '0x0'
             this.networkFile.contracts = contracts
             await this.app.currentDirectory().setImplementation('Impl', this.impl.address, txParams)
           })
@@ -293,7 +293,7 @@ contract('StatusComparator', function([_, owner, anotherAddress]) {
 
             this.checker.reports.should.have.lengthOf(2)
             this.checker.reports[0].expected.should.be.equal('0x0')
-            this.checker.reports[0].observed.should.be.equal(bytecodeDigest(ImplV1.bytecode))
+            this.checker.reports[0].observed.should.be.equal(bytecodeDigest(ImplV1.deployedBytecode))
             this.checker.reports[0].description.should.be.equal(`Bytecode at ${this.impl.address} for contract Impl does not match`)
             this.checker.reports[1].expected.should.be.equal('one')
             this.checker.reports[1].observed.should.be.equal('none')

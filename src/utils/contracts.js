@@ -1,19 +1,17 @@
 import crypto from 'crypto'
 
-export function extractBodyCode(rawBytecode) {
-  return splitCode(rawBytecode).body
+export function bodyCode(instance) {
+  return splitCode(instance).body
 }
 
-export function extractConstructorCode(rawBytecode) {
-  return splitCode(rawBytecode).constructor
+export function constructorCode(instance) {
+  return splitCode(instance).constructor
 }
 
-export function splitCode(rawBytecode) {
-  const bytecode = rawBytecode.replace(/^0x/, '')
-  const constructorEndingOpcodes = '6000396000f300'
-  const endingConstructorIndex = bytecode.indexOf(constructorEndingOpcodes) + constructorEndingOpcodes.length
-  const body = bytecode.substr(endingConstructorIndex, bytecode.length)
-  const constructor = bytecode.substr(0, endingConstructorIndex)
+export function splitCode(instance) {
+  const bytecode = instance.constructor.bytecode.replace(/^0x/, '')
+  const body = instance.constructor.deployedBytecode.replace(/^0x/, '')
+  const constructor = bytecode.substr(0, bytecode.indexOf(body))
   return { constructor, body }
 }
 

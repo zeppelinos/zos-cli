@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import { Logger, FileSystem as fs } from 'zos-lib'
-import { bytecodeDigest, extractConstructorCode } from '../../utils/contracts'
+import { bytecodeDigest, bodyCode, constructorCode } from '../../utils/contracts'
 
 const log = new Logger('ZosNetworkFile')
 
@@ -172,8 +172,9 @@ export default class ZosNetworkFile {
   setContract(alias, instance) {
     this.data.contracts[alias] = {
       address: instance.address,
+      constructorCode: constructorCode(instance),
+      bodyBytecodeHash: bytecodeDigest(bodyCode(instance)),
       bytecodeHash: bytecodeDigest(instance.constructor.bytecode),
-      constructorCode: extractConstructorCode(instance.constructor.bytecode),
     }
   }
 

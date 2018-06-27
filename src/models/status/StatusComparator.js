@@ -79,10 +79,8 @@ export default class StatusComparator {
   }
 
   _checkImplementationBytecode(alias, address) {
-    const constructorCode = this.networkFile.contract(alias).constructorCode
-    const expected = this.networkFile.contract(alias).bytecodeHash
-    const bodyBytecode = web3.eth.getCode(address).replace(/^0x/, '');
-    const observed = bytecodeDigest(constructorCode + bodyBytecode)
+    const expected = this.networkFile.contract(alias).bodyBytecodeHash
+    const observed = bytecodeDigest(web3.eth.getCode(address))
     if (observed !== expected) this._addReport(expected, observed, `Bytecode at ${address} for contract ${alias} does not match`)
   }
 
