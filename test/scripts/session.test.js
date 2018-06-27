@@ -10,20 +10,40 @@ describe('session script', function () {
 
   describe('opening a new session', function () {
     describe('when there was no session opened before', function () {
-      it('sets the new network', function () {
-        session({ network: 'foo' })
+      describe('when the time out does not expire', function () {
+        it('sets the new network', function () {
+          session({ network: 'foo' })
 
-        Session.getNetwork().should.be.equal('foo')
+          Session.getNetwork().should.be.equal('foo')
+        })
+      })
+
+      describe('when the time out expires', function () {
+        it('replaces the previous network', function () {
+          session({ network: 'foo', timeout: 0 })
+
+          assert(Session.getNetwork() === undefined)
+        })
       })
     })
 
     describe('when there was no session opened before', function () {
       beforeEach(() => session({ network: 'foo' }))
 
-      it('replaces the previous network', function () {
-        session({ network: 'bar' })
+      describe('when the time out does not expire', function () {
+        it('replaces the previous network', function () {
+          session({ network: 'bar' })
 
-        Session.getNetwork().should.be.equal('bar')
+          Session.getNetwork().should.be.equal('bar')
+        })
+      })
+
+      describe('when the time out expires', function () {
+        it('replaces the previous network', function () {
+          session({ network: 'bar', timeout: 0 })
+
+          assert(Session.getNetwork() === undefined)
+        })
       })
     })
   })

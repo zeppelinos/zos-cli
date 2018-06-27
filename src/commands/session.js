@@ -11,6 +11,6 @@ const register = program =>
     .option('--network <network>')
     .option('--close')
     .description(description)
-    .action(setNetwork)
+    .action(session)
 
 module.exports = { signature, description, register }
