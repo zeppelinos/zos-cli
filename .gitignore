@@ -1,6 +1,6 @@
 node_modules
-zos*
 .zos.session
+zos.*
 build
 lib
 .node-xmlhttprequest-sync-*
