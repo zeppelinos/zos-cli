@@ -31,7 +31,6 @@
   "homepage": "https://github.com/zeppelinos/zos-cli#readme",
   "dependencies": {
     "chalk": "^2.4.1",
-    "colors": "^1.2.1",
     "commander": "^2.15.1",
     "lodash": "^4.17.5",
     "npm-programmatic": "0.0.10",
