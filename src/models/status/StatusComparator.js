@@ -41,7 +41,7 @@ export default class StatusComparator {
     this._addReport(expected, address, `Address for contract ${alias} does not match`)
   }
 
-  onMismatchingContractBytecode(expected, observed, { alias, address }) {
+  onMismatchingContractBodyBytecode(expected, observed, { alias, address, bodyBytecodeHash }) {
     this._addReport(expected, observed, `Bytecode at ${address} for contract ${alias} does not match`)
   }
 

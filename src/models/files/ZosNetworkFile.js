@@ -201,8 +201,8 @@ export default class ZosNetworkFile {
     this.data.contracts[alias].address = address
   }
 
-  setContractBytecodeHash(alias, bytecodeHash) {
-    this.data.contracts[alias].bytecodeHash = bytecodeHash
+  setContractBodyBytecodeHash(alias, bodyBytecodeHash) {
+    this.data.contracts[alias].bodyBytecodeHash = bodyBytecodeHash
   }
 
   removeContract(alias) {

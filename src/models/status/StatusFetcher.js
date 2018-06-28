@@ -1,5 +1,5 @@
 import { Contracts, Logger, App, FileSystem as fs } from 'zos-lib'
-import {bytecodeDigest, extractBodyCode, extractConstructorCode} from '../../utils/contracts'
+import { bytecodeDigest, bodyCode, constructorCode } from '../../utils/contracts'
 
 const log = new Logger('StatusFetcher')
 
@@ -43,18 +43,19 @@ export default class StatusFetcher {
     // TODO: use new version of Contracts once released
     const buildPath = `${process.cwd()}/build/contracts/${contractName}.json`
     if(fs.exists(buildPath)) {
-      const contract = Contracts.getFromLocal(contractName)
-      const bodyBytecode = web3.eth.getCode(address).replace(/^0x/, '')
-      if(extractBodyCode(contract.bytecode) === bodyBytecode) {
+      const contract = Contracts.getFromLocal(contractName).at(address)
+      const remoteBodyBytecode = web3.eth.getCode(address).replace(/^0x/, '')
+      const bodyBytecodeHash = bytecodeDigest(remoteBodyBytecode)
+      if(bodyCode(contract) === remoteBodyBytecode) {
         // TODO: use new log warning level once released
         log.log(`Assuming that constructor function of local version of ${contractName} is the one registered`, 'yellow')
-        const constructorCode = extractConstructorCode(contract.bytecode)
-        const bytecodeHash = bytecodeDigest(constructorCode + bodyBytecode)
-        this.networkFile.setContract(alias, { address, bytecodeHash, constructorCode })
+        const constructor = constructorCode(contract)
+        const bytecodeHash = bytecodeDigest(constructor + remoteBodyBytecode)
+        this.networkFile.setContract(alias, { address, bytecodeHash, bodyBytecodeHash, constructorCode: constructor })
       }
       else {
         log.error(`Local version of ${contractName} has a different bytecode than the one stored at ${address}`)
-        this.networkFile.setContract(alias, { address, bytecodeHash: 'unknown', constructorCode: 'unknown' })
+        this.networkFile.setContract(alias, { address, bodyBytecodeHash, bytecodeHash: 'unknown', constructorCode: 'unknown' })
       }
     }
     else {
@@ -68,9 +69,9 @@ export default class StatusFetcher {
     this.networkFile.setContractAddress(alias, address)
   }
 
-  onMismatchingContractBytecode(expected, observed, { alias, address, bytecodeHash }) {
+  onMismatchingContractBodyBytecode(expected, observed, { alias, address, bodyBytecodeHash }) {
     log.info(`Updating bytecodeHash of contract ${alias} from ${expected} to ${observed}`)
-    this.networkFile.setContractBytecodeHash(alias, bytecodeHash)
+    this.networkFile.setContractBodyBytecodeHash(alias, bodyBytecodeHash)
   }
 
   onUnregisteredLocalProxy(expected, observed, { alias, address, implementation }) {

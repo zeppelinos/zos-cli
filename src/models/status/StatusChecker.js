@@ -99,7 +99,7 @@ export default class StatusChecker {
   _checkImplementationBytecode(alias, address) {
     const expected = this.networkFile.contract(alias).bodyBytecodeHash
     const observed = bytecodeDigest(web3.eth.getCode(address))
-    if (observed !== expected) this._addReport(expected, observed, `Bytecode at ${address} for contract ${alias} does not match`)
+    if (observed !== expected) this.visitor.onMismatchingContractBodyBytecode(expected, observed, { alias, address, bodyBytecodeHash: observed })
   }
 
   _checkUnregisteredLocalImplementations(implementationsInfo) {

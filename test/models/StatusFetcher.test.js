@@ -8,7 +8,7 @@ import linkStdlib from '../../src/scripts/link'
 import StatusChecker from '../../src/models/status/StatusChecker'
 import StatusFetcher from '../../src/models/status/StatusFetcher'
 import ZosPackageFile from '../../src/models/files/ZosPackageFile'
-import { bytecodeDigest, extractConstructorCode } from '../../src/utils/contracts'
+import {bodyCode, bytecodeDigest, constructorCode} from '../../src/utils/contracts'
 
 const ImplV1 = Contracts.getFromLocal('ImplV1')
 const AnotherImplV1 = Contracts.getFromLocal('AnotherImplV1')
@@ -196,7 +196,8 @@ contract('StatusFetcher', function([_, owner, anotherAddress]) {
             this.networkFile.contractAliases.should.have.lengthOf(1)
             this.networkFile.contract('ImplV1').address.should.be.equal(this.impl.address)
             this.networkFile.contract('ImplV1').bytecodeHash.should.be.equal(bytecodeDigest(ImplV1.bytecode))
-            this.networkFile.contract('ImplV1').constructorCode.should.be.equal(extractConstructorCode(ImplV1.bytecode))
+            this.networkFile.contract('ImplV1').constructorCode.should.be.equal(constructorCode(this.impl))
+            this.networkFile.contract('ImplV1').bodyBytecodeHash.should.be.equal(bytecodeDigest(bodyCode(this.impl)))
           })
         })
 
@@ -212,6 +213,7 @@ contract('StatusFetcher', function([_, owner, anotherAddress]) {
             this.networkFile.contract('Impl').address.should.be.equal(this.impl.address)
             this.networkFile.contract('Impl').bytecodeHash.should.be.equal('unknown')
             this.networkFile.contract('Impl').constructorCode.should.be.equal('unknown')
+            this.networkFile.contract('Impl').bodyBytecodeHash.should.be.equal(bytecodeDigest(bodyCode(this.impl)))
           })
         })
       })
@@ -228,10 +230,12 @@ contract('StatusFetcher', function([_, owner, anotherAddress]) {
           this.networkFile.contractAliases.should.have.lengthOf(2)
           this.networkFile.contract('ImplV1').address.should.be.equal(this.impl.address)
           this.networkFile.contract('ImplV1').bytecodeHash.should.be.equal(bytecodeDigest(ImplV1.bytecode))
-          this.networkFile.contract('ImplV1').constructorCode.should.be.equal(extractConstructorCode(ImplV1.bytecode))
+          this.networkFile.contract('ImplV1').constructorCode.should.be.equal(constructorCode(this.impl))
+          this.networkFile.contract('ImplV1').bodyBytecodeHash.should.be.equal(bytecodeDigest(bodyCode(this.impl)))
           this.networkFile.contract('AnotherImplV1').address.should.be.equal(this.anotherImpl.address)
           this.networkFile.contract('AnotherImplV1').bytecodeHash.should.be.equal(bytecodeDigest(AnotherImplV1.bytecode))
-          this.networkFile.contract('AnotherImplV1').constructorCode.should.be.equal(extractConstructorCode(AnotherImplV1.bytecode))
+          this.networkFile.contract('AnotherImplV1').constructorCode.should.be.equal(constructorCode(this.anotherImpl))
+          this.networkFile.contract('AnotherImplV1').bodyBytecodeHash.should.be.equal(bytecodeDigest(bodyCode(this.anotherImpl)))
         })
       })
 
@@ -249,7 +253,8 @@ contract('StatusFetcher', function([_, owner, anotherAddress]) {
           this.networkFile.contractAliases.should.have.lengthOf(1)
           this.networkFile.contract('AnotherImplV1').address.should.be.equal(this.anotherImpl.address)
           this.networkFile.contract('AnotherImplV1').bytecodeHash.should.be.equal(bytecodeDigest(AnotherImplV1.bytecode))
-          this.networkFile.contract('AnotherImplV1').constructorCode.should.be.equal(extractConstructorCode(AnotherImplV1.bytecode))
+          this.networkFile.contract('AnotherImplV1').constructorCode.should.be.equal(constructorCode(this.anotherImpl))
+          this.networkFile.contract('AnotherImplV1').bodyBytecodeHash.should.be.equal(bytecodeDigest(bodyCode(this.anotherImpl)))
         })
       })
     })
@@ -286,6 +291,7 @@ contract('StatusFetcher', function([_, owner, anotherAddress]) {
             this.networkFile.contract('Impl').address.should.be.equal(previousContract.address)
             this.networkFile.contract('Impl').bytecodeHash.should.be.equal(previousContract.bytecodeHash)
             this.networkFile.contract('Impl').constructorCode.should.be.equal(previousContract.constructorCode)
+            this.networkFile.contract('Impl').bodyBytecodeHash.should.be.equal(previousContract.bodyBytecodeHash)
           })
         })
 
@@ -303,14 +309,13 @@ contract('StatusFetcher', function([_, owner, anotherAddress]) {
             this.networkFile.contract('Impl').address.should.be.equal(this.anotherImpl.address)
             this.networkFile.contract('Impl').bytecodeHash.should.be.equal(previousContract.bytecodeHash)
             this.networkFile.contract('Impl').constructorCode.should.be.equal(previousContract.constructorCode)
+            this.networkFile.contract('Impl').bodyBytecodeHash.should.be.equal(previousContract.bodyBytecodeHash)
           })
         })
 
         describe('when the bytecode for that contract is different', function () {
           beforeEach('registering new implementation in AppDirectory', async function () {
-            const contracts = this.networkFile.contracts
-            contracts.Impl.bytecodeHash = '0x0'
-            this.networkFile.contracts = contracts
+            this.networkFile.setContractBodyBytecodeHash('Impl', '0x0')
             await this.app.currentDirectory().setImplementation('Impl', this.impl.address, txParams)
           })
 
@@ -323,6 +328,7 @@ contract('StatusFetcher', function([_, owner, anotherAddress]) {
             this.networkFile.contract('Impl').address.should.be.equal(previousContract.address)
             this.networkFile.contract('Impl').bytecodeHash.should.be.equal(bytecodeDigest(ImplV1.bytecode))
             this.networkFile.contract('Impl').constructorCode.should.be.equal(previousContract.constructorCode)
+            this.networkFile.contract('Impl').bodyBytecodeHash.should.be.equal(bytecodeDigest(bodyCode(this.impl)))
           })
         })
       })
