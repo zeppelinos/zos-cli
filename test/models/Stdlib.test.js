@@ -3,6 +3,8 @@ require('../setup')
 
 import Stdlib from '../../src/models/stdlib/Stdlib'
 
+const should = require('chai').should()
+
 contract('Stdlib', function () {
   const packageName = 'mock-stdlib'
 
@@ -14,7 +16,7 @@ contract('Stdlib', function () {
         const version = '1.1.0'
 
         it('should return the address of the stdlib', function () {
-          Stdlib.fetch(packageName, version, network).should.be.nonzeroAddress
+          Stdlib.fetch(packageName, version, network).address.should.be.nonzeroAddress
         })
       })
 
@@ -50,8 +52,8 @@ contract('Stdlib', function () {
       this.stdlib.name.should.eq(packageName)
     })
 
-    it('should set a version', async function () {
-      this.stdlib.version.should.eq('1.1.0')
+    it('should not set a version if not specified', async function () {
+      should.not.exist(this.stdlib.version)
     })
 
     it('should list all provided contracts', async function () {
