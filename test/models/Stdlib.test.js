@@ -25,7 +25,7 @@ contract('Stdlib', function () {
 
         it('throws an error', function () {
           expect(() => Stdlib.fetch(packageName, version, network))
-            .to.throw('Requested stdlib version 2.0.0 does not match stdlib network package version 1.1.0')
+            .to.throw('Required stdlib version 2.0.0 does not match stdlib package version 1.1.0')
         })
       })
     })
@@ -52,8 +52,8 @@ contract('Stdlib', function () {
       this.stdlib.name.should.eq(packageName)
     })
 
-    it('should not set a version if not specified', async function () {
-      should.not.exist(this.stdlib.version)
+    it('should set latest version with caret if not specified', async function () {
+      this.stdlib.version.should.eq('^1.1.0')
     })
 
     it('should list all provided contracts', async function () {

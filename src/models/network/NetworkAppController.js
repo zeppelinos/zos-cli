@@ -170,7 +170,7 @@ export default class NetworkAppController extends NetworkBaseController {
     if (stdlibAddress !== currentStdlibAddress) {
       await this.app.setStdlib(stdlibAddress);
       this.networkFile.stdlib = { 
-         ... this.packageFile.stdlib,
+         ... this.packageFile.stdlib, // name, customDeploy
          address: stdlibAddress, 
          version: stdlibVersion
       };

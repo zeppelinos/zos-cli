@@ -35,7 +35,7 @@ contract('link script', function() {
 
   it('should raise an error if requested version of stdlib does not match its package version', async function () {
     await linkStdlib({ stdlibNameVersion: 'mock-stdlib-invalid@1.0.0', packageFile: this.packageFile })
-      .should.be.rejectedWith('Requested stdlib version 1.0.0 does not match stdlib package version 2.0.0')
+      .should.be.rejectedWith('Required stdlib version 1.0.0 does not match stdlib package version 2.0.0')
   });
 
   it('should install the stdlib if a valid version range is requested', async function () {
@@ -49,11 +49,11 @@ contract('link script', function() {
     await linkStdlib({ stdlibNameVersion: 'mock-stdlib', installLib: true, packageFile: this.packageFile });
 
     this.packageFile.stdlibName.should.eq('mock-stdlib');
-    should.not.exist(this.packageFile.stdlibVersion);
+    this.packageFile.stdlibVersion.should.eq('^1.1.0');
   });
 
   it('should raise an error if requested version range does not match its package version', async function () {
     await linkStdlib({ stdlibNameVersion: 'mock-stdlib@~1.0.0', packageFile: this.packageFile })
-      .should.be.rejectedWith('Requested stdlib version ~1.0.0 does not match stdlib package version 1.1.0')
+      .should.be.rejectedWith('Required stdlib version ~1.0.0 does not match stdlib package version 1.1.0')
   });
 });

@@ -15,8 +15,14 @@ export default class Stdlib {
     return await StdlibDeployer.deploy(...arguments);
   }
 
-  static satisfies(version, requirement) {
+  static satisfiesVersion(version, requirement) {
     return !requirement || version === requirement || semver.satisfies(version, requirement);
+  }
+
+  static validateSatisfiesVersion(version, requirement) {
+    if (!Stdlib.satisfiesVersion(version, requirement)) {
+      throw Error(`Required stdlib version ${requirement} does not match stdlib package version ${version}`);
+    }
   }
 
   constructor(nameAndVersion) {
@@ -50,12 +56,16 @@ export default class Stdlib {
   _parseNameVersion(nameAndVersion) {
     const [name, version] = nameAndVersion.split('@')
     this.name = name
-    this.version = version
     this.nameAndVersion = nameAndVersion
 
     const packageVersion = this.getPackage().version
-    if (!Stdlib.satisfies(packageVersion, version)) {
-      throw Error(`Requested stdlib version ${version} does not match stdlib package version ${packageVersion}`)
-    }
+    Stdlib.validateSatisfiesVersion(packageVersion, version)
+
+    this.version = version || tryWithCaret(packageVersion)
   }
+}
+
+function tryWithCaret(version) {
+  const cleaned = semver.clean(version);
+  return cleaned ? `^${cleaned}` : version;
 }

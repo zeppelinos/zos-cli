@@ -255,7 +255,7 @@ contract('push script', function([_, owner]) {
 
       it('should set address in network file', async function () {
         await push({ network, txParams, networkFile: this.networkFile })
-          .should.be.rejectedWith('Requested stdlib version 1.0.0 does not match stdlib network package version 3.0.0')
+          .should.be.rejectedWith('Required stdlib version 1.0.0 does not match stdlib package version 3.0.0')
       });
     })
   });
