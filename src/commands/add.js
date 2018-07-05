@@ -30,9 +30,7 @@ async function action(contractNames, options) {
     })
     add({ contractsData })
   }
-  if (options.push) {
-    await push.action({ network: options.push, from: options.from, timeout: options.timeout })
-  }
+  await push.tryAction(options)
 }
 
 export default { name, signature, description, register, action }

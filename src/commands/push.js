@@ -2,6 +2,7 @@
 
 import push from '../scripts/push'
 import runWithTruffle from '../utils/runWithTruffle'
+import _ from 'lodash'
 
 const name = 'push'
 const signature = name
@@ -22,9 +23,17 @@ const register = program => program
 async function action(options) {
   const { skipCompile, deployStdlib, reupload } = options
   await runWithTruffle(
-    async (opts) => await push({ deployStdlib, reupload, ... opts }), 
+    async (opts) => await push({ deployStdlib, reupload, ... opts }),
     { compile: !skipCompile, ... options }
   )
 }
 
-export default { name, signature, description, register, action }
+async function tryAction(externalOptions) {
+  if (!externalOptions.push) return;
+  const options = _.omit(externalOptions, 'push');
+  const network = _.isString(externalOptions.push) ? externalOptions.push : undefined;
+  if (network) options.network = network;
+  return action(options)
+}
+
+export default { name, signature, description, register, action, tryAction }

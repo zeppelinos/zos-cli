@@ -8,14 +8,18 @@ const ZOS_SESSION_PATH = '.zos.session'
 const Session = {
 
   getSession() {
-    const session = fs.parseJsonIfExists(ZOS_SESSION_PATH) || {}
+    const session = fs.parseJsonIfExists(ZOS_SESSION_PATH)
+    if (_.isEmpty(session)) return undefined
     const expires = new Date(session.expires)
-    if (!session || expires <= new Date()) return undefined
-    log.info(`Using session with ${describe(session)}`)
+    if (expires <= new Date()) return undefined
     return _.pick(session, 'network', 'timeout', 'from')
   },
 
-  getOptions(overrides) {
+  getOptions(overrides = {}) {
+    const session = this.getSession();
+    if (!session) return overrides;
+    log.info(`Using session with ${describe(_.omitBy(session, (v,key) => overrides[key]))}`)
+    
     return {
       ... this.getSession(),
       ... overrides

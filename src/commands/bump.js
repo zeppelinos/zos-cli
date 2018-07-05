@@ -13,7 +13,7 @@ const register = program => program
   .description(description)
   .option('--link <stdlib>', 'link to new standard library version')
   .option('--no-install', 'skip installing stdlib dependencies locally')
-  .option('--push <network>', 'push changes to the specified network after bumping version')
+  .option('--push [network]', 'push changes to the specified network after bumping version')
   .option('--timeout <timeout>', 'timeout in seconds for blockchain transactions')
   .option('-f, --from <from>', 'specify transaction sender address for --push')
   .action(action)
@@ -21,9 +21,7 @@ const register = program => program
 async function action(version, options) {
   const { link: stdlibNameVersion, install: installLib } = options
   await bump({ version, stdlibNameVersion, installLib })
-  if (options.push) {
-    await push.action({ network: options.push, from: options.from, timeout: options.timeout })
-  }
+  await push.tryAction(options)
 }
 
 export default { name, signature, description, register, action }
