@@ -10,7 +10,7 @@ const register = program => program
   .command(signature, { noHelp: true })
   .usage('[options]')
   .description(description)
-  .option('--network <network>')
+  .option('-n, --network <network>')
   .option('--close')
   .action(action)
 
