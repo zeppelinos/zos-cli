@@ -20,7 +20,7 @@ const register = program => program
 async function action(stdlibNameVersion, options) {
   const installLib = options.install
   await linkStdlib({ stdlibNameVersion, installLib })
-  if(options.push) {
+  if (options.push) {
     await push.action({ network: options.push, from: options.from, timeout: options.timeout })
   }
 }

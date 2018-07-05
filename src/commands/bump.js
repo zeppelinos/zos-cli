@@ -14,14 +14,15 @@ const register = program => program
   .option('--link <stdlib>', 'link to new standard library version')
   .option('--no-install', 'skip installing stdlib dependencies locally')
   .option('--push <network>', 'push changes to the specified network after bumping version')
+  .option('--timeout <timeout>', 'timeout in seconds for blockchain transactions')
   .option('-f, --from <from>', 'specify transaction sender address for --push')
   .action(action)
 
 async function action(version, options) {
   const { link: stdlibNameVersion, install: installLib } = options
   await bump({ version, stdlibNameVersion, installLib })
-  if(options.push) {
-    await push.action({ network: options.push, from: options.from })
+  if (options.push) {
+    await push.action({ network: options.push, from: options.from, timeout: options.timeout })
   }
 }
 
