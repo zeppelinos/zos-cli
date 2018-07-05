@@ -20,9 +20,11 @@ const register = program => program
   .action(action)
 
 async function action(options) {
-  const { from, network, skipCompile, deployStdlib, reupload, timeout } = options
-  const txParams = from ? { from } : {}
-  await runWithTruffle(async () => await push({ network, deployStdlib, reupload, txParams }), network, { compile: !skipCompile, timeout })
+  const { skipCompile, deployStdlib, reupload } = options
+  await runWithTruffle(
+    async (opts) => await push({ deployStdlib, reupload, ... opts }), 
+    { compile: !skipCompile, ... options }
+  )
 }
 
 export default { name, signature, description, register, action }
