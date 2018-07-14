@@ -43,8 +43,8 @@ export default class NetworkBaseController {
     await statusFetcher.call()
   }
 
-  async createProxy() {
-    throw Error('Unimplemented function create()')
+  async createInstance() {
+    throw Error('Unimplemented function createInstance()')
   }
 
   async push(reupload = false) {

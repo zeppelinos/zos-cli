@@ -12,7 +12,7 @@ export default class ZosNetworkFile {
     this.network = network
     this.fileName = fileName
 
-    const defaults = this.packageFile.isLib ? { contracts: {}, lib: true, frozen: false } : { contracts: {}, proxies: {} }
+    const defaults = this.packageFile.isLib ? { contracts: {}, lib: true, frozen: false } : { contracts: {}, proxies: {}, nonUpgradeableInstances: {} }
     this.data = fs.parseJsonIfExists(this.fileName) || defaults
   }
 
@@ -68,6 +68,10 @@ export default class ZosNetworkFile {
     return this.data.proxies || {}
   }
 
+  get nonUpgradeableInstances() {
+    return this.data.nonUpgradeableInstances || {}
+  }
+
   get contracts() {
     return this.data.contracts || {}
   }
@@ -108,6 +112,14 @@ export default class ZosNetworkFile {
     return this.proxiesOf(alias).findIndex(proxy => proxy.address === address)
   }
 
+  nonUpgradeableInstance(alias, index) {
+    return this.nonUpgradeableInstancesOf(alias)[index]
+  }
+
+  nonUpgradeableInstancesOf(alias) {
+    return this.nonUpgradeableInstances[alias] || []
+  }
+
   contract(alias) {
     return this.contracts[alias]
   }
@@ -130,6 +142,10 @@ export default class ZosNetworkFile {
 
   hasProxies(alias = undefined) {
     return alias ? !_.isEmpty(this.proxiesOf(alias)) : !_.isEmpty(this.proxies)
+  }
+
+  hasNonUpgradeableInstances(alias = undefined) {
+    return alias ? !_.isEmpty(this.nonUpgradeableInstancesOf(alias)) : !_.isEmpty(this.nonUpgradeableInstances)
   }
 
   hasMatchingVersion() {
@@ -241,6 +257,15 @@ export default class ZosNetworkFile {
     if(index < 0) return
     this.data.proxies[alias].splice(index, 1)
     if(this.proxiesOf(alias).length === 0) delete this.data.proxies[alias]
+  }
+
+  setNonUpgradeableInstances(alias, value) {
+    this.data.nonUpgradeableInstances[alias] = value
+  }
+
+  addNonUpgradeableInstance(alias, info) {
+    if (!this.hasNonUpgradeableInstances(alias)) this.setNonUpgradeableInstances(alias, [])
+    this.data.nonUpgradeableInstances[alias].push(info)
   }
 
   write() {
