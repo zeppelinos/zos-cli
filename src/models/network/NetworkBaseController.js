@@ -44,7 +44,7 @@ export default class NetworkBaseController {
   }
 
   async createProxy() {
-    throw Error('Unimplemented function createProxy()')
+    throw Error('Unimplemented function create()')
   }
 
   async push(reupload = false) {

@@ -1,7 +1,7 @@
 import stdout from '../utils/stdout';
 import ControllerFor from '../models/network/ControllerFor';
 
-export default async function createProxy({ contractAlias, initMethod, initArgs, network, txParams = {}, force = false, networkFile = undefined }) {
+export default async function create({ contractAlias, initMethod, initArgs, network, txParams = {}, force = false, networkFile = undefined }) {
   if (!contractAlias) throw Error('A contract alias must be provided to create a new proxy.')
 
   const controller = ControllerFor(network, txParams, networkFile)
