@@ -7,7 +7,7 @@ const log = new Logger('NetworkAppController');
 
 // TODO: Remove after upgrade to latest zos-lib version
 App.prototype.createNonUpgradeableInstance = async function(contractClass, contractName, initMethodName, initArgs) {
-  // log.info(`Creating new non-upgradeable instance of ${contractName}...`)
+  log.info(`Creating new non-upgradeable instance of ${contractName}...`)
   const implementationAddress = (await this.getImplementation(contractName)).replace('0x', '');
 
   // This is EVM assembly will return of the code of a foreign address.
@@ -32,11 +32,11 @@ App.prototype.createNonUpgradeableInstance = async function(contractClass, contr
   const txHash = await web3.eth.sendTransaction(params)
   const receipt = await web3.eth.getTransactionReceipt(txHash)
   const instance = contractClass.at(receipt.contractAddress)
-  // log.info(`${contractName} instance created at ${instance.address}`)
+  log.info(`${contractName} instance created at ${instance.address}`)
 
   if(typeof(initArgs) !== 'undefined') {
     // this could be front-run
-    // log.info(`Initializing ${contractName} instance at ${instance.address}`)
+    log.info(`Initializing ${contractName} instance at ${instance.address}`)
     const initMethod = this._validateInitMethod(contractClass, initMethodName, initArgs)
     const initArgTypes = initMethod.inputs.map(input => input.type)
     const callData = encodeCall(initMethodName, initArgTypes, initArgs)
@@ -103,11 +103,8 @@ export default class NetworkAppController extends NetworkBaseController {
 
     this._updateTruffleDeployedInformation(contractAlias, instance)
     const implementation = await this.app.getImplementation(contractAlias);
-    const info = { address: instance.address, version: this.app.version, implementation }
-
-    upgradeable
-      ? this.networkFile.addProxy(contractAlias, info)
-      : this.networkFile.addNonUpgradeableInstance(contractAlias, info)
+    const info = { address: instance.address, version: this.app.version, implementation, upgradeable }
+    this.networkFile.addInstance(contractAlias, info)
 
     return instance;
   }
@@ -174,8 +171,8 @@ export default class NetworkAppController extends NetworkBaseController {
     }
 
     return {
-      [contractAlias]: _.filter(this.networkFile.proxiesOf(contractAlias), proxy => (
-        !proxyAddress || proxy.address === proxyAddress
+      [contractAlias]: _.filter(this.networkFile.proxiesOf(contractAlias), instance => (
+        !proxyAddress || instance.address === proxyAddress
       ))
     };
   }

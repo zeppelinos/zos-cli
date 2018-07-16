@@ -48,9 +48,10 @@ contract('create script', function([_, owner]) {
     });
 
     const assertInstance = async function(networkFile, alias, { version, say, implementation }) {
-      const instanceInfo = upgradeable ? networkFile.proxy(alias, 0) : networkFile.nonUpgradeableInstance(alias, 0)
+      const instanceInfo = networkFile.instance(alias, 0)
       instanceInfo.address.should.be.nonzeroAddress;
       instanceInfo.version.should.eq(version);
+      instanceInfo.upgradeable.should.be.eq(upgradeable);
 
       if (say) {
         const instance = await ImplV1.at(instanceInfo.address);
@@ -75,7 +76,7 @@ contract('create script', function([_, owner]) {
       await create({ contractAlias, network, txParams, upgradeable, networkFile: this.networkFile });
 
       const networks = Object.values(Contracts.getFromLocal(contractName).networks)
-      const instanceAddress = this.networkFile.proxy(contractAlias, 0).implementation
+      const instanceAddress = this.networkFile.instance(contractAlias, 0).implementation
       networks.filter(network => network.address === instanceAddress).should.be.have.lengthOf(1)
     });
 
@@ -103,9 +104,7 @@ contract('create script', function([_, owner]) {
       await create({ contractAlias, network, txParams, upgradeable, networkFile: this.networkFile });
       await create({ contractAlias, network, txParams, upgradeable, networkFile: this.networkFile });
 
-      upgradeable
-        ? this.networkFile.proxiesOf(contractAlias).should.have.lengthOf(3)
-        : this.networkFile.nonUpgradeableInstancesOf(contractAlias).should.have.lengthOf(3)
+      this.networkFile.instancesOf(contractAlias).should.have.lengthOf(3)
     });
 
     it('should be able to handle instances for more than one contract', async function() {
