@@ -6,8 +6,8 @@ import CaptureLogs from '../helpers/captureLogs';
 
 import add from '../../src/scripts/add.js';
 import push from '../../src/scripts/push.js';
-import bumpVersion from '../../src/scripts/bump.js';
-import createProxy from '../../src/scripts/create.js';
+import bump from '../../src/scripts/bump.js';
+import create from '../../src/scripts/create.js';
 import update from '../../src/scripts/update.js';
 import ZosPackageFile from "../../src/models/files/ZosPackageFile";
 
@@ -61,12 +61,12 @@ contract('update script', function([_, owner]) {
       this.implV1Address = this.networkFile.contract('Impl').address;
       this.anotherImplV1Address = this.networkFile.contract('AnotherImpl').address;
 
-      await createProxy({ contractAlias: 'Impl', network, txParams, networkFile: this.networkFile });
-      await createProxy({ contractAlias: 'Impl', network, txParams, networkFile: this.networkFile });
-      await createProxy({ contractAlias: 'Impl', upgradeable: false, network, txParams, networkFile: this.networkFile })
-      await createProxy({ contractAlias: 'AnotherImpl', network, txParams, networkFile: this.networkFile });
+      await create({ contractAlias: 'Impl', network, txParams, networkFile: this.networkFile });
+      await create({ contractAlias: 'Impl', network, txParams, networkFile: this.networkFile });
+      await create({ contractAlias: 'Impl', upgradeable: false, network, txParams, networkFile: this.networkFile })
+      await create({ contractAlias: 'AnotherImpl', network, txParams, networkFile: this.networkFile });
 
-      await bumpVersion({ version: version_2, txParams, packageFile: this.packageFile });
+      await bump({ version: version_2, txParams, packageFile: this.packageFile });
       const newContractsData = [{ name: 'ImplV2', alias: 'Impl' }, { name: 'AnotherImplV2', alias: 'AnotherImpl' }]
       await add({ contractsData: newContractsData, packageFile: this.packageFile });
       await push({ network, txParams, networkFile: this.networkFile });
@@ -236,10 +236,10 @@ contract('update script', function([_, owner]) {
       this.networkFile = this.packageFile.networkFile(network)
 
       await push({ network, txParams, deployStdlib: true, networkFile: this.networkFile });
-      await createProxy({ contractAlias: 'Greeter', network, txParams, networkFile: this.networkFile });
-      await createProxy({ contractAlias: 'Greeter', network, txParams, networkFile: this.networkFile });
+      await create({ contractAlias: 'Greeter', network, txParams, networkFile: this.networkFile });
+      await create({ contractAlias: 'Greeter', network, txParams, networkFile: this.networkFile });
 
-      await bumpVersion({ version: version_2, txParams, stdlibNameVersion: 'mock-stdlib-2@1.2.0', packageFile: this.packageFile });
+      await bump({ version: version_2, txParams, stdlibNameVersion: 'mock-stdlib-2@1.2.0', packageFile: this.packageFile });
       await push({ network, txParams, deployStdlib: true, networkFile: this.networkFile });
     });
 
