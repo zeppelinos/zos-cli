@@ -26,6 +26,7 @@ contract('update script', function([_, owner]) {
   const assertProxyInfo = async function(networkFile, contractAlias, proxyIndex, { version, implementation, address, value }) {
     const proxyInfo = networkFile.instance(contractAlias, proxyIndex);
 
+    proxyInfo.upgradeable.should.be.true
     if (address) proxyInfo.address.should.eq(address);
     else proxyInfo.address.should.be.nonzeroAddress;
 
@@ -62,6 +63,7 @@ contract('update script', function([_, owner]) {
 
       await createProxy({ contractAlias: 'Impl', network, txParams, networkFile: this.networkFile });
       await createProxy({ contractAlias: 'Impl', network, txParams, networkFile: this.networkFile });
+      await createProxy({ contractAlias: 'Impl', upgradeable: false, network, txParams, networkFile: this.networkFile })
       await createProxy({ contractAlias: 'AnotherImpl', network, txParams, networkFile: this.networkFile });
 
       await bumpVersion({ version: version_2, txParams, packageFile: this.packageFile });
@@ -84,6 +86,12 @@ contract('update script', function([_, owner]) {
       await assertProxyInfo(this.networkFile, 'AnotherImpl', 0, { version: version_1, implementation: this.anotherImplV1Address });
     });
 
+    it('should not upgrade a non-upgradeable instance given its address', async function() {
+      const instance = this.networkFile.instance('Impl', 2);
+      await upgradeProxy({ contractAlias: 'Impl', proxyAddress: instance.address, network, txParams, networkFile: this.networkFile });
+      this.networkFile.instance('Impl', 2).implementation.should.be.eq(this.implV1Address)
+    });
+
     it('should upgrade the version of all proxies given the contract alias', async function() {
       // Upgrade all 'Impl' proxies
       await update({ contractAlias: 'Impl', proxyAddress: undefined, network, txParams, networkFile: this.networkFile });
@@ -99,6 +107,12 @@ contract('update script', function([_, owner]) {
       await assertProxyInfo(this.networkFile, 'Impl', 0, { version: version_2, implementation: this.implV2Address });
       await assertProxyInfo(this.networkFile, 'Impl', 1, { version: version_2, implementation: this.implV2Address });
       await assertProxyInfo(this.networkFile, 'AnotherImpl', 0, { version: version_2, implementation: this.anotherImplV2Address });
+    });
+
+    it('should not upgrade non-upgradeable instances in the app', async function() {
+      await upgradeProxy({ contractAlias: undefined, proxyAddress: undefined, all: true, network, txParams, networkFile: this.networkFile });
+
+      this.networkFile.instance('Impl', 2).implementation.should.be.eq(this.implV1Address)
     });
 
     it('should require all flag to upgrade all proxies', async function() {
@@ -204,6 +218,14 @@ contract('update script', function([_, owner]) {
         await update({ contractAlias: 'NoMigrate', network, txParams, networkFile: this.networkFile });
         this.logs.errors.should.have.lengthOf(0);
       });
+
+      it('should warn when the instance to upgrade is non-upgradeable', async function() {
+        const instance = this.networkFile.instance('Impl', 2)
+        await upgradeProxy({ contractAlias: 'Impl', proxyAddress: instance.address, network, txParams, networkFile: this.networkFile })
+
+        this.logs.infos.should.have.lengthOf(1);
+        this.logs.infos[0].should.eq('No proxies to upgrade were found');
+      })
     });
   });
 
