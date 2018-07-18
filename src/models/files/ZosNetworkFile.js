@@ -65,11 +65,7 @@ export default class ZosNetworkFile {
   }
 
   get proxies() {
-    return this.instanceAliases.reduce((previous, alias) => {
-      const instances = this.instancesOf(alias)
-      if (instances.length >= 0) previous[alias] = instances
-      return previous
-    }, {})
+    return _.mapValues(this.instances, instances => _.filter(instances, 'upgradeable'))
   }
 
   get instances() {
@@ -93,10 +89,7 @@ export default class ZosNetworkFile {
   }
 
   proxiesList() {
-    return _.flatMap(this.instanceAliases, alias => this.proxiesOf(alias).map(info => {
-      info['alias'] = alias
-      return info
-    }))
+    return _.flatMap(this.instanceAliases, alias => this.proxiesOf(alias).map(info => Object.assign(info, { alias })))
   }
 
   instance(alias, index) {
