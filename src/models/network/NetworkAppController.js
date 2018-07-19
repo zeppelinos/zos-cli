@@ -29,8 +29,8 @@ App.prototype.createNonUpgradeableInstance = async function(contractClass, contr
   const ASM_CODE_COPY = `0x73${implementationAddress}803b8091600080913c6000f3`;
 
   const params = Object.assign({}, contractClass.defaults(), this.txParams, { to: 0x0, data: ASM_CODE_COPY })
-  const txHash = await web3.eth.sendTransaction(params)
-  const receipt = await web3.eth.getTransactionReceipt(txHash)
+  const txHash = web3.eth.sendTransaction(params)
+  const receipt = web3.eth.getTransactionReceipt(txHash)
   const instance = contractClass.at(receipt.contractAddress)
   log.info(`${contractName} instance created at ${instance.address}`)
 
