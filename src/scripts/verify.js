@@ -1,14 +1,9 @@
-import LocalAppController from  '../models/local/LocalAppController'
-import ZosPackageFile from "../models/files/ZosPackageFile"
+import ControllerFor from '../models/network/ControllerFor'
+import ZosPackageFile from '../models/files/ZosPackageFile'
+import ZosNetworkFile from '../models/files/ZosNetworkFile'
 
-export default function verify(contractName, { network, optimizer = false, runs = undefined }) {
-  /*
-   * TODO:
-   * - verify if contract has been compiled: validateImplementation
-   * - verify if contract has been deployed to the blockchain (i.e., exists in zos.<network>.json)
-   * - verify if latest compiled version of contract matches last deployed contract
-   * - flatten the contract sourcecode and get the solidity compiler version
-   * - verify the contract
-   * */
-  const controller = new LocalAppController(new ZosPackageFile())
+export default function verify(contractAlias, { network, txParams = {}, networkFile = undefined, optimizer = false, runs = undefined }) {
+  const controller = ControllerFor(network, txParams, networkFile)
+  controller.checkLocalContractDeployed(contractAlias, true)
+  controller.verifyAndPublishContract(contractAlias)
 }

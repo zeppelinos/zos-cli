@@ -155,6 +155,10 @@ export default class NetworkBaseController {
     return !this.packageFile.hasContract(contractAlias) || this.networkFile.hasContract(contractAlias);
   }
 
+  async verifyAndPublishContract(contractAlias) {
+    throw Error('TODO: implement verification and publish method');
+  }
+
   writeNetworkPackage() {
     this.networkFile.write()
   }
