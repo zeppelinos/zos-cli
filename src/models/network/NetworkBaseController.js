@@ -111,7 +111,8 @@ export default class NetworkBaseController {
   }
 
   checkLocalContractsDeployed(throwIfFail = false) {
-    this._handleErrorMessage(this._errorForLocalContractsDeployed(), throwIfFail);
+    const err = this._errorForLocalContractsDeployed();
+    if (err) this._handleErrorMessage(err, throwIfFail);
   }
 
   _errorForLocalContractsDeployed() {
@@ -126,7 +127,8 @@ export default class NetworkBaseController {
   }
 
   checkLocalContractDeployed(contractAlias, throwIfFail = false) {
-    this._handleErrorMessage(this._errorForLocalContractDeployed(contractAlias), throwIfFail);
+    const err = this._errorForLocalContractDeployed(contractAlias);
+    if (err) this._handleErrorMessage(err, throwIfFail);
   }
 
   _errorForLocalContractDeployed(contractAlias) {
@@ -140,8 +142,11 @@ export default class NetworkBaseController {
   }
 
   _handleErrorMessage(msg, throwIfFail = false) {
-    if (msg && throwIfFail) throw Error(msg);
-    else if (msg) log.info(msg);
+    if (throwIfFail) {
+      throw Error(msg);
+    } else {
+      log.info(msg);
+    }
   }
 
   hasContractChanged(contractAlias) {
