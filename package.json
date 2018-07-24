@@ -30,7 +30,9 @@
   },
   "homepage": "https://github.com/zeppelinos/zos-cli#readme",
   "dependencies": {
+    "axios": "^0.18.0",
     "chalk": "^2.4.1",
+    "cheerio": "^1.0.0-rc.2",
     "commander": "^2.15.1",
     "lockfile": "^1.0.4",
     "lodash": "^4.17.5",
