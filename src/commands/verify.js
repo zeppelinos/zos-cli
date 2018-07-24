@@ -12,6 +12,7 @@ const register = program => program
   .description(description)
   .option('-n, --network <network>', 'network where to verify the contract')
   .option('--optimizer <optimizer>', 'specify if optimizer is enabled or disabled.')
+  .option('--remote <remote>', 'specify remote endpoint to use for verification')
   .option('--runs <runs>', 'specify number of runs if optimizer enabled.')
   .action(action);
 
