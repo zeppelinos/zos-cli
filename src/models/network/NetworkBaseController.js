@@ -2,6 +2,7 @@ import _ from 'lodash';
 import { Contracts, Logger, App } from 'zos-lib';
 import StatusComparator from '../status/StatusComparator'
 import StatusChecker from "../status/StatusChecker";
+import { flattenCode } from '../../utils/contracts'
 
 const log = new Logger('NetworkController');
 
@@ -155,8 +156,11 @@ export default class NetworkBaseController {
     return !this.packageFile.hasContract(contractAlias) || this.networkFile.hasContract(contractAlias);
   }
 
-  async verifyAndPublishContract(contractAlias) {
-    throw Error('TODO: implement verification and publish method');
+  async verifyAndPublishContract(contractAlias, optimizer, runs, remote) {
+    // I suspect that this is not the best way to reference a contract source code file.
+    // Maybe adding a zos-lib Contract method to retrieve the solidity code would be better?
+    const contractSourcePath = this.localController.getContractSourcePath(contractAlias)
+    const flattenedCode = await flattenCode([contractSourcePath])
   }
 
   writeNetworkPackage() {

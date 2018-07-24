@@ -105,6 +105,16 @@ export default class LocalBaseController {
     }
   }
 
+  getContractSourcePath(contractAlias) {
+    const contractName = this.packageFile.contract(contractAlias)
+    if (contractName) {
+      const contractDataPath = Contracts.getLocalPath(contractName)
+      return fs.parseJson(contractDataPath).sourcePath
+    } else {
+      throw Error(`Cound not find ${contractAlias} in contracts directory.`)
+    }
+  }
+
   writePackage() {
     this.packageFile.write()
   }
