@@ -11,16 +11,16 @@ const register = program => program
   .command(signature, { noHelp: true })
   .description(description)
   .option('-n, --network <network>', 'network where to verify the contract')
-  .option('--optimizer <optimizer>', 'specify if optimizer is enabled or disabled.')
-  .option('--remote <remote>', 'specify remote endpoint to use for verification')
+  .option('-o, --with-optimizer', 'enables optimizer option')
   .option('--runs <runs>', 'specify number of runs if optimizer enabled.')
+  .option('--remote <remote>', 'specify remote endpoint to use for verification')
   .action(action);
 
 
 function action(contractAlias, options) {
-  const { optimizer, runs } = options
-  if (optimizer === 'enabled' && !runs) {
-    throw new Error('Cannot verify contract without defining number of optimizer runs')
+  const { withOptimizer, runs } = options
+  if (withOptimizer && !runs) {
+    throw new Error('Cannot verify contract without defining optimizer runs')
   }
   runWithTruffle(() => verify(contractAlias, options), options)
 }
