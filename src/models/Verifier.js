@@ -16,7 +16,7 @@ const Verifier = {
 async function publishToEtherchain(params) {
   const etherchainVerificationUrl = 'https://www.etherchain.org/tools/verifyContract'
   const etherchainContractUrl = 'https://www.etherchain.org/account/'
-  const { compilerVersion, optimizer } = params
+  const { compilerVersion, optimizer, contractAddress } = params
   const compiler = `soljson-v${compilerVersion.replace('.Emscripten.clang', '')}.js`
   const optimizerStatus = optimizer ? 'Enabled' : 'Disabled'
 
@@ -33,7 +33,7 @@ async function publishToEtherchain(params) {
       const html = cheerio.load(response.data)
       const message = html('#infoModal .modal-body').text()
       if (message.match(/successful/)) {
-        log.info(`Contract verified and published successfully. You can check it here: ${etherchainContractUrl }/${contractAddress}#code`)
+        log.info(`Contract verified and published successfully. You can check it here: ${etherchainContractUrl}/${contractAddress}#code`)
       } else if(message.match(/^No[\w\s]*provided\.$/)) {
         throw new Error(`Error during contract verification: ${message}`)
       } else {
