@@ -157,14 +157,14 @@ export default class NetworkBaseController {
     return !this.packageFile.hasContract(contractAlias) || this.networkFile.hasContract(contractAlias);
   }
 
-  async verifyAndPublishContract(contractAlias, optimizer, runs, remote) {
+  async verifyAndPublishContract(contractAlias, optimizer, optimizerRuns, remote) {
     const contractName = this.packageFile.contract(contractAlias)
     const { compilerVersion, sourcePath } = this.localController.getContractSourcePath(contractAlias)
     const contractSource = await flattenCode([sourcePath])
     const contractAddress = this.networkFile.contracts[contractAlias].address
     log.info(`Verifying and publishing ${contractAlias} on ${remote}`)
 
-    Verifier.verifyAndPublish(remote, { contractName, compilerVersion, optimizer, runs, contractSource, contractAddress })
+    Verifier.verifyAndPublish(remote, { contractName, compilerVersion, optimizer, optimizerRuns, contractSource, contractAddress })
   }
 
   writeNetworkPackage() {
