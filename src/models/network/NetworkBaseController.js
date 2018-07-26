@@ -158,15 +158,13 @@ export default class NetworkBaseController {
   }
 
   async verifyAndPublishContract(contractAlias, optimizer, runs, remote) {
-    // I suspect that this is not the best way to reference a contract source code file.
-    // Maybe adding a zos-lib Contract method to retrieve the solidity code path would be better?
     const contractName = this.packageFile.contract(contractAlias)
-    const { compiler, sourcePath } = this.localController.getContractSourcePath(contractAlias)
+    const { compilerVersion, sourcePath } = this.localController.getContractSourcePath(contractAlias)
     const contractSource = await flattenCode([sourcePath])
     const contractAddress = this.networkFile.contracts[contractAlias].address
-    log.info(`Verifying and publishing ${contractAlias} to ${remote}`)
+    log.info(`Verifying and publishing ${contractAlias} on ${remote}`)
 
-    Verifier.verifyAndPublish(remote, { contractName, compiler, optimizer, runs, contractSource, contractAddress })
+    Verifier.verifyAndPublish(remote, { contractName, compilerVersion, optimizer, runs, contractSource, contractAddress })
   }
 
   writeNetworkPackage() {

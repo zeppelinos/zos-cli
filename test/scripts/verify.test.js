@@ -19,7 +19,7 @@ contract('verify script', function() {
 
   describe('validations', function() {
     describe('with invalid package or network files', function() {
-      it('throws error if zOS project is not yet initialized', async function() {
+      it('throws error if zOS project is not yet initialized', function() {
         packageFile = new ZosPackageFile('non-existent-package.zos.json')
         networkFile = packageFile.networkFile(network)
         expect(() => verify(contractAlias, { network, networkFile })).to.throw(/Run 'zos init' first to initialize the project./)

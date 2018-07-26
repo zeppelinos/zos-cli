@@ -13,18 +13,18 @@ const Verifier = {
   }
 }
 
-async function publishToEtherchain({ contractName, compiler, optimizer, runs, contractSource, contractAddress }) {
+async function publishToEtherchain(params) {
   const etherchainVerificationUrl = 'https://www.etherchain.org/tools/verifyContract'
   const etherchainContractUrl = 'https://www.etherchain.org/account/'
-  const { version } = compiler
-  const compilerVersion = `soljson-v${version.replace('.Emscripten.clang', '')}.js`
+  const { compilerVersion, optimizer } = params
+  const compiler = `soljson-v${compilerVersion.replace('.Emscripten.clang', '')}.js`
   const optimizerStatus = optimizer ? 'Enabled' : 'Disabled'
 
   try {
     const response = await axios({
       method: 'POST',
       url: etherchainVerificationUrl,
-      data: querystring.stringify({ contractAddress, contractName, compilerVersion, runs, contractSource, optimizer: optimizerStatus }),
+      data: querystring.stringify({ ...params, compilerVersion: compiler, optimizer: optimizerStatus }),
       headers: {
         'Content-type': 'application/x-www-form-urlencoded'
       }

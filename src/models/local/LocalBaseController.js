@@ -110,7 +110,7 @@ export default class LocalBaseController {
     if (contractName) {
       const contractDataPath = Contracts.getLocalPath(contractName)
       const { compiler, sourcePath } = fs.parseJson(contractDataPath)
-      return { compiler, sourcePath }
+      return { sourcePath, compilerVersion: compiler.version }
     } else {
       throw Error(`Cound not find ${contractAlias} in contracts directory.`)
     }
