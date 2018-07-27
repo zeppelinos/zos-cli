@@ -224,7 +224,7 @@ contract('update script', function([_, owner]) {
         await update({ contractAlias: 'Impl', proxyAddress: instance.address, network, txParams, networkFile: this.networkFile })
 
         this.logs.infos.should.have.lengthOf(1);
-        this.logs.infos[0].should.eq('No proxies to upgrade were found');
+        this.logs.infos[0].should.eq('No proxies to update were found');
       })
     });
   });
