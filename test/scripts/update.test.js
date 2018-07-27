@@ -88,7 +88,7 @@ contract('update script', function([_, owner]) {
 
     it('should not upgrade a non-upgradeable instance given its address', async function() {
       const instance = this.networkFile.instance('Impl', 2);
-      await upgradeProxy({ contractAlias: 'Impl', proxyAddress: instance.address, network, txParams, networkFile: this.networkFile });
+      await update({ contractAlias: 'Impl', proxyAddress: instance.address, network, txParams, networkFile: this.networkFile });
       this.networkFile.instance('Impl', 2).implementation.should.be.eq(this.implV1Address)
     });
 
@@ -110,7 +110,7 @@ contract('update script', function([_, owner]) {
     });
 
     it('should not upgrade non-upgradeable instances in the app', async function() {
-      await upgradeProxy({ contractAlias: undefined, proxyAddress: undefined, all: true, network, txParams, networkFile: this.networkFile });
+      await update({ contractAlias: undefined, proxyAddress: undefined, all: true, network, txParams, networkFile: this.networkFile });
 
       this.networkFile.instance('Impl', 2).implementation.should.be.eq(this.implV1Address)
     });
@@ -221,7 +221,7 @@ contract('update script', function([_, owner]) {
 
       it('should warn when the instance to upgrade is non-upgradeable', async function() {
         const instance = this.networkFile.instance('Impl', 2)
-        await upgradeProxy({ contractAlias: 'Impl', proxyAddress: instance.address, network, txParams, networkFile: this.networkFile })
+        await update({ contractAlias: 'Impl', proxyAddress: instance.address, network, txParams, networkFile: this.networkFile })
 
         this.logs.infos.should.have.lengthOf(1);
         this.logs.infos[0].should.eq('No proxies to upgrade were found');

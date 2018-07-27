@@ -169,7 +169,7 @@ contract('create script', function([_, owner]) {
       });
 
       it('should refuse create a proxy for a stdlib contract', async function () {
-        await createProxy({ contractAlias: 'Greeter', network, txParams, networkFile: this.networkFile })
+        await create({ contractAlias: 'Greeter', network, txParams, networkFile: this.networkFile })
           .should.be.rejectedWith(/Contract Greeter is provided by mock-stdlib but it was not deployed to the network/)
       });
     });
