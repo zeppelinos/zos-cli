@@ -6,9 +6,11 @@ import { Logger } from 'zos-lib'
 const log = new Logger('Verifier')
 
 const Verifier = {
-  verifyAndPublish(remote, params) {
+  async verifyAndPublish(remote, params) {
     if (remote === 'etherchain') {
-      publishToEtherchain(params)
+      await publishToEtherchain(params)
+    } else {
+      throw new Error('Invalid remote. Currently, zOS contract verifier only supports etherchain as remote verification application.')
     }
   }
 }
@@ -21,7 +23,7 @@ async function publishToEtherchain(params) {
   const optimizerStatus = optimizer ? 'Enabled' : 'Disabled'
 
   try {
-    const response = await axios({
+    const response = await axios.request({
       method: 'POST',
       url: etherchainVerificationUrl,
       data: querystring.stringify({ ...params, compilerVersion: compiler, optimizer: optimizerStatus }),

@@ -164,7 +164,7 @@ export default class NetworkBaseController {
     const contractAddress = this.networkFile.contracts[contractAlias].address
     log.info(`Verifying and publishing ${contractAlias} on ${remote}`)
 
-    Verifier.verifyAndPublish(remote, { contractName, compilerVersion, optimizer, optimizerRuns, contractSource, contractAddress })
+    await Verifier.verifyAndPublish(remote, { contractName, compilerVersion, optimizer, optimizerRuns, contractSource, contractAddress })
   }
 
   writeNetworkPackage() {
