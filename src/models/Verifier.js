@@ -15,7 +15,7 @@ const Verifier = {
 
 async function publishToEtherchain(params) {
   const etherchainVerificationUrl = 'https://www.etherchain.org/tools/verifyContract'
-  const etherchainContractUrl = 'https://www.etherchain.org/account/'
+  const etherchainContractUrl = 'https://www.etherchain.org/account'
   const { compilerVersion, optimizer, contractAddress } = params
   const compiler = `soljson-v${compilerVersion.replace('.Emscripten.clang', '')}.js`
   const optimizerStatus = optimizer ? 'Enabled' : 'Disabled'
