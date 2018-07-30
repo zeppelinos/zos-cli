@@ -43,7 +43,7 @@ contract('verify script', function () {
         packageFile = new ZosPackageFile('test/mocks/packages/package-with-contracts.zos.json')
         networkFile = packageFile.networkFile(network)
         const nonExistentContract = 'NonExistent'
-        await assertVerify(nonExistentContract, { network, networkFile }, /not found in application/)
+        await assertVerify(nonExistentContract, { network, networkFile }, /not found in this project/)
       })
     })
 
