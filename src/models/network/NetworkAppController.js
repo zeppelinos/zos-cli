@@ -81,7 +81,7 @@ export default class NetworkAppController extends NetworkBaseController {
   async upgradeProxies(contractAlias, proxyAddress, initMethod, initArgs) {
     const proxyInfos = this.getProxies(contractAlias, proxyAddress);
     if (_.isEmpty(proxyInfos) || (contractAlias && _.isEmpty(proxyInfos[contractAlias]))) {
-      log.info("No proxies to upgrade were found");
+      log.info('No proxies to update were found');
       return;
     }
 
@@ -111,7 +111,7 @@ export default class NetworkAppController extends NetworkBaseController {
     }));
 
     if(!_.isEmpty(failures)) {
-      const message = failures.map(failure => `Proxy ${failure.contractAlias} at ${failure.proxyInfo.address} failed to upgrade with ${failure.error.message}`).join('\n')
+      const message = failures.map(failure => `Proxy ${failure.contractAlias} at ${failure.proxyInfo.address} failed to update with ${failure.error.message}`).join('\n')
       throw Error(message)
     }
     return proxyInfos;
@@ -187,6 +187,15 @@ export default class NetworkAppController extends NetworkBaseController {
 
   isContractDefined(contractAlias) {
     return super.isContractDefined(contractAlias) || this.isStdlibContract(contractAlias);
+  }
+
+  _errorForLocalContractDeployed(contractAlias) {
+    const baseErr = super._errorForLocalContractDeployed(contractAlias);
+    if (baseErr) {
+      return baseErr;
+    } else if (this.isStdlibContract(contractAlias) && !this.networkFile.hasStdlib()) {
+      return `Contract ${contractAlias} is provided by ${this.packageFile.stdlibName} but it was not deployed to the network, consider running \`zos push\``;
+    }
   }
 
   _updateTruffleDeployedInformation(contractAlias, implementation) {
