@@ -22,7 +22,7 @@ function action(contractAlias, options) {
   if (optimizer && !optimizerRuns) {
     throw new Error('Cannot verify contract without defining optimizer runs')
   }
-  runWithTruffle(() => verify(contractAlias, options), options)
+  runWithTruffle(opts => verify(contractAlias, { ...options, ...opts }), options)
 }
 
 export default { name, signature, description, register, action }
