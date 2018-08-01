@@ -5,12 +5,10 @@ import sinon from 'sinon'
 import axios from 'axios'
 
 import CaptureLogs from '../helpers/captureLogs'
-import { Contracts } from 'zos-lib'
 
 import verify from '../../src/scripts/verify.js'
 import push from '../../src/scripts/push.js'
 import ZosPackageFile from '../../src/models/files/ZosPackageFile'
-import ZosNetworkFileFile from '../../src/models/files/ZosNetworkFile'
 
 contract('verify script', function () {
   const contractAlias = 'Impl'

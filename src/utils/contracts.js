@@ -23,6 +23,6 @@ export function bytecodeDigest(rawBytecode) {
   return hash.update(buffer).digest('hex')
 }
 
-export async function flattenCode(contract) {
-  return await flatten(contract)
+export function flattenSourceCode(contract) {
+  return flatten(contract)
 }
