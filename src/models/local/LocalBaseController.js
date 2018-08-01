@@ -45,6 +45,11 @@ export default class LocalBaseController {
     if (this.hasConstructor(Contracts.getLocalPath(contractName))) {
       log.error(`Contract ${contractName} has an explicit constructor. Move it to an initializer function to use it with ZeppelinOS.`)
     }
+    // Log a warning anytime SelfDestruct is found.  This is a potential security risk, 
+    // but not an error/throw as it may be a desired feature
+    if (this.hasSelfDestruct(Contracts.getLocalPath(contractName))) {
+      log.warn(`Contract ${contractName} has a selfdestruct call. This is potentially a security risk. Please review and consider removing this call.`)
+    }
     this.packageFile.addContract(contractAlias, contractName)
   }
 
@@ -90,6 +95,26 @@ export default class LocalBaseController {
     if (!fs.exists(contractDataPath)) return false
     const abi = fs.parseJson(contractDataPath).abi
     return !!abi.find(fn => fn.type === "constructor");
+  }
+
+  hasSelfDestruct(contractDataPath) {
+    if (!fs.exists(contractDataPath)) return false
+    const ast_nodes = fs.parseJson(contractDataPath).ast.nodes
+    for (let i = 0; i < ast_nodes.length; i++) {
+      const node = ast_nodes[i];
+      if(!node.nodes) continue;
+      for(let j = 0; j < node.nodes.length; j++) {
+        const inner_node = node.nodes[j];
+        const statements = (inner_node.body || {}).statements
+        if (!statements) continue
+        for (let k = 0; k < statements.length; k++) {
+          const statement = statements[j];
+          const typeIdentifier = (((statement.expression || {}).expression || {}).typeDescriptions || {}).typeIdentifier
+          if(typeIdentifier === "t_function_selfdestruct_nonpayable$_t_address_$returns$__$") return true
+        }
+      }
+    }
+    return false
   }
 
   getContractClass(contractAlias) {
