@@ -105,13 +105,11 @@ export default class LocalBaseController {
       if (!node.nodes) continue;
       for (let j = 0; j < node.nodes.length; j++) {
         const inner_node = node.nodes[j]
-        if (!inner_node) continue
-        const statements = (inner_node.body || {}).statements
+        const statements = ((inner_node || {}).body || {}).statements
         if (!statements) continue
         for (let k = 0; k < statements.length; k++) {
           const statement = statements[j]
-          if (!statement) continue
-          const typeIdentifier = (((statement.expression || {}).expression || {}).typeDescriptions || {}).typeIdentifier
+          const typeIdentifier = ((((statement || {}).expression || {}).expression || {}).typeDescriptions || {}).typeIdentifier
           if (typeIdentifier === "t_function_selfdestruct_nonpayable$_t_address_$returns$__$") return true
         }
       }
