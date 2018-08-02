@@ -101,16 +101,18 @@ export default class LocalBaseController {
     if (!fs.exists(contractDataPath)) return false
     const ast_nodes = fs.parseJson(contractDataPath).ast.nodes
     for (let i = 0; i < ast_nodes.length; i++) {
-      const node = ast_nodes[i];
-      if(!node.nodes) continue;
-      for(let j = 0; j < node.nodes.length; j++) {
-        const inner_node = node.nodes[j];
+      const node = ast_nodes[i]
+      if (!node.nodes) continue;
+      for (let j = 0; j < node.nodes.length; j++) {
+        const inner_node = node.nodes[j]
+        if (!inner_node) continue
         const statements = (inner_node.body || {}).statements
         if (!statements) continue
         for (let k = 0; k < statements.length; k++) {
-          const statement = statements[j];
+          const statement = statements[j]
+          if (!statement) continue
           const typeIdentifier = (((statement.expression || {}).expression || {}).typeDescriptions || {}).typeIdentifier
-          if(typeIdentifier === "t_function_selfdestruct_nonpayable$_t_address_$returns$__$") return true
+          if (typeIdentifier === "t_function_selfdestruct_nonpayable$_t_address_$returns$__$") return true
         }
       }
     }
