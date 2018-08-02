@@ -17,3 +17,19 @@ contract WithFailingConstructor {
     assert(false);
   }
 }
+
+contract WithSelfDestruct {
+  uint256 public value;
+
+  constructor() public {
+    if (true)
+      selfdestruct(msg.sender);
+  }
+
+  function say() public pure returns (string) {
+    return "WithSelfDestruct";
+  }
+}
+
+contract ParentHasSelfDestruct is WithSelfDestruct {
+}
