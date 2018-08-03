@@ -1,7 +1,0 @@
-{
-  "name": "mock-stdlib-2",
-  "version": "1.2.0",
-  "contracts": {
-    "Greeter": "GreeterImpl"
-  }
-}
