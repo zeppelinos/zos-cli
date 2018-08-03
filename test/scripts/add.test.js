@@ -92,7 +92,7 @@ contract('add script', function() {
       this.logs.errors[0].should.match(/constructor/i);
     });
 
-    it('should not warn when adding a contract without a constructor or a selfdestruct cull', async function() {
+    it('should not warn when adding a contract without a constructor or a selfdestruct call', async function() {
       add({ contractsData, packageFile: this.packageFile });
 
       this.logs.errors.should.have.lengthOf(0);
@@ -106,12 +106,11 @@ contract('add script', function() {
       this.logs.warns[0].should.match(/selfdestruct/i);
     });
     
-    // TODO: This warning is not yet implemented
-    // it('should warn when adding a contract who\'s parent has a selfdestruct call', async function() {
-    //   add({ contractsData: [{ name: 'ParentHasSelfDestruct', alias: 'ParentHasSelfDestruct' }], packageFile: this.packageFile });
+    it('should warn when adding a contract who\'s parent has a selfdestruct call', async function() {
+      add({ contractsData: [{ name: 'ParentHasSelfDestruct', alias: 'ParentHasSelfDestruct' }], packageFile: this.packageFile });
 
-    //   this.logs.warns.should.have.lengthOf(1);
-    //   this.logs.warns[0].should.match(/selfdestruct/i);
-    // });
+      this.logs.warns.should.have.lengthOf(1);
+      this.logs.warns[0].should.match(/selfdestruct/i);
+    });
   });
 });

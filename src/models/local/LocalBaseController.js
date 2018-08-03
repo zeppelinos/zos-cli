@@ -100,21 +100,22 @@ export default class LocalBaseController {
   hasSelfDestruct(contractDataPath) {
     if (!fs.exists(contractDataPath)) return false
     const ast = fs.parseJson(contractDataPath).ast
-    return this.hasKeyValue(ast, "typeIdentifier", "t_function_selfdestruct_nonpayable$_t_address_$returns$__$");
+    if (this.hasKeyValue(ast, "typeIdentifier", "t_function_selfdestruct_nonpayable$_t_address_$returns$__$")) return true
+    for (let i = 0; i < ast.nodes.length; i++) {
+      for (let j = 0; j < (ast.nodes.baseContracts || []).length; j++) {
+        const contractName = ast.nodes.baseContracts.baseName.name
+        if (this.hasSelfDestruct(Contracts.getLocalPath(contractName))) return true
+      }
+    }
   }
 
   hasKeyValue(data, key, value) {
     if (!data) return false
     if (data[key] === value) return true
-    if (typeof(data) === 'object') {
-      for (const child_key in data) {
-        const child_value = data[child_key];
-        if (this.hasKeyValue(child_value, key, value)) {
-          return true
-        }
-      }
+    for (const childKey in data) {
+      if (typeof(data[childKey]) === 'object' && this.hasKeyValue(data[childKey], key, value)) return true
     }
-    return false;
+    return false
   }
 
   getContractClass(contractAlias) {
