@@ -420,9 +420,9 @@ contract('StatusComparator', function([_, owner, anotherAddress]) {
 
     describe('when the network file has two proxies', function () {
       beforeEach('adding a proxy', async function () {
-        this.networkFile.setProxies('Impl', [
-          { implementation: this.impl.address, address: '0x1', version: '1.0' },
-          { implementation: this.impl.address, address: '0x2', version: '1.0' }
+        this.networkFile.setInstances('Impl', [
+          { implementation: this.impl.address, address: '0x1', version: '1.0', upgradeable: true },
+          { implementation: this.impl.address, address: '0x2', version: '1.0', upgradeable: true }
         ])
       })
 
@@ -448,9 +448,9 @@ contract('StatusComparator', function([_, owner, anotherAddress]) {
         describe('when it matches one proxy address', function () {
           describe('when it matches the alias and the implementation address', function () {
             beforeEach('changing network file', async function () {
-              this.networkFile.setProxies('Impl', [
-                { implementation: this.impl.address, address: '0x1', version: '1.0' },
-                { implementation: this.impl.address, address: this.proxy.address, version: '1.0' },
+              this.networkFile.setInstances('Impl', [
+                { implementation: this.impl.address, address: '0x1', version: '1.0', upgradeable: true },
+                { implementation: this.impl.address, address: this.proxy.address, version: '1.0', upgradeable: true }
               ])
             })
 
@@ -466,9 +466,9 @@ contract('StatusComparator', function([_, owner, anotherAddress]) {
 
           describe('when it matches the alias but not the implementation address', function () {
             beforeEach('changing network file', async function () {
-              this.networkFile.setProxies('Impl', [
-                { implementation: this.impl.address, address: '0x1', version: '1.0' },
-                { implementation: this.anotherImpl.address, address: this.proxy.address, version: '1.0' },
+              this.networkFile.setInstances('Impl', [
+                { implementation: this.impl.address, address: '0x1', version: '1.0', upgradeable: true },
+                { implementation: this.anotherImpl.address, address: this.proxy.address, version: '1.0', upgradeable: true }
               ])
             })
 
@@ -487,8 +487,8 @@ contract('StatusComparator', function([_, owner, anotherAddress]) {
 
           describe('when it matches the implementation address but not the alias', function () {
             beforeEach('changing network file', async function () {
-              this.networkFile.setProxies('Impl', [{ implementation: this.impl.address, address: '0x1', version: '1.0' }])
-              this.networkFile.setProxies('AnotherImpl', [{ implementation: this.impl.address, address: this.proxy.address, version: '1.0' }])
+              this.networkFile.setInstances('Impl', [{ implementation: this.impl.address, address: '0x1', version: '1.0', upgradeable: true }])
+              this.networkFile.setInstances('AnotherImpl', [{ implementation: this.impl.address, address: this.proxy.address, version: '1.0', upgradeable: true }])
             })
 
             it('reports that diff', async function () {
@@ -506,8 +506,8 @@ contract('StatusComparator', function([_, owner, anotherAddress]) {
 
           describe('when it does not match the alias and the implementation address', function () {
             beforeEach('changing network file', async function () {
-              this.networkFile.setProxies('Impl', [{ implementation: this.impl.address, address: '0x1', version: '1.0' }])
-              this.networkFile.setProxies('AnotherImpl', [{ implementation: this.anotherImpl.address, address: this.proxy.address, version: '1.0' }])
+              this.networkFile.setInstances('Impl', [{ implementation: this.impl.address, address: '0x1', version: '1.0', upgradeable: true }])
+              this.networkFile.setInstances('AnotherImpl', [{ implementation: this.anotherImpl.address, address: this.proxy.address, version: '1.0', upgradeable: true }])
             })
 
             it('reports that diff', async function () {
