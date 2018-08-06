@@ -46,3 +46,12 @@ contract WithDelegateCall {
     return "WithDelegateCall";
   }
 }
+
+contract WithParentWithDelegateCall is WithDelegateCall {
+  constructor(address _e) public WithDelegateCall(_e) {
+  }
+
+  function say() public pure returns (string) {
+    return "WithParentWithDelegateCall";
+  }
+}

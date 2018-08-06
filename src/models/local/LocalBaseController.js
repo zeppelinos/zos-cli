@@ -103,22 +103,23 @@ export default class LocalBaseController {
   }
 
   hasSelfDestruct(contractDataPath) {
-    return this.hasTypeIdentifier(contractDataPath, "t_function_selfdestruct_nonpayable$_t_address_$returns$__$");
+    return this.hasTypeIdentifier(contractDataPath, "t_function_selfdestruct_nonpayable$_t_address_$returns$__$")
   }
 
   hasDelegateCall(contractDataPath) {
-    return this.hasTypeIdentifier(contractDataPath, "t_function_baredelegatecall_nonpayable$__$returns$_t_bool_$");
+    return this.hasTypeIdentifier(contractDataPath, "t_function_baredelegatecall_nonpayable$__$returns$_t_bool_$")
   }
 
   hasTypeIdentifier(contractDataPath, typeIdentifier) {
     if (!fs.exists(contractDataPath)) return false
-    const ast = fs.parseJson(contractDataPath).ast
-    if (this.hasKeyValue(ast, "typeIdentifier", typeIdentifier)) return true
-    for (const node of ast.nodes) {
+    const nodes = fs.parseJson(contractDataPath).ast.nodes
+    if (this.hasKeyValue(nodes, "typeIdentifier", typeIdentifier)) return true
+    for (const node of nodes) {
       for (const baseContract of node.baseContracts || []) {
         if (this.hasTypeIdentifier(Contracts.getLocalPath(baseContract.baseName.name), typeIdentifier)) return true
       }
     }
+    return false
   }
 
   hasKeyValue(data, key, value) {
