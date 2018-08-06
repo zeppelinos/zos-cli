@@ -31,5 +31,18 @@ contract WithSelfDestruct {
   }
 }
 
-contract ParentHasSelfDestruct is WithSelfDestruct {
+contract WithParentWithSelfDestruct is WithSelfDestruct {
+  function say() public pure returns (string) {
+    return "WithParentWithSelfDestruct";
+  }
+}
+
+contract WithDelegateCall {
+  constructor(address _e) public {
+    require(_e.delegatecall(bytes4(keccak256("kill()"))));
+  }
+  
+  function say() public pure returns (string) {
+    return "WithDelegateCall";
+  }
 }

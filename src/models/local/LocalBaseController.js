@@ -45,10 +45,15 @@ export default class LocalBaseController {
     if (this.hasConstructor(Contracts.getLocalPath(contractName))) {
       log.error(`Contract ${contractName} has an explicit constructor. Move it to an initializer function to use it with ZeppelinOS.`)
     }
-    // Log a warning anytime SelfDestruct is found.  This is a potential security risk, 
+    // Log a warning anytime `selfdestruct` is found.  This is a potential security risk, 
     // but not an error/throw as it may be a desired feature
     if (this.hasSelfDestruct(Contracts.getLocalPath(contractName))) {
-      log.warn(`Contract ${contractName} has a selfdestruct call. This is potentially a security risk. Please review and consider removing this call.`)
+      log.warn(`Contract ${contractName} (or its parent class) has a selfdestruct call. This is potentially a security risk. Please review and consider removing this call.`)
+    }
+    // Log a warning anytime `delegatecall` is found.  This is a potential security risk, 
+    // but not an error/throw as it may be a desired feature
+    if (this.hasDelegateCall(Contracts.getLocalPath(contractName))) {
+      log.warn(`Contract ${contractName} (or its parent class) has a delegatecall call. Avoid using low-level function 'delegatecall'. This is potentially a security risk. Please review and consider removing this call.`)
     }
     this.packageFile.addContract(contractAlias, contractName)
   }
@@ -98,13 +103,20 @@ export default class LocalBaseController {
   }
 
   hasSelfDestruct(contractDataPath) {
+    return this.hasTypeIdentifier(contractDataPath, "t_function_selfdestruct_nonpayable$_t_address_$returns$__$");
+  }
+
+  hasDelegateCall(contractDataPath) {
+    return this.hasTypeIdentifier(contractDataPath, "t_function_baredelegatecall_nonpayable$__$returns$_t_bool_$");
+  }
+
+  hasTypeIdentifier(contractDataPath, typeIdentifier) {
     if (!fs.exists(contractDataPath)) return false
     const ast = fs.parseJson(contractDataPath).ast
-    if (this.hasKeyValue(ast, "typeIdentifier", "t_function_selfdestruct_nonpayable$_t_address_$returns$__$")) return true
-    for (let i = 0; i < ast.nodes.length; i++) {
-      for (let j = 0; j < (ast.nodes.baseContracts || []).length; j++) {
-        const contractName = ast.nodes.baseContracts.baseName.name
-        if (this.hasSelfDestruct(Contracts.getLocalPath(contractName))) return true
+    if (this.hasKeyValue(ast, "typeIdentifier", typeIdentifier)) return true
+    for (const node of ast.nodes) {
+      for (const baseContract of node.baseContracts || []) {
+        if (this.hasTypeIdentifier(Contracts.getLocalPath(baseContract.baseName.name), typeIdentifier)) return true
       }
     }
   }
