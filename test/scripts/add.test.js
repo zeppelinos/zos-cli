@@ -106,7 +106,7 @@ contract('add script', function() {
       this.logs.warns[0].should.match(/selfdestruct/i);
     });
     
-    it('should warn when adding a contract who\'s parent has a selfdestruct call', async function() {
+    it('should warn when adding a contract whose parent has a selfdestruct call', async function() {
       add({ contractsData: [{ name: 'WithParentWithSelfDestruct', alias: 'WithParentWithSelfDestruct' }], packageFile: this.packageFile });
 
       this.logs.warns.should.have.lengthOf(1);
@@ -115,6 +115,13 @@ contract('add script', function() {
     
     it('should warn when adding a contract with a delegatecall call', async function() {
       add({ contractsData: [{ name: 'WithDelegateCall', alias: 'WithDelegateCall' }], packageFile: this.packageFile });
+
+      this.logs.warns.should.have.lengthOf(1);
+      this.logs.warns[0].should.match(/delegatecall/i);
+    });
+    
+    it('should warn when adding a contract whose parent has a delegatecall call', async function() {
+      add({ contractsData: [{ name: 'WithParentWithDelegateCall', alias: 'WithParentWithDelegateCall' }], packageFile: this.packageFile });
 
       this.logs.warns.should.have.lengthOf(1);
       this.logs.warns[0].should.match(/delegatecall/i);
